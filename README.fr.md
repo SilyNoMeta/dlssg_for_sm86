@@ -21,6 +21,7 @@ Un numéro plus élevé ne garantit ni plus de FPS ni un meilleur ressenti.
 | [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | Tout le contenu de la `-1`, plus la réutilisation des entrées FP16 d'une convolution. | Essayée en jeu par un utilisateur ; aucun problème visuel évident, gain difficile à juger. |
 | [310.9.1-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-3) | Tout le contenu de la `-2`, plus la réutilisation des entrées FP16 d'une seconde convolution de reconstruction. | Images identiques à la `-2` dans les tests hors jeu ; aucun gain constant sur le temps GPU total établi. |
 | [310.9.1-4](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-4) | Tout le contenu de la `-3`, plus des lectures vectorisées dans deux convolutions résiduelles. | Images identiques à la `-2` dans les tests hors jeu ; variations du temps GPU total faibles et irrégulières. |
+| [310.9.1-5](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-5) | Les kernels de la `-4`, avec un INI facultatif pour activer ou désactiver quatre optimisations. | Même traitement d'image par défaut que la `-4` ; permet de comparer les combinaisons des versions précédentes. |
 
 Le bilinéaire adapte l'idée de l'option [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) du projet original.
 Il peut modifier légèrement les pixels par rapport à la `-0`.
@@ -36,6 +37,33 @@ en secours ; les retours d'autres configurations sont les bienvenus.
 
 Fermez le jeu avant de changer de DLL ou de réglages. Comparez la qualité d'image,
 la réactivité et la fluidité, ainsi que les FPS, à réglages identiques.
+
+### Configuration facultative (`-5`)
+
+Copiez `dlssg_sm86.ini` à côté de `version.dll`, choisissez `1` (actif) ou `0`
+(inactif), puis redémarrez complètement le jeu. Sans fichier, ou si une clé
+manque, l'optimisation correspondante est active par défaut. Ce sont les réglages
+de ce pont ; l'INI de l'hôte natif du projet original n'est pas lu.
+
+```ini
+[Optimizations]
+HardwareBilinear=1
+Conv13SharedInput=1
+Conv0SharedInput=1
+ResidualVectorLoads=1
+```
+
+Combinaisons à comparer (même traitement d'image, pas le même fichier DLL) :
+
+| Profil | HardwareBilinear | Conv13SharedInput | Conv0SharedInput | ResidualVectorLoads |
+|---|---:|---:|---:|---:|
+| `-0` | 0 | 0 | 0 | 0 |
+| `-1` | 1 | 0 | 0 | 0 |
+| `-2` | 1 | 1 | 0 | 0 |
+| `-3` | 1 | 1 | 1 | 0 |
+| `-4` | 1 | 1 | 1 | 1 |
+
+Les 16 combinaisons et le fonctionnement sans fichier ont été vérifiés hors jeu. Cela ne garantit pas la compatibilité avec tous les jeux.
 
 ## Compatibilité
 
@@ -83,8 +111,8 @@ Il s'agit d'un retour de compatibilité sur la configuration testée.
 4. Relancer le jeu et activer DLSS Frame Generation. Commencer par X2, puis
    comparer X3/X4 dans une même scène en mouvement.
 
-Il n'y a pas de fichier INI requis. Les options du host natif amont, dont
-`HardwareBilinear`, ne sont pas lues par cette variante. Ne pas renommer cette
+L'INI est facultatif dans la `-5` ; voir la configuration plus haut.
+L'INI de l'hôte natif du projet original n'est pas lu. Ne pas renommer cette
 DLL en `nvngx_dlssg.dll` ni remplacer les DLL NVIDIA originales du jeu.
 
 Lors d'une mise à jour depuis le premier paquet 310.9.1 à deux éléments,
@@ -146,7 +174,7 @@ Vérifier les chemins personnels avant de partager un journal.
 
 ## Version et crédits
 
-La version `310.9.1-4` utilise le runtime 310.9.1. L’empreinte de la DLL figure
+La version `310.9.1-5` utilise le runtime 310.9.1. L’empreinte de la DLL figure
 dans `SHA256SUMS.txt`.
 
 Merci à [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) pour le projet

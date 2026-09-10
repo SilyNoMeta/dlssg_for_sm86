@@ -1,3 +1,55 @@
+# DLSSG 310.9.1-5 — Optional INI controls
+
+## English
+
+The `-4` kernels, with an optional INI to switch four optimizations on/off. Same default image path as `-4`; convenient for comparing the earlier kernel combinations.
+
+Experimental prerelease, checked offline on an RTX 3070 Ti Laptop (8 GB).
+The added memory-access changes preserve FP16 arithmetic, and tested outputs
+match `-2` with hardware bilinear enabled. There is no consistent measured
+overall performance gain and no game validation yet for this revision.
+No FP8 or INT8 is included. Keep your working DLL to compare and revert.
+Hardware bilinear follows the idea of upstream's [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) option; small
+differences versus the manual bilinear path in `-0` remain possible.
+
+Optional `dlssg_sm86.ini` beside the DLL: four 0/1 switches, all enabled by default; fully restart the game after edits. All 16 combinations passed offline checks. Profiles for `-0` through `-4` are documented in the README.
+
+[Version comparison and installation](https://github.com/SilyNoMeta/dlssg_for_sm86/blob/v310.9.1-5/README.en.md)
+
+## 简体中文
+
+使用 `-4` 内核，通过可选 INI 开关控制四项优化。 默认图像处理路径与 `-4` 相同，便于对比此前版本的内核组合。
+
+实验预发布版本，已在 RTX 3070 Ti Laptop（8 GB）上进行离线检查。
+新增内存读取改动保留 FP16 运算；启用硬件双线性时，已测试的输出与 `-2` 一致。
+尚未确认整体性能有稳定提升，本修订版也尚未进行游戏实测。
+不含 FP8 或 INT8。请保留已验证可用的 DLL，便于对比和回退。
+双线性优化借鉴原项目的 [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) 选项，与 `-0` 手动双线性路径相比仍可能有细微像素差异。
+
+可选的 `dlssg_sm86.ini` 放在 DLL 旁：四项 0/1 开关，默认全部开启；修改后需完全重启游戏。16 种组合均通过离线检查。README 提供 `-0` 至 `-4` 的配置组合。
+
+[版本对比与安装](https://github.com/SilyNoMeta/dlssg_for_sm86/blob/v310.9.1-5/README.zh-CN.md)
+
+## Français
+
+Les kernels de la `-4`, avec un INI facultatif pour activer ou désactiver quatre optimisations. Même traitement d'image par défaut que la `-4` ; permet de comparer les combinaisons des versions précédentes.
+
+Préversion expérimentale vérifiée hors jeu sur une RTX 3070 Ti mobile (8 Go).
+Les nouvelles lectures mémoire conservent les calculs FP16 ; les sorties testées
+correspondent à la `-2` lorsque le bilinéaire matériel est actif. Aucun gain
+global constant n'est établi et cette révision n'a pas encore été essayée en jeu.
+Ni FP8 ni INT8. Conservez votre DLL fonctionnelle pour comparer et revenir en arrière.
+Le bilinéaire reprend l'idée de l'option [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) du projet original ; de petits
+écarts avec le bilinéaire manuel de la `-0` restent possibles.
+
+`dlssg_sm86.ini` facultatif à côté de la DLL : quatre interrupteurs 0/1, tous actifs par défaut ; redémarrez le jeu après modification. Les 16 combinaisons passent les vérifications hors jeu. Le README donne les profils `-0` à `-4`.
+
+[Comparatif et installation](https://github.com/SilyNoMeta/dlssg_for_sm86/blob/v310.9.1-5/README.fr.md)
+
+`version.dll` SHA256: `4e0d1ed6068a7e9cb13789e72b02001b39ed83575e84a5754a5dc3761e91d4fe`
+
+---
+
 # DLSSG 310.9.1-4 — Vectorized residual input loads
 
 ## English

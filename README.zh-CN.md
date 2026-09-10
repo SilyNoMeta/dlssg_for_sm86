@@ -20,6 +20,7 @@
 | [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | 包含 `-1`，并在一个卷积中复用 FP16 输入。 | 一位用户已在游戏中试用；未报告明显画面问题，性能改善难以判断。 |
 | [310.9.1-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-3) | 包含 `-2`，并在第二个重建卷积中复用 FP16 输入。 | 离线图像与 `-2` 一致；尚未确认 GPU 总耗时有稳定改善。 |
 | [310.9.1-4](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-4) | 包含 `-3`，并在两个残差卷积中使用向量化输入读取。 | 离线图像与 `-2` 一致；GPU 总耗时变化较小且存在波动。 |
+| [310.9.1-5](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-5) | 使用 `-4` 内核，通过可选 INI 开关控制四项优化。 | 默认图像处理路径与 `-4` 相同，便于对比此前版本的内核组合。 |
 
 双线性优化借鉴原项目的 [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) 选项，与 `-0` 相比可能出现轻微像素差异。
 后续内存读取优化保留 FP16 运算。**这些发布版本均未使用 FP8 或 INT8。**
@@ -30,6 +31,32 @@
 不代表整体性能一定有可测量的改善。请保留已验证可用的版本作为备份；欢迎其他配置的反馈。
 
 更换 DLL 或设置前请退出游戏。在相同设置下比较画质、响应、流畅度和 FPS。
+
+### 可选配置（`-5`）
+
+将 `dlssg_sm86.ini` 放在 `version.dll` 旁，将值设为 `1`（开启）或 `0`（关闭），
+然后完全重启游戏。没有 INI 文件或缺少某项设置时，该项默认开启。
+这是本桥接实现的配置，不会读取原项目原生宿主的 INI。
+
+```ini
+[Optimizations]
+HardwareBilinear=1
+Conv13SharedInput=1
+Conv0SharedInput=1
+ResidualVectorLoads=1
+```
+
+用于对比的内核组合（图像处理路径相同，但 DLL 文件本身不同）：
+
+| 配置 | HardwareBilinear | Conv13SharedInput | Conv0SharedInput | ResidualVectorLoads |
+|---|---:|---:|---:|---:|
+| `-0` | 0 | 0 | 0 | 0 |
+| `-1` | 1 | 0 | 0 | 0 |
+| `-2` | 1 | 1 | 0 | 0 |
+| `-3` | 1 | 1 | 1 | 0 |
+| `-4` | 1 | 1 | 1 | 1 |
+
+全部 16 种开关组合及无文件默认配置均已进行离线检查，但不保证兼容所有游戏。
 
 ## 运行要求
 
@@ -68,7 +95,7 @@ SM86/RTX 30。兼容性反馈仅代表已测试的配置。
 3. 将本版本的 `version.dll` 复制到实际负责渲染的 EXE 旁。对于《黑神话：悟空》，路径为 `b1/Binaries/Win64`，与 `b1-Win64-Shipping.exe` 同目录。
 4. 启动游戏并启用 DLSS 帧生成。建议先使用 X2，再在同一运动场景中比较 X3/X4。
 
-无需 INI 文件。本版本不读取上游原生宿主的设置，包括 `HardwareBilinear`。
+`-5` 支持可选 INI；请参阅上方配置说明。不会读取原项目原生宿主的 INI。
 请勿将本 DLL 重命名为 `nvngx_dlssg.dll`，也不要用它替换游戏原有的 NVIDIA DLL。
 
 若从最初的双组件 310.9.1 包升级，请将旧 `version.dll` 和 `dlssg3109` 文件夹
@@ -118,7 +145,7 @@ SM86/RTX 30。兼容性反馈仅代表已测试的配置。
 
 ## 版本与致谢
 
-`310.9.1-4` 使用 310.9.1 运行时。DLL 校验值见 `SHA256SUMS.txt`。
+`310.9.1-5` 使用 310.9.1 运行时。DLL 校验值见 `SHA256SUMS.txt`。
 
 感谢 [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) 的原始项目和 SM86 工作。
 另见[第三方声明](THIRD_PARTY_NOTICES.txt)。

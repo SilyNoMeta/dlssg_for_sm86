@@ -20,6 +20,7 @@ A higher revision number does not guarantee higher FPS or a better feel.
 | [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | Everything in `-1`, plus FP16 input reuse in one convolution. | Tested in games by one user; no obvious visual issue reported, improvement hard to judge. |
 | [310.9.1-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-3) | Everything in `-2`, plus FP16 input reuse in a second reconstruction convolution. | Offline image checks match `-2`; no consistent total GPU-time improvement established. |
 | [310.9.1-4](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-4) | Everything in `-3`, plus vectorized input loads in two residual convolutions. | Offline image checks match `-2`; total GPU-time changes remain small and variable. |
+| [310.9.1-5](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-5) | The `-4` kernels, with an optional INI to switch four optimizations on/off. | Same default image path as `-4`; convenient for comparing the earlier kernel combinations. |
 
 The bilinear optimization adapts the idea of the original project's
 [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) option. It can slightly change pixels versus `-0`.
@@ -34,6 +35,33 @@ Keep your working version as a fallback; feedback from other configurations is w
 
 Exit the game before switching DLLs or settings. Compare image quality,
 responsiveness and smoothness, as well as FPS, at identical settings.
+
+### Optional configuration (`-5`)
+
+Copy `dlssg_sm86.ini` beside `version.dll`, edit values to `1` (on) or `0` (off),
+and fully restart the game. Without the file, or when a key is missing, that
+optimization defaults to on. These are this bridge's settings; it does not read
+the upstream native-host INI.
+
+```ini
+[Optimizations]
+HardwareBilinear=1
+Conv13SharedInput=1
+Conv0SharedInput=1
+ResidualVectorLoads=1
+```
+
+Kernel combinations for comparison (same image path, not the same DLL binary):
+
+| Profile | HardwareBilinear | Conv13SharedInput | Conv0SharedInput | ResidualVectorLoads |
+|---|---:|---:|---:|---:|
+| `-0` | 0 | 0 | 0 | 0 |
+| `-1` | 1 | 0 | 0 | 0 |
+| `-2` | 1 | 1 | 0 | 0 |
+| `-3` | 1 | 1 | 1 | 0 |
+| `-4` | 1 | 1 | 1 | 1 |
+
+All 16 switch combinations and the no-file default were exercised offline. This does not establish compatibility with every game.
 
 ## Requirements
 
@@ -81,8 +109,8 @@ to the tested setup.
 4. Start the game and enable DLSS Frame Generation. Start with X2, then compare
    X3/X4 in the same moving scene.
 
-No INI file is required. Upstream native-host settings, including
-`HardwareBilinear`, are not read by this variant. Do not rename this DLL to
+An INI is optional in `-5`; see the configuration section above. The upstream
+native-host INI is not read. Do not rename this DLL to
 `nvngx_dlssg.dll` or replace the game's original NVIDIA libraries.
 
 When upgrading from the initial two-part 310.9.1 package, back up its old
@@ -140,7 +168,7 @@ Review personal paths before sharing logs.
 
 ## Version and credits
 
-`310.9.1-4` uses the 310.9.1 runtime. The DLL checksum is listed in `SHA256SUMS.txt`.
+`310.9.1-5` uses the 310.9.1 runtime. The DLL checksum is listed in `SHA256SUMS.txt`.
 
 Thanks to [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) for the original
 project and SM86 work. See [third-party notices](THIRD_PARTY_NOTICES.txt).
