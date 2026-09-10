@@ -1,149 +1,89 @@
-# DLSSG Native 0.2.3
+# DLSSG 310.9.1 pour SM86
 
-简体中文 | [English](README.en.md)
+Français | [English](README.en.md)
 
-Windows x64 / D3D12。运行文件为 `version.dll` 和 `dlssg_sm86.ini`。
+Adaptation expérimentale de DLSS Frame Generation **310.9.1** pour les GPU
+NVIDIA SM86, basée sur le travail de
+[sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86).
+Installation avec un seul fichier : **`version.dll`**.
 
-自有 C++ 包装层、SM75/SM86 PTX/Cubin、310.1 模型和推理图都在一个 DLL 内。运行时不解压、加载或内存映射原厂 `nvngx_dlssg.dll`；仍使用系统 NVIDIA NGX/NVAPI/CUDA 驱动接口，无需 CUDA Toolkit。
+[Télécharger la release 310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0)
 
-## 0.2.3 简略更新说明
+## Compatibilité
 
-- **性能**：默认启用已验证的 SM86 精确内核、融合、图像处理和 CUDA 缓冲清理优化，移除变慢的实验路径。3080 Ti 的 4K 4X 离线插帧组耗时相对 Release 0.1.0 从 6.748 ms 降至 4.654 ms；完整数据和游戏实测见下文。
-- **配置**：日常 INI 精简为 5 项。默认 `HardwareBilinear=0` 为精确档，`1` 为可选近似采样，仅 SM86 生效。
-- **安装包**：同包提供 SM75/SM86 路由；`altnative` 增加四种备用代理入口，全部五个 DLL 使用项目自签证书。
-- **兼容修复**：保留 0.2.2 的《悟空》typeless UI 修复和首次 Evaluate 初始化。
+- Windows x64, jeu Direct3D 12 et pilote NVIDIA fournissant NGX/NVAPI.
+- GPU SM86 (famille GeForce RTX 30). Essais réalisés sur RTX 3070 Ti Laptop,
+  pilote 616.92 ; ce numéro n'est pas une exigence minimale de pilote.
+- Le jeu doit intégrer DLSS Frame Generation et charger le proxy `version.dll`.
+- Modes X2, X3 et X4, selon les choix proposés par le jeu.
+- Python et CUDA Toolkit ne sont pas nécessaires pour jouer.
 
-## 运行要求
+Cette release ne fournit pas de route SM75/RTX 20, de prise en charge Vulkan,
+ni de DLL proxy sous d'autres noms.
 
-- **系统与游戏**：Windows 10/11 x64、D3D12，以及能够通过本 Mod 启用 DLSS 帧生成的游戏。CPU 和系统内存仍需满足游戏自身要求。
-- **显卡与路由**：SM86 路由面向 RTX 30 系列；SM75 路由面向 RTX 20 系列。当前实卡验证为 RTX 3080 Ti，SM75 在该卡上通过 PTX 前向测试，物理 Turing/Cubin 仍待验证。
-- **驱动与依赖**：需要 NVIDIA 驱动提供 NGX/NVAPI/CUDA 接口；本次使用驱动 591.86 验证，此版本号不代表最低驱动要求。运行时无需安装 CUDA Toolkit 或 Python。
-- **显存**：需同时容纳游戏本体、插帧新增资源和场景波动余量。系统及其他程序也会占用显存，应关注游戏实际可用的显存预算。
+## Installation et mise à jour
 
-### 不同配置的插帧额外显存参考
+1. Fermer complètement le jeu.
+2. Sauvegarder un éventuel `version.dll` déjà présent. Si un autre mod utilise
+   ce nom, ne pas l'écraser : cette release ne gère pas le chaînage de proxies.
+3. Copier le `version.dll` de la release près de l'exécutable qui effectue le
+   rendu. Pour Black Myth: Wukong : `b1/Binaries/Win64`, près de
+   `b1-Win64-Shipping.exe`.
+4. Relancer le jeu et activer DLSS Frame Generation. Commencer par X2, puis
+   comparer X3/X4 dans une même scène en mouvement.
 
-以下为 0.2.3 在 RTX 3080 Ti / 驱动 591.86 / PTX 下的参考预算，覆盖 SM86 默认精确、SM86 可选近似及 SM75 路由，共 27 组补测。按最终**输出分辨率**选行；例如 4K 输出 + DLSS 性能档仍使用 4K 这一行。
+Il n'y a pas de fichier INI requis. Les options du host natif amont, dont
+`HardwareBilinear`, ne sont pas lues par cette variante. Ne pas renommer cette
+DLL en `nvngx_dlssg.dll` ni remplacer les DLL NVIDIA originales du jeu.
 
-| 输出分辨率 | 2X：额外显存估计 | 3X：额外显存估计 | 4X：额外显存估计 |
-|---|---:|---:|---:|
-| 1080p / 1920×1080 | 约 320 MiB | 约 330 MiB | 约 340 MiB |
-| 2K / 2560×1440 | 约 490 MiB | 约 510 MiB | 约 520 MiB |
-| 4K / 3840×2160 | 约 700 MiB | 约 740 MiB | 约 770 MiB |
+Lors d'une mise à jour depuis le premier paquet 310.9.1 à deux éléments,
+sauvegarder l'ancien `version.dll` et le dossier `dlssg3109` hors du jeu.
+Le nouveau fichier unique suffit.
 
-表值按预热后的进程本地显存增量计算，扣除基准程序预存输入和测试输出的占用，再加上一组 `M` 张 32 位输出缓冲，向上取整到 10 MiB（1 GiB = 1024 MiB）。这是稳定运行时的估计；游戏本体、额外在途帧、交换链及更大像素格式的开销还需另计，**实际应留出高于表值的额外显存余量**。这些数值不是整款游戏的最低显存容量或峰值保证；SM75 数值为 3080 Ti 上的路由参考。
+## Fonctionnement
 
-本次测得默认精确档和可选近似档的显存占用相同；SM75 路由差异小于 1 MiB，采用同一取整预算。2X/3X/4X 复用常驻推理资源，因此降低倍率主要减少输出缓冲，未必显著降低总显存占用。
+Le proxy embarque le runtime NVIDIA 310.9.1 inchangé et les kernels adaptés
+à SM86. Au premier chargement, le runtime est extrait automatiquement dans
+`%LOCALAPPDATA%/DLSSG-SM86/<SHA256>/nvngx_dlssg.dll` et vérifié avant utilisation.
+Les kernels sont lus directement depuis la DLL. Un cache corrompu est refusé.
+Le journal de diagnostic est `dlssg3109.log`, près du proxy.
 
-**显存不足或超过 Windows 分配的显存预算时，可能出现偶发卡顿、帧时间尖峰，即使平均 FPS 看起来正常。** 可降低贴图、输出分辨率或光追设置，并减少后台显存占用，为场景切换和资源加载留出余量。[Microsoft 显存预算说明](https://learn.microsoft.com/en-us/windows/win32/api/dxgi1_4/nf-dxgi1_4-idxgiadapter3-queryvideomemoryinfo)
+Cette architecture diffère du host natif 310.1 du projet amont. Les réglages,
+mesures de performance et routes GPU de ce dernier ne décrivent pas cette
+release. Aucun réglage global du pilote ou indicateur DLSS n'est activé
+automatiquement par l'installation.
 
-## 安装与升级
+## Retours en jeu et limites
 
-适用 Windows x64、D3D12 游戏及 NVIDIA 驱动。无需额外安装 Python 或 CUDA Toolkit。当前模型为 310.1；Vulkan 支持见下一版本计划。
+| Jeu | Retour utilisateur |
+|---|---|
+| Black Myth: Wukong | X2 agréable, X3 acceptable ; X4 fonctionne mais mauvais ressenti de fluidité. |
+| Palworld | Bon fonctionnement, y compris X4 ; dégradation visuelle sensible en X4. |
 
-1. **完全退出游戏。** 首次安装直接进行下一步；从旧版升级时，把之前安装的本项目代理 DLL 和 `dlssg_sm86.ini` 备份到单独目录，再移出游戏目录中的旧代理。保留其他 Mod 的文件。
-2. **找到实际渲染 EXE 的目录。** 《黑神话：悟空》为 `D:\SteamLibrary\steamapps\common\BlackMythWukong\b1\Binaries\Win64`，其中应有 `b1-Win64-Shipping.exe`。
-3. **复制一个代理 DLL 和 INI。** 默认复制包根目录的 `version.dll` 与 `dlssg_sm86.ini`。若这个 DLL 名称被其他 Mod 占用，或游戏不会加载它，从 `altnative` 选择一个可用入口，按下表安装。每次只保留本项目的一个代理。
-4. **选择显卡路由。** 3080 Ti 保持 `Router=SM86, KernelImage=PTX`；SM75/Turing 使用 `Router=SM75, KernelImage=PTX`。同一 INI 适用于全部入口。
-5. **重启游戏并启用 DLSS 帧生成。** 在游戏中选择 2X/3X/4X；`MaxGeneratedFrames=3` 表示允许最多额外生成三帧，实际倍率由游戏请求。
+Ces retours ne constituent pas un benchmark contrôlé ou une garantie sur
+toutes les configurations. Un compteur de FPS plus élevé ne garantit pas
+une meilleure réactivité. Comparer aussi les artefacts et la régularité en
+mouvement ; la cause précise des défauts observés en X4 n'est pas établie.
 
-| 入口 | 包内位置 | 用法 |
-|---|---|---|
-| 默认 | `version.dll` | 与 INI 放到渲染 EXE 旁 |
-| 替代 | `altnative/winmm.dll` | 选择游戏会加载的名称，原名复制到 EXE 旁 |
-| 替代 | `altnative/dinput8.dll` | 同上 |
-| 替代 | `altnative/winhttp.dll` | 同上 |
-| 替代 | `altnative/dxgi.dll` | 同上；当前仍为 D3D12 管线 |
+## Dépannage et désinstallation
 
-所有 DLL 都包含完整推理资源。替代入口复制时保持原文件名；其他文件可保留在下载目录。不额外混用上游 SM75 包中的代理、注入器或后端。
+Si les options restent absentes, vérifier le dossier de l'exécutable et la
+présence de `dlssg3109.log`. Fermer le jeu avant toute modification. Si le
+journal signale un cache corrompu, déplacer le sous-dossier concerné de
+`%LOCALAPPDATA%/DLSSG-SM86` pour permettre sa recréation au prochain lancement.
 
-`HardwareBilinear=0` 为默认精确档；需要可选近似采样时改为 `1`，仅 SM86 生效，生成像素可能变化。两档预设见 [INI 说明](docs/NATIVE_INI.md)。更改配置后重启游戏。
+Pour désinstaller, retirer uniquement le `version.dll` de cette release,
+puis remettre le fichier sauvegardé s'il y en avait un. Le journal et le cache
+DLSSG-SM86 peuvent être retirés quand les jeux qui l'utilisent sont fermés.
 
-排查加载时临时设置 `Logging.Level=2`，日志位于 EXE 旁 `dlssg_sm86/logs`；若未出现项目日志，核对渲染 EXE 目录和所选 DLL 是否由游戏加载。正式游玩可恢复 `Level=1`。保留游戏自带的 DLSSG 文件。卸载时退出游戏，移除本次选择的代理 DLL 和 INI，需要回退时恢复备份。
+Pour signaler un problème, préciser le jeu, le GPU, le pilote et le mode testé.
+Vérifier les chemins personnels avant de partager un journal.
 
-## 杀软误报与签名
+## Version et crédits
 
-本项目通过系统 DLL 代理和 LoadLibrary hook 接入游戏，这类行为可能被安全软件的启发式检测误报。Native 化已经取消原厂 feature DLL 的解压和手动映射，但仍需保留接入 hook；是否属于误报，要结合具体检测结果由对应厂商复核。
+`310.9.1-0` désigne le runtime 310.9.1 et la première révision distribuée de ce
+pont. Les propriétés Windows du fichier indiquent `0.1.0` : il s'agit du même
+binaire, conservé sans recompilation. Son empreinte figure dans `SHA256SUMS.txt`.
 
-全部五个 DLL 都使用 **DLSSG Native Project 项目自签证书**，可在 Windows 文件属性的“数字签名”中查看。签名用于核验签名者和文件完整性，**不提供 Windows 默认信任，也不保证消除杀软告警**。证书链不受信任、SmartScreen 的信誉提示与杀软检出属于不同检查；自签文件仍可能收到 SmartScreen 提示。[Microsoft SmartScreen 说明](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation)
-
-遇到告警时，先核对下载来源及发布 ZIP 旁的 `.sha256`，再记录安全软件名称、检测名称、病毒库版本和被检测 DLL 的 SHA256，向对应厂商提交误报复核。Microsoft Defender 的提交入口为 [Microsoft 文件分析](https://www.microsoft.com/en-us/wdsi/filesubmission)；核对哈希和签名不能代替厂商的检测结论。
-
-## 统一基线：Release 0.1.0 → Native 0.2.3
-
-本表统一使用 **2026-09-07 的 `dist/Release/version.dll`**，SHA256 `03d445237d519ac48cd9226278a0f07aecd7ac597697697eb64404e1d51b3c5a`。本表两档使用 0.2.3 DLL 的签名前文件 `f5715c29…`；发布包追加签名，PE 内容摘要一致。九个条件全部重新实测，GPU 为 RTX 3080 Ti / SM86，驱动 591.86。
-
-单位为**每个真实帧对应整组帧生成的 GPU 毫秒数**，包含共用预处理；2X/3X/4X 分别生成 1/2/3 帧。默认精确档为 `HardwareBilinear=0`，可选近似档为 `1`。
-
-| 分辨率 | 倍率 | Release 0.1.0 (ms) | 0.2.3 默认精确 (ms) | 耗时降低 | 0.2.3 可选近似 (ms) | 耗时降低 |
-|---|---:|---:|---:|---:|---:|---:|
-| 1080p | 2X | 1.528 | 0.996 | 34.82% | 0.985 | 35.55% |
-| 1080p | 3X | 2.253 | 1.594 | 29.26% | 1.574 | 30.11% |
-| 1080p | 4X | 2.977 | 2.185 | 26.61% | 2.157 | 27.54% |
-| 2K / 1440p | 2X | 2.477 | 1.632 | 34.12% | 1.616 | 34.77% |
-| 2K / 1440p | 3X | 3.674 | 2.591 | 29.49% | 2.557 | 30.40% |
-| 2K / 1440p | 4X | 4.882 | 3.545 | 27.39% | 3.493 | 28.45% |
-| 4K | 2X | 3.138 | 2.090 | 33.38% | 2.048 | 34.74% |
-| 4K | 3X | 4.994 | 3.407 | 31.77% | 3.326 | 33.39% |
-| 4K | 4X | 6.748 | 4.654 | 31.03% | 4.535 | 32.80% |
-
-耗时降低统一按 `(Release 耗时 − 当前耗时) / Release 耗时` 计算，使用未取整数据。毫秒数为各轮中位数的中位数。每个条件四轮，旧 Release 在每轮前后各测一次，精确/近似顺序交替；每次测 256 组，共 144 次运行。GPU 未锁频，未删除异常值。
-
-所有版本使用相同的合成《悟空》资源格式输入、PTX、HIGH=100 计算队列，每次 Evaluate 独立提交；1.5 秒负载预热后 Reset，再预热 64 帧。旧 Release 的内核格式由 Auto/Cubin 显式改为 PTX，其余计算路径来自该原始 DLL。旧版显式加载与内嵌资源一致的 310.1 feature DLL；初始化、解压和加载时间均不计入本表。
-
-精确档计时后输出与旧 Release 逐字节一致；近似档的真实帧及 alpha 不变，生成 RGB 有差异。这里是 GPU pipeline 耗时，整组跨度包含 Evaluate 之间的提交空隙；游戏渲染、Present、上传和读回不计入。不能将耗时降幅当作游戏 FPS 增幅。
-
-## 插帧后帧率怎么估算
-
-先在**相同场景、输出分辨率、DLSS 超分档位和画质设置**下关闭帧生成，得到帧率 `F_off`。用 `1000 / F_off` 换算基础帧时间，再从上表按分辨率、插帧倍率和默认精确／可选近似配置选择整组插帧耗时 `T_FG`（毫秒）。
-
-```text
-基础帧时间 T_base (ms) = 1000 / F_off
-开启插帧后的帧组时间 T_group (ms) ≈ T_base + T_FG
-真实帧／帧组速率 G (组/s) ≈ 1000 / T_group
-插帧后总帧率 F_out (FPS) ≈ G × M
-                       = 1000 × M / (1000 / F_off + T_FG)
-```
-
-`M` 是总倍率（2X/3X/4X 对应 2/3/4）。一组包含一个真实帧和 `M − 1` 个生成帧；**上表的 `T_FG` 已包含整组生成帧和共用预处理，不能再乘 `M − 1`**。在这个估算中，开启插帧后的真实帧／帧组速率 `G` 低于关闭插帧的 `F_off`。
-
-例如，未开帧生成约 **50 FPS**，基础帧时间为 **20 ms**。采用上表 RTX 3080 Ti / SM86 的 **4K 4X** 插帧组耗时：
-
-| 配置 | 插帧组耗时 T_FG (ms) | 估计帧组时间 (ms) | 估计真实帧／帧组速率 (组/s) | 估计插帧后总帧率 |
-|---|---:|---:|---:|---:|
-| Release 0.1.0 | 6.748 | 26.748 | 37.4 | 149.5 FPS |
-| 0.2.3 默认精确（HardwareBilinear=0） | 4.654 | 24.654 | 40.6 | 162.2 FPS |
-| 0.2.3 可选近似（HardwareBilinear=1） | 4.535 | 24.535 | 40.8 | 163.0 FPS |
-
-1080p、1440p 或 2X/3X 时，换用上表对应行，并填入该画质设置下自己测得的 `F_off`。这些插帧耗时来自 3080 Ti / SM86；其他显卡或 SM75 路由应使用对应实测耗时。
-
-这是将基础渲染时间与插帧组开销相加的**粗略估计**。游戏中的 GPU 资源争用、同步、CPU 开销、限帧及显示器刷新率会影响最终结果；估计值不保证等于计数器读数或实际显示帧率。
-
-## 《黑神话：悟空》实测反馈
-
-用户提供的 RTX 3080 Ti 同场景近似读数：**4K 输出、DLSS 性能档、全景光线追踪关闭、全影视级画质**。关闭帧生成时约 **50 FPS**，开启 **4X** 后：
-
-| 状态 | 真实帧／帧组速率 | 含生成帧的总帧率 |
-|---|---:|---:|
-| 优化前 | 约 36 组/s | 约 144 FPS |
-| 本次优化后 | 约 40 组/s | 约 160 FPS |
-
-帧组速率和总帧率均提升约 **11.1%**，即约 **+4 组/s、+16 FPS**。这里记录的是用户反馈的游戏实测，不是上述公式计算出的结果，也不是本次重新执行的自动化游戏测试。与离线默认精确档约 162 FPS 的估算接近，但不能把离线插帧耗时降低 31.03% 直接当作游戏 FPS 增幅。
-
-## 诊断与边界
-
-默认 `Logging.Level=1` 只记错误；排查时改为 `2` 或 `3`，日志在 `dlssg_sm86/logs`。可选 GPU 计时项见 INI 说明。
-
-调用方必须提供正反 clip 矩阵；最高生成 3 帧，不支持 6X/动态倍率、Reflex Warp 或 Reflex 自动矩阵查询。输入状态为 NON_PIXEL_SHADER_RESOURCE，输出为 UAV；调用方负责提交、同步和显示。本版优化的是 GPU 计算开销，不能将离线耗时下降当成实测游戏 FPS 增幅。
-
-SM75 路由已在 3080 Ti 上完成前向 PTX 检查；物理 Turing/Cubin 和新版游戏长期运行仍待验证。
-
-## SM75 来源与致谢
-
-感谢 **Coldwood1026** 的 RTX 20 系列 / SM75 适配工作。GPU 资源引用 [dlssg_for_sm75](https://github.com/Coldwood1026/dlssg_for_sm75)（原名 `dlssg_for_sm86`）的固定提交 [c60c2aa…](https://github.com/Coldwood1026/dlssg_for_sm75/commit/c60c2aa363c7e66a523122aa5cec9c884658ad5f)，由本项目独立宿主加载和调度。来源及许可见 `THIRD_PARTY_NOTICES.txt`。
-
-## 下一版本计划
-
-1. **Vulkan 支持**：增加 Vulkan 资源接入、互操作与同步，并验证 SM75/SM86 路径。
-2. **模型更新到最新 DLSSG**：实施时固定最新可用版本及哈希，适配模型/推理图并评估画质、显存和耗时。
-
-当前版本仍为 D3D12 + 310.1 模型。详细计划见 [路线图](docs/ROADMAP.md)。
+Merci à [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) pour le projet
+original et le travail SM86. Voir [les attributions tierces](THIRD_PARTY_NOTICES.txt).

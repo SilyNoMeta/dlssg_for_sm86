@@ -1,3 +1,21 @@
+DLSSG 310.9.1-0 SM86 bridge
+
+Based on sdli1995/dlssg_for_sm86:
+https://github.com/sdli1995/dlssg_for_sm86
+
+This distribution embeds the unchanged NVIDIA nvngx_dlssg.dll 310.9.1
+and adapted NVIDIA kernel assets. These third-party materials retain their
+original rights and are not relicensed by this fork.
+
+NVIDIA runtime SHA256:
+ff6e90eb78b827927dff5b4ecc6b1c870c2e9bca29ed9f48c7d348cc9e170b82
+
+The upstream notice below is preserved for attribution. Its descriptions of
+the native 310.1 host, SM75 routing and helper libraries refer to upstream's
+package, not the architecture or supported routes of this 310.9.1 bridge.
+
+--- Preserved upstream notice ---
+
 Helper libraries used by this project
 
 Project source follows the dlssg-to-fsr3 repository's GPLv3 license
