@@ -1,6 +1,6 @@
 # DLSSG 310.9.1 for SM86
 
-[Français](README.md) | English
+English | [简体中文](README.zh-CN.md) | [Français](README.fr.md)
 
 Experimental adaptation of DLSS Frame Generation **310.9.1** for NVIDIA SM86
 GPUs, based on [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86).
@@ -11,7 +11,7 @@ Install a single file: **`version.dll`**.
 ## Requirements
 
 - Windows x64, a Direct3D 12 game and an NVIDIA driver providing NGX/NVAPI.
-- SM86 GPU (GeForce RTX 30 family). Tested on RTX 3070 Ti Laptop with driver
+- SM86 GPU (GeForce RTX 30 family). Tested on a laptop with an RTX 3070 Ti Laptop GPU (**8 GB VRAM**) and driver
   616.92; this is a tested driver, not a minimum driver requirement.
 - The game must integrate DLSS Frame Generation and load the `version.dll` proxy.
 - X2, X3 and X4 depend on the controls exposed by the game.
@@ -21,6 +21,29 @@ This release does not provide an SM75/RTX 20 route, Vulkan support or alternate
 proxy DLL names.
 
 ## Installation and updates
+
+### New users: start with RHI and ShortFuse's tools
+
+**We recommend [RHI — ReShade HDR Installer](https://github.com/RankFTW/RHI)
+for beginners** to install and manage the companion tools. RHI exposes
+ShortFuse DLSS Tool and NR Cost Scaler through its DLSS management interface.
+Follow RHI's instructions for your game, then install this release's
+`version.dll` using the steps below.
+
+Our tester reports that this release works very well with
+**[ShortFuse's DLSS Tool](https://discord.com/channels/1408098019194310818/1543975158937821315)**
+and **[Patched DLSS-NR for RTX20/30/40](https://discord.com/channels/1408098019194310818/1543976771920330884)**,
+which can also be installed through [RHI](https://github.com/RankFTW/RHI).
+The Discord links may require joining the server.
+
+RTX20/30/40 in the NR patch's name describes that companion tool; this frame
+generation bridge still targets SM86/RTX 30. This compatibility report applies
+to the tested setup.
+
+**Support their authors by giving a star ⭐ to
+[RHI](https://github.com/RankFTW/RHI) and [ShortFuse's RenoDX](https://github.com/clshortfuse/renodx)!**
+
+### Install the frame generation bridge
 
 1. Fully exit the game.
 2. Back up any existing `version.dll`. If another mod uses this filename, do
@@ -52,6 +75,9 @@ does not automatically change global driver settings or enable DLSS indicators.
 
 ## Game reports and limitations
 
+The reports below come from one laptop equipped with an **RTX 3070 Ti Laptop
+GPU with 8 GB VRAM**. They should not be taken as desktop GPU results.
+
 | Game | User report |
 |---|---|
 | Black Myth: Wukong | X2 feels good, X3 acceptable; X4 works but feels poor. |
@@ -61,6 +87,16 @@ These are user reports, not controlled benchmarks or compatibility guarantees.
 Higher displayed FPS do not guarantee better responsiveness. Compare motion
 artifacts and pacing as well; the exact cause of the reported X4 artifacts has
 not been established.
+
+**Reports from other configurations are welcome!** Please share your GPU and
+VRAM, laptop or desktop model, driver, game version, output resolution and X2/X3/X4
+mode. If using Neural Rendering, include the NR version and NR Cost Scaler setting.
+Describe image quality and responsiveness as well as FPS, ideally in the same scene.
+Submit feedback through [GitHub Issues](https://github.com/SilyNoMeta/dlssg_for_sm86/issues).
+
+[View the Palworld screenshots and RHI setup](GALLERY.en.md): NR enabled/disabled
+and full/reduced NR processing resolution. All supplied gameplay screenshots
+show X2; the exact Cost Scaler value is not confirmed.
 
 ## Troubleshooting and removal
 

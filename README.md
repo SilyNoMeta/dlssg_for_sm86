@@ -1,89 +1,121 @@
-# DLSSG 310.9.1 pour SM86
+# DLSSG 310.9.1 for SM86
 
-Français | [English](README.en.md)
+English | [简体中文](README.zh-CN.md) | [Français](README.fr.md)
 
-Adaptation expérimentale de DLSS Frame Generation **310.9.1** pour les GPU
-NVIDIA SM86, basée sur le travail de
-[sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86).
-Installation avec un seul fichier : **`version.dll`**.
+Experimental adaptation of DLSS Frame Generation **310.9.1** for NVIDIA SM86
+GPUs, based on [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86).
+Install a single file: **`version.dll`**.
 
-[Télécharger la release 310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0)
+[Download release 310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0)
 
-## Compatibilité
+## Requirements
 
-- Windows x64, jeu Direct3D 12 et pilote NVIDIA fournissant NGX/NVAPI.
-- GPU SM86 (famille GeForce RTX 30). Essais réalisés sur RTX 3070 Ti Laptop,
-  pilote 616.92 ; ce numéro n'est pas une exigence minimale de pilote.
-- Le jeu doit intégrer DLSS Frame Generation et charger le proxy `version.dll`.
-- Modes X2, X3 et X4, selon les choix proposés par le jeu.
-- Python et CUDA Toolkit ne sont pas nécessaires pour jouer.
+- Windows x64, a Direct3D 12 game and an NVIDIA driver providing NGX/NVAPI.
+- SM86 GPU (GeForce RTX 30 family). Tested on a laptop with an RTX 3070 Ti Laptop GPU (**8 GB VRAM**) and driver
+  616.92; this is a tested driver, not a minimum driver requirement.
+- The game must integrate DLSS Frame Generation and load the `version.dll` proxy.
+- X2, X3 and X4 depend on the controls exposed by the game.
+- No Python or CUDA Toolkit installation is needed to play.
 
-Cette release ne fournit pas de route SM75/RTX 20, de prise en charge Vulkan,
-ni de DLL proxy sous d'autres noms.
+This release does not provide an SM75/RTX 20 route, Vulkan support or alternate
+proxy DLL names.
 
-## Installation et mise à jour
+## Installation and updates
 
-1. Fermer complètement le jeu.
-2. Sauvegarder un éventuel `version.dll` déjà présent. Si un autre mod utilise
-   ce nom, ne pas l'écraser : cette release ne gère pas le chaînage de proxies.
-3. Copier le `version.dll` de la release près de l'exécutable qui effectue le
-   rendu. Pour Black Myth: Wukong : `b1/Binaries/Win64`, près de
+### New users: start with RHI and ShortFuse's tools
+
+**We recommend [RHI — ReShade HDR Installer](https://github.com/RankFTW/RHI)
+for beginners** to install and manage the companion tools. RHI exposes
+ShortFuse DLSS Tool and NR Cost Scaler through its DLSS management interface.
+Follow RHI's instructions for your game, then install this release's
+`version.dll` using the steps below.
+
+Our tester reports that this release works very well with
+**[ShortFuse's DLSS Tool](https://discord.com/channels/1408098019194310818/1543975158937821315)**
+and **[Patched DLSS-NR for RTX20/30/40](https://discord.com/channels/1408098019194310818/1543976771920330884)**,
+which can also be installed through [RHI](https://github.com/RankFTW/RHI).
+The Discord links may require joining the server.
+
+RTX20/30/40 in the NR patch's name describes that companion tool; this frame
+generation bridge still targets SM86/RTX 30. This compatibility report applies
+to the tested setup.
+
+**Support their authors by giving a star ⭐ to
+[RHI](https://github.com/RankFTW/RHI) and [ShortFuse's RenoDX](https://github.com/clshortfuse/renodx)!**
+
+### Install the frame generation bridge
+
+1. Fully exit the game.
+2. Back up any existing `version.dll`. If another mod uses this filename, do
+   not overwrite it: this release does not chain other proxies.
+3. Copy the release's `version.dll` next to the actual rendering executable.
+   For Black Myth: Wukong, use `b1/Binaries/Win64`, next to
    `b1-Win64-Shipping.exe`.
-4. Relancer le jeu et activer DLSS Frame Generation. Commencer par X2, puis
-   comparer X3/X4 dans une même scène en mouvement.
+4. Start the game and enable DLSS Frame Generation. Start with X2, then compare
+   X3/X4 in the same moving scene.
 
-Il n'y a pas de fichier INI requis. Les options du host natif amont, dont
-`HardwareBilinear`, ne sont pas lues par cette variante. Ne pas renommer cette
-DLL en `nvngx_dlssg.dll` ni remplacer les DLL NVIDIA originales du jeu.
+No INI file is required. Upstream native-host settings, including
+`HardwareBilinear`, are not read by this variant. Do not rename this DLL to
+`nvngx_dlssg.dll` or replace the game's original NVIDIA libraries.
 
-Lors d'une mise à jour depuis le premier paquet 310.9.1 à deux éléments,
-sauvegarder l'ancien `version.dll` et le dossier `dlssg3109` hors du jeu.
-Le nouveau fichier unique suffit.
+When upgrading from the initial two-part 310.9.1 package, back up its old
+`version.dll` and `dlssg3109` folder outside the game. Only the new DLL is needed.
 
-## Fonctionnement
+## How it works
 
-Le proxy embarque le runtime NVIDIA 310.9.1 inchangé et les kernels adaptés
-à SM86. Au premier chargement, le runtime est extrait automatiquement dans
-`%LOCALAPPDATA%/DLSSG-SM86/<SHA256>/nvngx_dlssg.dll` et vérifié avant utilisation.
-Les kernels sont lus directement depuis la DLL. Un cache corrompu est refusé.
-Le journal de diagnostic est `dlssg3109.log`, près du proxy.
+The proxy embeds the unchanged NVIDIA 310.9.1 runtime and SM86 kernel assets.
+On first use it extracts the runtime to
+`%LOCALAPPDATA%/DLSSG-SM86/<SHA256>/nvngx_dlssg.dll`, verifies it and reuses that
+cache. Kernels are read directly from DLL resources. A corrupt cache is rejected.
+The diagnostic log is `dlssg3109.log`, next to the proxy.
 
-Cette architecture diffère du host natif 310.1 du projet amont. Les réglages,
-mesures de performance et routes GPU de ce dernier ne décrivent pas cette
-release. Aucun réglage global du pilote ou indicateur DLSS n'est activé
-automatiquement par l'installation.
+This architecture differs from upstream's native 310.1 host. Its settings,
+performance figures and GPU routes do not describe this release. Installation
+does not automatically change global driver settings or enable DLSS indicators.
 
-## Retours en jeu et limites
+## Game reports and limitations
 
-| Jeu | Retour utilisateur |
+The reports below come from one laptop equipped with an **RTX 3070 Ti Laptop
+GPU with 8 GB VRAM**. They should not be taken as desktop GPU results.
+
+| Game | User report |
 |---|---|
-| Black Myth: Wukong | X2 agréable, X3 acceptable ; X4 fonctionne mais mauvais ressenti de fluidité. |
-| Palworld | Bon fonctionnement, y compris X4 ; dégradation visuelle sensible en X4. |
+| Black Myth: Wukong | X2 feels good, X3 acceptable; X4 works but feels poor. |
+| Palworld | Works well, including X4; noticeably worse image quality in X4. |
 
-Ces retours ne constituent pas un benchmark contrôlé ou une garantie sur
-toutes les configurations. Un compteur de FPS plus élevé ne garantit pas
-une meilleure réactivité. Comparer aussi les artefacts et la régularité en
-mouvement ; la cause précise des défauts observés en X4 n'est pas établie.
+These are user reports, not controlled benchmarks or compatibility guarantees.
+Higher displayed FPS do not guarantee better responsiveness. Compare motion
+artifacts and pacing as well; the exact cause of the reported X4 artifacts has
+not been established.
 
-## Dépannage et désinstallation
+**Reports from other configurations are welcome!** Please share your GPU and
+VRAM, laptop or desktop model, driver, game version, output resolution and X2/X3/X4
+mode. If using Neural Rendering, include the NR version and NR Cost Scaler setting.
+Describe image quality and responsiveness as well as FPS, ideally in the same scene.
+Submit feedback through [GitHub Issues](https://github.com/SilyNoMeta/dlssg_for_sm86/issues).
 
-Si les options restent absentes, vérifier le dossier de l'exécutable et la
-présence de `dlssg3109.log`. Fermer le jeu avant toute modification. Si le
-journal signale un cache corrompu, déplacer le sous-dossier concerné de
-`%LOCALAPPDATA%/DLSSG-SM86` pour permettre sa recréation au prochain lancement.
+[View the Palworld screenshots and RHI setup](GALLERY.en.md): NR enabled/disabled
+and full/reduced NR processing resolution. All supplied gameplay screenshots
+show X2; the exact Cost Scaler value is not confirmed.
 
-Pour désinstaller, retirer uniquement le `version.dll` de cette release,
-puis remettre le fichier sauvegardé s'il y en avait un. Le journal et le cache
-DLSSG-SM86 peuvent être retirés quand les jeux qui l'utilisent sont fermés.
+## Troubleshooting and removal
 
-Pour signaler un problème, préciser le jeu, le GPU, le pilote et le mode testé.
-Vérifier les chemins personnels avant de partager un journal.
+If options are missing, check the executable directory and `dlssg3109.log`.
+Exit the game before changing files. If the log reports a corrupt cache, move
+the affected subfolder out of `%LOCALAPPDATA%/DLSSG-SM86` so it can be recreated.
 
-## Version et crédits
+To uninstall, remove this release's `version.dll` and restore your backed-up
+file if applicable. Its log and DLSSG-SM86 cache can be removed once games using
+them are closed.
 
-`310.9.1-0` désigne le runtime 310.9.1 et la première révision distribuée de ce
-pont. Les propriétés Windows du fichier indiquent `0.1.0` : il s'agit du même
-binaire, conservé sans recompilation. Son empreinte figure dans `SHA256SUMS.txt`.
+When reporting a problem, include the game, GPU, driver and selected mode.
+Review personal paths before sharing logs.
 
-Merci à [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) pour le projet
-original et le travail SM86. Voir [les attributions tierces](THIRD_PARTY_NOTICES.txt).
+## Version and credits
+
+`310.9.1-0` means runtime 310.9.1, distribution revision 0. Windows file properties
+still show `0.1.0`: this is the exact same binary, without recompilation.
+Its checksum is listed in `SHA256SUMS.txt`.
+
+Thanks to [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) for the original
+project and SM86 work. See [third-party notices](THIRD_PARTY_NOTICES.txt).
