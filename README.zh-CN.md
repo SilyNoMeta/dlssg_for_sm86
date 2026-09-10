@@ -9,26 +9,26 @@
 
 ## 选择版本
 
-这三个实验版本均使用 DLSSG 310.9.1，只需安装一个 `version.dll`。
-**建议在同一场景中分别尝试，保留最适合自己的版本。** 新版本不一定能带来更好的游戏体验。
+所有版本均使用 DLSSG 310.9.1，只需安装一个 `version.dll`。
+**请在相同场景中尝试各版本，保留最适合自己的版本。**
+版本号更高并不保证 FPS 更高或体验更好。
 
 | 版本 / 下载 | 主要区别 | 预期效果 |
 |---|---|---|
-| [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0) | 基础版本，使用手动双线性插值。 | 可作为优化版本的对照。 |
-| [310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) | 在最终图像重建阶段使用硬件双线性过滤，始终启用。 | 像素可能有轻微差异；测试用户感觉有小幅改善。 |
-| [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | 包含 `-1` 的全部改动，并在一个卷积中利用共享内存复用 FP16 输入数据。 | 进一步的小幅优化；未反馈明显的画面问题，性能差异可能难以察觉。 |
+| [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0) | 基础版本，手动双线性插值。 | 用于对比图像重建效果。 |
+| [310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) | 最终重建使用硬件双线性过滤。 | 可能存在细微像素差异；用户反馈有小幅改善。 |
+| [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | 包含 `-1`，并在一个卷积中复用 FP16 输入。 | 一位用户已在游戏中试用；未报告明显画面问题，性能改善难以判断。 |
+| [310.9.1-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-3) | 包含 `-2`，并在第二个重建卷积中复用 FP16 输入。 | 离线图像与 `-2` 一致；尚未确认 GPU 总耗时有稳定改善。 |
 
-`-1` 和 `-2` 的双线性路径借鉴原项目的 [`HardwareBilinear`](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff4/docs/NATIVE_INI.md) 选项，并针对本桥接实现进行了适配。
-没有 INI 开关；如需尝试此前的采样路径，请使用 `-0`。`-2` 保留 FP16 运算，不引入 FP8。
+双线性优化借鉴原项目的 [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) 选项，与 `-0` 相比可能出现轻微像素差异。
+后续内存读取优化保留 FP16 运算。**这些发布版本均未使用 FP8 或 INT8。**
 
-在配备 **RTX 3070 Ti Laptop、8 GB 显存的笔记本**上，测试用户无法明确判断 `-2`
-的体验更好还是更差，也未发现明显的画面问题。离线测量显示，相比 `-1`，X4 帧生成的
-**GPU 总耗时大约减少 0.4–0.5%**，但结果存在波动。这不是游戏内实测的 FPS 提升，
-实际体验可能几乎没有区别。新增 FP16 优化在已测试案例中的图像对比完全一致，
-但不能保证所有游戏均如此。欢迎其他硬件配置的反馈。
+目前的游戏反馈来自早期 `-0` 至 `-2` 版本，测试设备是一台配备
+**RTX 3070 Ti Laptop、8 GB 显存的笔记本**。较新版本已通过离线图像、
+加载和资源生命周期检查，但**尚未进行游戏实测**。单个内核运行更快，
+不代表整体性能一定有可测量的改善。请保留已验证可用的版本作为备份；欢迎其他配置的反馈。
 
-切换版本前请退出游戏并备份当前 DLL。在相同设置和场景下，对比画质、操作响应、
-流畅度以及 FPS，选择适合自己的版本。
+更换 DLL 或设置前请退出游戏。在相同设置下比较画质、响应、流畅度和 FPS。
 
 ## 运行要求
 
@@ -48,7 +48,7 @@
 安装和管理配套工具。RHI 的 DLSS 管理界面提供 ShortFuse DLSS Tool 和 NR Cost Scaler。
 请按 RHI 针对游戏的说明操作，然后按下方步骤安装本版本的 `version.dll`。
 
-根据测试用户的反馈，本版本与
+根据测试用户对早期版本的反馈，这些版本与
 **[ShortFuse 的 DLSS Tool](https://discord.com/channels/1408098019194310818/1543975158937821315)**
 及其 **[Patched DLSS-NR for RTX20/30/40](https://discord.com/channels/1408098019194310818/1543976771920330884)**
 配合使用效果很好，也可通过 [RHI](https://github.com/RankFTW/RHI) 安装这些配套工具。
@@ -117,7 +117,7 @@ SM86/RTX 30。兼容性反馈仅代表已测试的配置。
 
 ## 版本与致谢
 
-`310.9.1-2` 使用 310.9.1 运行时。DLL 校验值见 `SHA256SUMS.txt`。
+`310.9.1-3` 使用 310.9.1 运行时。DLL 校验值见 `SHA256SUMS.txt`。
 
 感谢 [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) 的原始项目和 SM86 工作。
 另见[第三方声明](THIRD_PARTY_NOTICES.txt)。

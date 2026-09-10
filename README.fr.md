@@ -10,32 +10,31 @@ Installation avec un seul fichier : **`version.dll`**.
 
 ## Choisir une version
 
-Ces trois versions expérimentales utilisent DLSSG 310.9.1 et s'installent avec
-un seul `version.dll`. **Essayez-les dans la même scène et gardez celle qui vous
-convient le mieux.** Une révision plus récente ne garantit pas un meilleur ressenti.
+Toutes les versions utilisent DLSSG 310.9.1 et s'installent avec un seul `version.dll`.
+**Essayez les variantes dans la même scène et gardez celle qui vous convient le mieux.**
+Un numéro plus élevé ne garantit ni plus de FPS ni un meilleur ressenti.
 
 | Version / téléchargement | Différence principale | À quoi s'attendre |
 |---|---|---|
-| [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0) | Version de base, avec interpolation bilinéaire manuelle. | Un point de comparaison pour les variantes optimisées. |
-| [310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) | Filtrage bilinéaire matériel pour la reconstruction finale, toujours actif. | De petites différences de pixels sont possibles ; notre testeur a ressenti une amélioration marginale. |
-| [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | Tout le contenu de la `-1`, plus la réutilisation des entrées FP16 d'une convolution en mémoire partagée. | Une petite optimisation supplémentaire ; aucun changement visuel frappant signalé, et un gain parfois difficile à percevoir. |
+| [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0) | Base avec interpolation bilinéaire manuelle. | Référence pour comparer la reconstruction d'image. |
+| [310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) | Filtrage bilinéaire matériel pour la reconstruction finale. | De petits écarts de pixels sont possibles ; une amélioration marginale a été rapportée. |
+| [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | Tout le contenu de la `-1`, plus la réutilisation des entrées FP16 d'une convolution. | Essayée en jeu par un utilisateur ; aucun problème visuel évident, gain difficile à juger. |
+| [310.9.1-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-3) | Tout le contenu de la `-2`, plus la réutilisation des entrées FP16 d'une seconde convolution de reconstruction. | Images identiques à la `-2` dans les tests hors jeu ; aucun gain constant sur le temps GPU total établi. |
 
-Le bilinéaire des `-1` et `-2` reprend l'idée de l'option [`HardwareBilinear`](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff4/docs/NATIVE_INI.md) du projet
-original, avec une adaptation à ce pont. Il n'y a pas de réglage INI ; utilisez
-la `-0` pour essayer l'échantillonnage précédent. La `-2` conserve les calculs
-FP16 et n'introduit pas de FP8.
+Le bilinéaire adapte l'idée de l'option [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) du projet original.
+Il peut modifier légèrement les pixels par rapport à la `-0`.
+Les optimisations suivantes de lecture mémoire conservent les calculs FP16.
+**Ces releases ne contiennent ni FP8 ni INT8.**
 
-Sur un **portable RTX 3070 Ti mobile, 8 Go de VRAM**, le testeur ne distingue
-pas clairement si la `-2` est meilleure ou moins bonne, et ne signale aucun
-problème visuel évident. Les mesures hors jeu suggèrent environ **0,4 à 0,5 %
-de temps GPU total en moins pour la génération X4** par rapport à la `-1`,
-avec de la variabilité. Ce n'est pas un gain de FPS mesuré en jeu ; l'effet
-peut être imperceptible. Les comparaisons d'images de l'optimisation FP16 ajoutée
-sont identiques dans les cas testés, sans garantie pour tous les jeux.
-Les retours d'autres configurations sont les bienvenus.
+Les retours en jeu concernent pour l'instant les versions `-0` à `-2`, sur un
+**portable RTX 3070 Ti mobile avec 8 Go de VRAM**. Les nouvelles révisions passent
+les vérifications hors jeu d'images, de chargement et de gestion des ressources,
+mais **n'ont pas encore été essayées en jeu**. Un kernel plus rapide isolément
+ne garantit pas un gain global mesurable. Gardez votre version fonctionnelle
+en secours ; les retours d'autres configurations sont les bienvenus.
 
-Fermez le jeu et sauvegardez votre DLL avant de changer de version. Comparez
-la qualité d'image, la réactivité et la fluidité, ainsi que les FPS, à réglages identiques.
+Fermez le jeu avant de changer de DLL ou de réglages. Comparez la qualité d'image,
+la réactivité et la fluidité, ainsi que les FPS, à réglages identiques.
 
 ## Compatibilité
 
@@ -59,7 +58,7 @@ ShortFuse DLSS Tool et NR Cost Scaler dans son interface de gestion du DLSS.
 Suivre les instructions de RHI pour son jeu, puis installer le `version.dll`
 de cette release selon les étapes ci-dessous.
 
-Selon le retour de notre testeur, cette version fonctionne très bien avec
+Selon le retour de notre testeur sur les versions précédentes, la compatibilité est très bonne avec
 **[DLSS Tool de ShortFuse](https://discord.com/channels/1408098019194310818/1543975158937821315)**
 et son **[Patched DLSS-NR for RTX20/30/40](https://discord.com/channels/1408098019194310818/1543976771920330884)**,
 également installable via [RHI](https://github.com/RankFTW/RHI).
@@ -146,7 +145,7 @@ Vérifier les chemins personnels avant de partager un journal.
 
 ## Version et crédits
 
-La version `310.9.1-2` utilise le runtime 310.9.1. L’empreinte de la DLL figure
+La version `310.9.1-3` utilise le runtime 310.9.1. L’empreinte de la DLL figure
 dans `SHA256SUMS.txt`.
 
 Merci à [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) pour le projet
