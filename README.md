@@ -113,9 +113,7 @@ Review personal paths before sharing logs.
 
 ## Version and credits
 
-`310.9.1-0` means runtime 310.9.1, distribution revision 0. Windows file properties
-still show `0.1.0`: this is the exact same binary, without recompilation.
-Its checksum is listed in `SHA256SUMS.txt`.
+`310.9.1-0` uses the 310.9.1 runtime. The DLL checksum is listed in `SHA256SUMS.txt`.
 
 Thanks to [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) for the original
 project and SM86 work. See [third-party notices](THIRD_PARTY_NOTICES.txt).

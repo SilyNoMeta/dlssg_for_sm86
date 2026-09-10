@@ -118,9 +118,8 @@ Vérifier les chemins personnels avant de partager un journal.
 
 ## Version et crédits
 
-`310.9.1-0` désigne le runtime 310.9.1 et la première révision distribuée de ce
-pont. Les propriétés Windows du fichier indiquent `0.1.0` : il s'agit du même
-binaire, conservé sans recompilation. Son empreinte figure dans `SHA256SUMS.txt`.
+La version `310.9.1-0` utilise le runtime 310.9.1. L’empreinte de la DLL figure
+dans `SHA256SUMS.txt`.
 
 Merci à [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) pour le projet
 original et le travail SM86. Voir [les attributions tierces](THIRD_PARTY_NOTICES.txt).

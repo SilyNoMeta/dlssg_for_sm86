@@ -20,9 +20,6 @@ Requires Windows x64, Direct3D 12, an SM86 NVIDIA GPU and a compatible game.
 See the README for installation and limitations. This is an experimental
 release, not a performance-optimized revision.
 
-The DLL is byte-for-byte identical to the locally validated 0.1.0 binary.
-Windows file metadata remains 0.1.0; `310.9.1-0` is the distribution tag.
-
 SHA256 of `version.dll`:
 `81f70a21f207bc9773275cb8343c95e41c18545190a05efbb2e4de650991c4b0`
 
