@@ -6,7 +6,26 @@ Experimental adaptation of DLSS Frame Generation **310.9.1** for NVIDIA SM86
 GPUs, based on [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86).
 Install a single file: **`version.dll`**.
 
-[Download release 310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0)
+[Download release 310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1)
+
+## What's new in 310.9.1-1
+
+This revision enables **hardware bilinear filtering** in the final output
+reconstruction stage. Hardware-filtered texture reads replace manual bilinear
+interpolation to reduce work. This is an approximate sampling path: generated
+pixels can differ slightly from 310.9.1-0.
+
+It follows the same optimization idea as the original project's
+[`HardwareBilinear` option](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff4/docs/NATIVE_INI.md),
+with an implementation adapted to our 310.9.1 bridge. Here it is **always enabled**;
+there is no INI switch. Use [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0)
+to return to the previous sampling path.
+
+Our tester reports a **small subjective improvement** on an RTX 3070 Ti Laptop
+with 8 GB VRAM. A repeatable overall performance gain has not been established;
+results depend on the game and scene. Other configurations' reports are welcome.
+X2/X3/X4 passed offline checks. Small differences in synthetic images do not
+guarantee identical quality in every game, especially in motion or HDR.
 
 ## Requirements
 
@@ -113,7 +132,7 @@ Review personal paths before sharing logs.
 
 ## Version and credits
 
-`310.9.1-0` uses the 310.9.1 runtime. The DLL checksum is listed in `SHA256SUMS.txt`.
+`310.9.1-1` uses the 310.9.1 runtime. The DLL checksum is listed in `SHA256SUMS.txt`.
 
 Thanks to [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) for the original
 project and SM86 work. See [third-party notices](THIRD_PARTY_NOTICES.txt).

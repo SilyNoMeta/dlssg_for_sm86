@@ -6,7 +6,24 @@
 [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86) 的工作。
 安装时只需复制一个文件：**`version.dll`**。
 
-[下载 310.9.1-0 版本](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0)
+[下载 310.9.1-1 版本](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1)
+
+## 310.9.1-1 更新内容
+
+本次更新在最终图像重建阶段启用**硬件双线性过滤**，用硬件过滤的纹理读取
+替代手动双线性插值，以减少计算工作。这是一条近似采样路径，生成帧的像素
+可能与 310.9.1-0 略有不同。
+
+其优化思路与原项目的
+[`HardwareBilinear` 选项](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff4/docs/NATIVE_INI.md)
+相同，但实现针对本项目的 310.9.1 桥接架构进行了适配。本版本**始终启用**
+该路径，没有 INI 开关。如需恢复此前的采样方式，请使用
+[310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0)。
+
+测试用户在配备 RTX 3070 Ti Laptop、8 GB 显存的笔记本上反馈有**轻微的主观改善**。
+目前尚未确认可重复的整体性能提升，效果取决于游戏和场景。欢迎其他配置的反馈。
+X2/X3/X4 已通过离线检查。合成图像中的微小差异并不保证所有游戏、运动场景或 HDR
+下的画质均相同。
 
 ## 运行要求
 
@@ -95,7 +112,7 @@ SM86/RTX 30。兼容性反馈仅代表已测试的配置。
 
 ## 版本与致谢
 
-`310.9.1-0` 使用 310.9.1 运行时。DLL 校验值见 `SHA256SUMS.txt`。
+`310.9.1-1` 使用 310.9.1 运行时。DLL 校验值见 `SHA256SUMS.txt`。
 
 感谢 [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) 的原始项目和 SM86 工作。
 另见[第三方声明](THIRD_PARTY_NOTICES.txt)。

@@ -7,7 +7,28 @@ NVIDIA SM86, basée sur le travail de
 [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86).
 Installation avec un seul fichier : **`version.dll`**.
 
-[Télécharger la release 310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0)
+[Télécharger la release 310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1)
+
+## Nouveautés de 310.9.1-1
+
+Cette révision active le **filtrage bilinéaire matériel** dans l'étape finale de
+reconstruction de l'image. Des lectures de texture filtrées par le matériel
+remplacent l'interpolation bilinéaire manuelle pour réduire le travail effectué.
+Cet échantillonnage est approximatif : les pixels générés peuvent légèrement
+différer de ceux de 310.9.1-0.
+
+Le principe rejoint l'option
+[`HardwareBilinear` du projet original](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff4/docs/NATIVE_INI.md),
+avec une implémentation adaptée à notre pont 310.9.1. Ici, il est **toujours actif**,
+sans réglage INI. Revenir à [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0)
+permet de retrouver l'échantillonnage précédent.
+
+Notre testeur rapporte une **petite amélioration ressentie** sur son portable
+RTX 3070 Ti mobile, 8 Go. Aucun gain global reproductible n'est établi ; le
+résultat dépend du jeu et de la scène. Les retours d'autres configurations sont
+bienvenus. X2/X3/X4 passent les contrôles hors jeu. De faibles écarts sur des
+images synthétiques ne garantissent pas une qualité identique dans tous les
+jeux, notamment en mouvement ou en HDR.
 
 ## Compatibilité
 
@@ -118,7 +139,7 @@ Vérifier les chemins personnels avant de partager un journal.
 
 ## Version et crédits
 
-La version `310.9.1-0` utilise le runtime 310.9.1. L’empreinte de la DLL figure
+La version `310.9.1-1` utilise le runtime 310.9.1. L’empreinte de la DLL figure
 dans `SHA256SUMS.txt`.
 
 Merci à [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) pour le projet
