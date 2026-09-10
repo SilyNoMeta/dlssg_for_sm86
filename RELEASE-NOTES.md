@@ -1,3 +1,49 @@
+# DLSSG 310.9.1-4 — Vectorized residual input loads
+
+## English
+
+Everything in `-3`, plus vectorized input loads in two residual convolutions. Offline image checks match `-2`; total GPU-time changes remain small and variable.
+
+Experimental prerelease, checked offline on an RTX 3070 Ti Laptop (8 GB).
+The added memory-access changes preserve FP16 arithmetic, and tested outputs
+match `-2` with hardware bilinear enabled. There is no consistent measured
+overall performance gain and no game validation yet for this revision.
+No FP8 or INT8 is included. Keep your working DLL to compare and revert.
+Hardware bilinear follows the idea of upstream's [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) option; small
+differences versus the manual bilinear path in `-0` remain possible.
+
+[Version comparison and installation](https://github.com/SilyNoMeta/dlssg_for_sm86/blob/v310.9.1-4/README.en.md)
+
+## 简体中文
+
+包含 `-3`，并在两个残差卷积中使用向量化输入读取。 离线图像与 `-2` 一致；GPU 总耗时变化较小且存在波动。
+
+实验预发布版本，已在 RTX 3070 Ti Laptop（8 GB）上进行离线检查。
+新增内存读取改动保留 FP16 运算；启用硬件双线性时，已测试的输出与 `-2` 一致。
+尚未确认整体性能有稳定提升，本修订版也尚未进行游戏实测。
+不含 FP8 或 INT8。请保留已验证可用的 DLL，便于对比和回退。
+双线性优化借鉴原项目的 [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) 选项，与 `-0` 手动双线性路径相比仍可能有细微像素差异。
+
+[版本对比与安装](https://github.com/SilyNoMeta/dlssg_for_sm86/blob/v310.9.1-4/README.zh-CN.md)
+
+## Français
+
+Tout le contenu de la `-3`, plus des lectures vectorisées dans deux convolutions résiduelles. Images identiques à la `-2` dans les tests hors jeu ; variations du temps GPU total faibles et irrégulières.
+
+Préversion expérimentale vérifiée hors jeu sur une RTX 3070 Ti mobile (8 Go).
+Les nouvelles lectures mémoire conservent les calculs FP16 ; les sorties testées
+correspondent à la `-2` lorsque le bilinéaire matériel est actif. Aucun gain
+global constant n'est établi et cette révision n'a pas encore été essayée en jeu.
+Ni FP8 ni INT8. Conservez votre DLL fonctionnelle pour comparer et revenir en arrière.
+Le bilinéaire reprend l'idée de l'option [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) du projet original ; de petits
+écarts avec le bilinéaire manuel de la `-0` restent possibles.
+
+[Comparatif et installation](https://github.com/SilyNoMeta/dlssg_for_sm86/blob/v310.9.1-4/README.fr.md)
+
+`version.dll` SHA256: `ebecb4044384ca283bfa77d033fec9a25db376d8ee3a98378dde659b28266d9c`
+
+---
+
 # DLSSG 310.9.1-3 — FP16 reconstruction input reuse
 
 ## English

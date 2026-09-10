@@ -19,6 +19,7 @@
 | [310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) | 最终重建使用硬件双线性过滤。 | 可能存在细微像素差异；用户反馈有小幅改善。 |
 | [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | 包含 `-1`，并在一个卷积中复用 FP16 输入。 | 一位用户已在游戏中试用；未报告明显画面问题，性能改善难以判断。 |
 | [310.9.1-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-3) | 包含 `-2`，并在第二个重建卷积中复用 FP16 输入。 | 离线图像与 `-2` 一致；尚未确认 GPU 总耗时有稳定改善。 |
+| [310.9.1-4](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-4) | 包含 `-3`，并在两个残差卷积中使用向量化输入读取。 | 离线图像与 `-2` 一致；GPU 总耗时变化较小且存在波动。 |
 
 双线性优化借鉴原项目的 [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) 选项，与 `-0` 相比可能出现轻微像素差异。
 后续内存读取优化保留 FP16 运算。**这些发布版本均未使用 FP8 或 INT8。**
@@ -117,7 +118,7 @@ SM86/RTX 30。兼容性反馈仅代表已测试的配置。
 
 ## 版本与致谢
 
-`310.9.1-3` 使用 310.9.1 运行时。DLL 校验值见 `SHA256SUMS.txt`。
+`310.9.1-4` 使用 310.9.1 运行时。DLL 校验值见 `SHA256SUMS.txt`。
 
 感谢 [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) 的原始项目和 SM86 工作。
 另见[第三方声明](THIRD_PARTY_NOTICES.txt)。

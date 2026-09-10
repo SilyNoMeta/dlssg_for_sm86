@@ -19,6 +19,7 @@ A higher revision number does not guarantee higher FPS or a better feel.
 | [310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) | Hardware bilinear filtering for final reconstruction. | Small pixel differences are possible; a marginal improvement was reported. |
 | [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | Everything in `-1`, plus FP16 input reuse in one convolution. | Tested in games by one user; no obvious visual issue reported, improvement hard to judge. |
 | [310.9.1-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-3) | Everything in `-2`, plus FP16 input reuse in a second reconstruction convolution. | Offline image checks match `-2`; no consistent total GPU-time improvement established. |
+| [310.9.1-4](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-4) | Everything in `-3`, plus vectorized input loads in two residual convolutions. | Offline image checks match `-2`; total GPU-time changes remain small and variable. |
 
 The bilinear optimization adapts the idea of the original project's
 [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) option. It can slightly change pixels versus `-0`.
@@ -139,7 +140,7 @@ Review personal paths before sharing logs.
 
 ## Version and credits
 
-`310.9.1-3` uses the 310.9.1 runtime. The DLL checksum is listed in `SHA256SUMS.txt`.
+`310.9.1-4` uses the 310.9.1 runtime. The DLL checksum is listed in `SHA256SUMS.txt`.
 
 Thanks to [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) for the original
 project and SM86 work. See [third-party notices](THIRD_PARTY_NOTICES.txt).

@@ -20,6 +20,7 @@ Un numéro plus élevé ne garantit ni plus de FPS ni un meilleur ressenti.
 | [310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) | Filtrage bilinéaire matériel pour la reconstruction finale. | De petits écarts de pixels sont possibles ; une amélioration marginale a été rapportée. |
 | [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | Tout le contenu de la `-1`, plus la réutilisation des entrées FP16 d'une convolution. | Essayée en jeu par un utilisateur ; aucun problème visuel évident, gain difficile à juger. |
 | [310.9.1-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-3) | Tout le contenu de la `-2`, plus la réutilisation des entrées FP16 d'une seconde convolution de reconstruction. | Images identiques à la `-2` dans les tests hors jeu ; aucun gain constant sur le temps GPU total établi. |
+| [310.9.1-4](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-4) | Tout le contenu de la `-3`, plus des lectures vectorisées dans deux convolutions résiduelles. | Images identiques à la `-2` dans les tests hors jeu ; variations du temps GPU total faibles et irrégulières. |
 
 Le bilinéaire adapte l'idée de l'option [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) du projet original.
 Il peut modifier légèrement les pixels par rapport à la `-0`.
@@ -145,7 +146,7 @@ Vérifier les chemins personnels avant de partager un journal.
 
 ## Version et crédits
 
-La version `310.9.1-3` utilise le runtime 310.9.1. L’empreinte de la DLL figure
+La version `310.9.1-4` utilise le runtime 310.9.1. L’empreinte de la DLL figure
 dans `SHA256SUMS.txt`.
 
 Merci à [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) pour le projet
