@@ -1,3 +1,82 @@
+# DLSSG 310.9.1-2 — FP16 input reuse
+
+## English
+
+This revision keeps the hardware bilinear optimization from `-1` and adds
+shared-memory reuse of FP16 inputs in one convolution to reduce repeated
+global-memory reads. FP16 arithmetic is preserved; FP8 is not used.
+
+The effect is modest: offline X4 measurements suggest around **0.4–0.5% less
+total GPU generation time**, with variability, not an in-game FPS claim.
+On an **RTX 3070 Ti Laptop, 8 GB**, our tester could not clearly tell whether
+it felt better or worse and reported no obvious visual issue. Comparisons
+for the added optimization produced identical images in the tested cases.
+It is an experimental option to try, not a promise of a noticeable improvement.
+
+The global README now compares [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0), [310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) and [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2).
+Try them with the same settings and keep the version you prefer. Reports from
+other GPUs, laptops/desktops and games are welcome.
+
+## 简体中文
+
+本版本保留 `-1` 的硬件双线性优化，并在一个卷积中利用共享内存复用 FP16 输入，
+减少重复的全局内存读取。FP16 运算保持不变，没有使用 FP8。
+
+效果较小：离线 X4 测量显示，**GPU 帧生成总耗时大约减少 0.4–0.5%**，但存在波动，
+这不是游戏内 FPS 提升的承诺。在 **RTX 3070 Ti Laptop、8 GB 显存的笔记本**上，
+测试用户无法明确判断体验更好还是更差，也未发现明显画面问题。新增优化在已测试
+案例中的图像对比完全一致。这是供尝试的实验选项，不保证能感受到明显改善。
+
+README 现已提供 [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0)、[310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) 和 [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) 的对比表。
+建议使用相同设置分别尝试，选择自己更喜欢的版本。欢迎其他显卡、笔记本、台式机及游戏的反馈。
+
+## Français
+
+Cette révision conserve le bilinéaire matériel de la `-1` et réutilise les
+entrées FP16 d'une convolution en mémoire partagée pour réduire les lectures
+répétées en mémoire globale. Les calculs FP16 sont conservés ; aucun FP8 n'est ajouté.
+
+L'effet est modeste : les mesures X4 hors jeu suggèrent environ **0,4 à 0,5 %
+de temps GPU total de génération en moins**, avec de la variabilité. Ce n'est
+pas une promesse de gain de FPS en jeu. Sur son **portable RTX 3070 Ti mobile,
+8 Go**, notre testeur ne distingue pas clairement si le ressenti est meilleur
+ou moins bon, et ne rapporte aucun problème visuel évident. Les comparaisons
+de l'optimisation ajoutée donnent des images identiques dans les cas testés.
+C'est une option expérimentale à essayer, sans amélioration perceptible garantie.
+
+Le README global compare maintenant les versions [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0), [310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) et [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2).
+Essayez-les à réglages identiques et gardez celle qui vous convient le mieux.
+Les retours d'autres GPU, portables, PC fixes et jeux sont les bienvenus.
+
+## HardwareBilinear
+
+**EN:** `-1` and `-2` follow the idea of the original project's [`HardwareBilinear`](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff4/docs/NATIVE_INI.md)
+option with a bridge-specific implementation, always enabled and without an INI
+switch. `-0` retains the previous sampling path. Bilinear sampling can cause
+small pixel differences versus `-0`; the new FP16 input reuse is a separate change.
+
+**中文：** `-1` 和 `-2` 的双线性实现借鉴原项目的上述选项，并针对本桥接进行了适配，
+始终启用且没有 INI 开关。`-0` 保留原采样路径。双线性优化可能导致与 `-0` 的轻微像素差异；
+本次 FP16 输入复用是另一项独立改动。
+
+**FR :** Les `-1` et `-2` adaptent le principe de cette option amont à notre pont,
+toujours actif et sans INI. La `-0` conserve l'échantillonnage précédent. Le
+bilinéaire peut modifier légèrement les pixels par rapport à la `-0` ; la
+réutilisation des entrées FP16 est une modification distincte.
+
+## Installation / 安装 / Installation
+
+- **EN:** Exit the game, back up your current `version.dll`, then replace it with
+  this release's DLL. See the [version comparison and installation instructions](README.md).
+- **中文：** 退出游戏并备份当前 `version.dll`，然后替换为本版本 DLL。
+  参阅[版本对比及安装说明](README.zh-CN.md)。
+- **FR :** Fermez le jeu, sauvegardez votre `version.dll` actuel, puis remplacez-le
+  par celui de cette release. Voir le [comparatif et les instructions](README.fr.md).
+
+`version.dll` SHA256: `836b8af6f9e27ea24cbbdcc8b2d9073cb4670edf31699c9fd44ef8df0f3de905`
+
+---
+
 # DLSSG 310.9.1-1 — Hardware Bilinear
 
 ## English

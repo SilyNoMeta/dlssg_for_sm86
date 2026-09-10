@@ -7,28 +7,35 @@ NVIDIA SM86, basée sur le travail de
 [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86).
 Installation avec un seul fichier : **`version.dll`**.
 
-[Télécharger la release 310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1)
 
-## Nouveautés de 310.9.1-1
+## Choisir une version
 
-Cette révision active le **filtrage bilinéaire matériel** dans l'étape finale de
-reconstruction de l'image. Des lectures de texture filtrées par le matériel
-remplacent l'interpolation bilinéaire manuelle pour réduire le travail effectué.
-Cet échantillonnage est approximatif : les pixels générés peuvent légèrement
-différer de ceux de 310.9.1-0.
+Ces trois versions expérimentales utilisent DLSSG 310.9.1 et s'installent avec
+un seul `version.dll`. **Essayez-les dans la même scène et gardez celle qui vous
+convient le mieux.** Une révision plus récente ne garantit pas un meilleur ressenti.
 
-Le principe rejoint l'option
-[`HardwareBilinear` du projet original](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff4/docs/NATIVE_INI.md),
-avec une implémentation adaptée à notre pont 310.9.1. Ici, il est **toujours actif**,
-sans réglage INI. Revenir à [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0)
-permet de retrouver l'échantillonnage précédent.
+| Version / téléchargement | Différence principale | À quoi s'attendre |
+|---|---|---|
+| [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0) | Version de base, avec interpolation bilinéaire manuelle. | Un point de comparaison pour les variantes optimisées. |
+| [310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) | Filtrage bilinéaire matériel pour la reconstruction finale, toujours actif. | De petites différences de pixels sont possibles ; notre testeur a ressenti une amélioration marginale. |
+| [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | Tout le contenu de la `-1`, plus la réutilisation des entrées FP16 d'une convolution en mémoire partagée. | Une petite optimisation supplémentaire ; aucun changement visuel frappant signalé, et un gain parfois difficile à percevoir. |
 
-Notre testeur rapporte une **petite amélioration ressentie** sur son portable
-RTX 3070 Ti mobile, 8 Go. Aucun gain global reproductible n'est établi ; le
-résultat dépend du jeu et de la scène. Les retours d'autres configurations sont
-bienvenus. X2/X3/X4 passent les contrôles hors jeu. De faibles écarts sur des
-images synthétiques ne garantissent pas une qualité identique dans tous les
-jeux, notamment en mouvement ou en HDR.
+Le bilinéaire des `-1` et `-2` reprend l'idée de l'option [`HardwareBilinear`](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff4/docs/NATIVE_INI.md) du projet
+original, avec une adaptation à ce pont. Il n'y a pas de réglage INI ; utilisez
+la `-0` pour essayer l'échantillonnage précédent. La `-2` conserve les calculs
+FP16 et n'introduit pas de FP8.
+
+Sur un **portable RTX 3070 Ti mobile, 8 Go de VRAM**, le testeur ne distingue
+pas clairement si la `-2` est meilleure ou moins bonne, et ne signale aucun
+problème visuel évident. Les mesures hors jeu suggèrent environ **0,4 à 0,5 %
+de temps GPU total en moins pour la génération X4** par rapport à la `-1`,
+avec de la variabilité. Ce n'est pas un gain de FPS mesuré en jeu ; l'effet
+peut être imperceptible. Les comparaisons d'images de l'optimisation FP16 ajoutée
+sont identiques dans les cas testés, sans garantie pour tous les jeux.
+Les retours d'autres configurations sont les bienvenus.
+
+Fermez le jeu et sauvegardez votre DLL avant de changer de version. Comparez
+la qualité d'image, la réactivité et la fluidité, ainsi que les FPS, à réglages identiques.
 
 ## Compatibilité
 
@@ -139,7 +146,7 @@ Vérifier les chemins personnels avant de partager un journal.
 
 ## Version et crédits
 
-La version `310.9.1-1` utilise le runtime 310.9.1. L’empreinte de la DLL figure
+La version `310.9.1-2` utilise le runtime 310.9.1. L’empreinte de la DLL figure
 dans `SHA256SUMS.txt`.
 
 Merci à [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) pour le projet
