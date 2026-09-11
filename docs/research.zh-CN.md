@@ -1,6 +1,46 @@
 # 时间正确性与已集成优化
 
-2026-09-11 · 310.9.1-8 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
+2026-09-11 · 310.9.1-9 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
+
+## -9 新增：更高倍率与原生 Dynamic MFG
+
+提供程序上限可配置为五张生成帧，即总倍率 X6。同一时间修正按 t=i/(n+1)
+放置第 i 张生成帧，也适用于 X5/X6。提高上限不会扩展旧版 Streamline 插件
+中的数组；固定覆盖仍受已识别插件版本及其报告能力的限制。
+
+原生 Dynamic MFG 使用 Streamline 的 eDynamic 选项及目标帧率，不另建帧呈现
+调节循环。启用需要已知 ABI、本项目适配的提供程序、DX12 和肯定的动态能力
+报告。游戏关闭 FG 时仍保持关闭。动态不可用或被拒绝时，可在支持范围内回退
+到所配置固定倍率。游戏已选择的原生动态模式会被保留。
+
+### 为什么报告了支持，却仍未启用？
+
+游戏可能在视图 0 调用 GetState，却在视图 1 调用 SetOptions。最初实现将系统
+能力存于每个视图中，导致第二个视图等待第一个视图已经获取的能力。修复后跨
+视图共享系统能力，但帧呈现计数、fence 和启用状态仍各自独立。提供程序、设备
+或 API 变化，以及成功关闭时，能力缓存被清空；后来的明确否定报告覆盖此前的
+肯定结果。版本化副本保护旧结构体，也不会额外调用 GetState 消耗游戏的呈现计数。
+
+### 此二进制文件的验证依据
+
+- 213 项控制/ABI 断言，包含旧版 Options/State 缓冲区保护。
+- 16 个 DX12/Vulkan 固定倍率 GPU 用例，覆盖 X5/X6 及优化开关。
+- 10 个真实 Streamline 场景，包含初始实现的预期失败对照和修复后的能力共享。
+- 四组 Vulkan X2–X6 切换序列，每组仅显式创建一次 feature；合成测试图中的
+  时间位置误差小于 0.403 像素。
+- RTX 3070 Ti Laptop 8 GB、驱动 616.92 上的游戏内功能报告：自动 X3/X4/X5
+  切换、动态水印以及被接受的 130 FPS 目标请求。
+
+该报告不提供新的 FPS/延迟基准或长时间稳定性结果。Vulkan 切换用例检查图像
+内容，不检查 swapchain 呈现或内部内存分配成本。Streamline 2.14.1 在 Vulkan
+下报告不支持原生动态，这与 [NVIDIA 指南](https://github.com/NVIDIA-RTX/Streamline/blob/v2.14.1/docs/ProgrammingGuideDLSS_G.md#63-enabling-dynamic-multi-frame-generation)
+一致。本版本未包含独立的 Vulkan 自适应控制器。
+
+控制设计参考了 [mavismmg / ImDreamt 的 MFGAdaUnlock-RenoDx](https://github.com/mavismmg/MFGAdaUnlock-RenoDx)，
+固定提交为 7e613b2aadffe936f2ea19df9c71931bbbbae2e6。发行包保留其 MIT 署名及
+Streamline 头文件声明。
+
+以下章节保留此前时间修正和加载测试的历史范围，不代表已重新测量 -9 的所有配置。
 
 ## 观察与假设
 
@@ -101,8 +141,8 @@ Vulkan 适配 NVX CUDA 模块创建及启动调用。两者都使用同一组修
 
 ## 可追溯性
 
-`version.dll` SHA256：`a19c3b7b65d3e485674377c8b2c8d71407179d7da314c6f9ccd691b03951fe75`。
-这正是在悟空中以 `dxgi.dll` 名称验证过的二进制文件，未重新构建。
-改名不会改变哈希。内嵌运行库及两个内核包与 -7 相同，变更在于加载集成。
-旧 -0…-6 因 MFG 缺陷撤下；保留历史结果用于解释，而非推荐下载。
-此处介绍技术机制及其验证，不包含私人开发日志或测试程序。
+-9 `version.dll` SHA256：`114004043035c3f8f91b1b8909bdb8b7e68fa36394aeb339c339e30042684561`。
+这就是获得本次游戏内动态验证的二进制文件，未重新构建。内嵌运行库与两个修正
+内核包均与 -8 相同；新增工作在于宿主端帧生成控制与能力处理。改名不会改变
+哈希。以上点名游戏的历史结果仍归属于其原始版本。-0 至 -6 已撤下。
+发行包仅附公开技术摘要，不包含开发日志或测试程序。参见[验证范围](validation-summary.json)。

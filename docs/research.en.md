@@ -1,6 +1,54 @@
 # Temporal correctness and shipped optimizations
 
-2026-09-11 · release 310.9.1-8 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
+2026-09-11 · release 310.9.1-9 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
+
+## New in -9: higher multipliers and native Dynamic MFG
+
+The provider ceiling is configurable up to five generated frames, or X6 total.
+The same temporal correction places generated frame i at t=i/(n+1), including
+the new X5/X6 cases. A ceiling does not expand an older game's Streamline arrays:
+fixed overrides remain bounded by the recognized plugin and reported capacity.
+
+Native Dynamic MFG uses Streamline's eDynamic options and target frame rate.
+It does not introduce a separate frame-pacing loop. Activation requires a known
+ABI, the adapted provider, DX12 and a positive dynamic-capability report. FG off
+remains off. Rejected or unavailable dynamic requests can fall back to the
+configured fixed factor when supported. A game's existing dynamic mode is preserved.
+
+### Why an advertised capability was not enough
+
+An integration can query GetState on viewport 0 and submit SetOptions on viewport 1.
+Our initial implementation kept system capabilities inside each viewport's state,
+so the second view could wait for support that the first view had already reported.
+The fix shares system capabilities across views while keeping presentation counters,
+fences and activation state local. Capabilities are cleared on provider/device/API
+changes and successful shutdown. A later explicit negative report replaces a positive
+one. Versioned copies preserve older game structures; no extra GetState call consumes
+the game's presentation counters.
+
+### Evidence for this binary
+
+- 213 control/ABI assertions, including guarded older Options/State buffers.
+- 16 fixed-mode GPU cases across DX12 and Vulkan, including X5/X6 and options on/off.
+- 10 real Streamline scenarios, including an expected failure on the initial
+  implementation and successful capability sharing in the corrected implementation.
+- Four Vulkan X2–X6 transition sequences, with one explicit feature creation each;
+  temporal-position error remains below 0.403 px on the synthetic test image.
+- A functional in-game Dynamic MFG report on RTX 3070 Ti Laptop 8 GB, driver 616.92:
+  automatic X3/X4/X5 transitions, a dynamic watermark, and a 130 FPS request accepted.
+
+The game report supplies no new FPS, latency or long-session stability benchmark.
+The Vulkan transition tests check generated image content, not swapchain presentation
+or internal allocation cost. Streamline 2.14.1 reports no native dynamic capability
+under Vulkan, consistent with NVIDIA's [Dynamic MFG guide](https://github.com/NVIDIA-RTX/Streamline/blob/v2.14.1/docs/ProgrammingGuideDLSS_G.md#63-enabling-dynamic-multi-frame-generation).
+A separate adaptive Vulkan controller is not included.
+
+The control design was informed by [mavismmg / ImDreamt's MFGAdaUnlock-RenoDx](https://github.com/mavismmg/MFGAdaUnlock-RenoDx),
+pinned at 7e613b2aadffe936f2ea19df9c71931bbbbae2e6. Its MIT attribution and the
+Streamline header notice are included in the distribution.
+
+The sections below retain the history and scope of earlier temporal/loader tests;
+their results are not presented as fresh measurements of every -9 configuration.
 
 ## Finding and hypothesis
 
@@ -121,11 +169,11 @@ a DLL cannot provide a missing game integration or add a DX11 backend.
 
 ## Traceability
 
-`version.dll` SHA256: `a19c3b7b65d3e485674377c8b2c8d71407179d7da314c6f9ccd691b03951fe75`.
-This is the exact binary validated in Wukong as `dxgi.dll`, with no rebuild.
-Renaming it does not change its hash. Its runtime and both embedded kernel packs
-match -7; the change is in loader integration.
-Previous releases -0…-6 were withdrawn because of the MFG defect; their historical
-results are retained for interpretation, not as recommended downloads.
-The mechanisms and validation above document this release;
-private development logs and test applications are not bundled.
+Release -9 `version.dll` SHA256: `114004043035c3f8f91b1b8909bdb8b7e68fa36394aeb339c339e30042684561`.
+This is the exact binary with the new in-game dynamic validation, without a rebuild.
+Its embedded runtime and both corrected kernel packs are unchanged from -8;
+the new work is in host-side frame-generation controls and capability handling.
+Renaming the DLL does not change its hash. Prior named-game results above remain
+attributed to their original releases. Releases -0 through -6 were withdrawn.
+Only the public technical summary accompanies the binary, not development logs
+or test programs. See [validation scope](validation-summary.json).

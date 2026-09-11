@@ -1,98 +1,124 @@
-# 面向 SM86 的 DLSSG 310.9.1
+<div align="center">
 
-[English](README.md) | 简体中文 | [Français](README.fr.md)
+<h1>DLSS Frame Generation<br>让 RTX 30 系列生成更多帧</h1>
+<p>更多画面，更流畅的运动，让倍率随游戏负载而变。</p>
+<p>
+<img alt="版本 310.9.1-9" src="https://img.shields.io/badge/release-310.9.1--9-76b900?style=flat-square">
+<img alt="Windows x64" src="https://img.shields.io/badge/Windows-x64-238636?style=flat-square">
+<img alt="DirectX 12 和 Vulkan" src="https://img.shields.io/badge/API-DX12%20%2B%20Vulkan-30363d?style=flat-square">
+<img alt="SM86" src="https://img.shields.io/badge/GPU-SM86-30363d?style=flat-square">
+</p>
+<p><strong><a href="https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-9/dlssg-sm86-310.9.1-9-win64.zip">下载 310.9.1-9</a></strong> · <a href="RELEASE-NOTES.md">版本更新</a> · <a href="docs/install-loaders.zh-CN.md">安装指南</a></p>
+<p><a href="README.en.md">English</a> · <a href="README.fr.md">Français</a> · <strong>简体中文</strong></p>
 
-基于 [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86) 的实验性 **DLSS Frame Generation 310.9.1**
-SM86/RTX 30 适配。一个独立 DLL 包含 **DirectX 12 + Vulkan**、
-MFG 时间位置修正和四项可选优化。
+</div>
 
-## 下载 310.9.1-8
+---
 
-**[下载通用 DLL 和可选 INI](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-8/dlssg-sm86-310.9.1-8-win64.zip)** · [版本说明](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-8)
+在兼容的 **Ampere SM86 / RTX 30 系列** GPU 上使用 **DLSS Frame Generation 310.9.1**。本实验性适配基于 [sdli1995 的原项目](https://github.com/sdli1995/dlssg_for_sm86)，修正多帧生成的运动位置，提供可选优化，并将 **DirectX 12 与 Vulkan** 支持集成到一个 DLL 中。
 
-一个压缩包，只含一个 **`version.dll`**。根据安装方式选择文件名：
+**-9 新增：** 最高 **X6** 固定倍率、**兼容 DX12 集成中的原生 Dynamic MFG**，以及一个可自行编辑的 INI。游戏仍需已经集成 DLSS 帧生成。
 
-| 文件名 | 安装方式 |
+## 能带来什么？
+
+| 功能 | 游戏中的实际作用 |
 |---|---|
-| `version.dll` | 直接版本代理，默认文件名。 |
-| `dxgi.dll` | 同一文件改名，直接 DXGI 代理，无需 ASI 加载器。 |
-| `dxgi.asi` | 同一文件改名，通过 Ultimate ASI Loader x64 加载。 |
+| **选择 X2 至 X6** | 在已加载插件支持的范围内，为每张渲染帧生成更多中间帧。X4 表示一张渲染帧加三张生成帧。 |
+| **让 Dynamic MFG 自动选择** | 为 NVIDIA 运行库设置你希望的目标，让它随负载调整倍率。需要兼容的 DX12 Streamline 集成与驱动。 |
+| **让运动均匀推进** | 中间帧处于运动路径的不同位置。时间修正解决旧版“FPS 很高，观感却不流畅”的 MFG 问题，并始终生效。 |
+| **支持 DX12 和 Vulkan** | 两者使用同一套修正后的 SM86 内核。固定 X5/X6 取决于游戏插件；原生动态模式仅支持 DX12。 |
+| **适配已有模组** | 保留 `version.dll`，改名为 `dxgi.dll`，或作为 ASI 插件加载。同一个文件，同一套功能。 |
+| **自行选择优化** | 四项 GPU 优化可在 INI 中独立开关。游玩不需要编译工具或安装 CUDA。 |
 
-**只安装一份本项目桥接文件。** ZIP 还包含可选 INI、文档、校验值和许可证。
--8 在 -7 修正后的运行库和内核基础上新增 DXGI 转发及 ASI 启动，保留四项 INI 选项。
+更多生成帧可以改善视觉流畅度，但 **X6 并不一定最好**。操作响应仍取决于实际渲染帧率，更高倍率也可能让画面瑕疵更明显。建议从 X2 或 X3 开始，在运动场景中比较。
 
-**此前 -0 至 -6 已撤下：虽然 FPS 较高，其 X3/X4
-生成图像的运动位置可能都接近两张真实图像的中点。** 在每帧移动 8 像素的测试中，
-旧 X4 输出约为 4/4/4 像素，修正后为 2/4/6。使用 **RTX 3070 Ti Laptop、8 GB**、
-驱动 616.92 的用户确认《黑神话：悟空》X4 明显更加流畅。这是正确性修复，
-不承诺提高 FPS。悟空基准图表的白色矩形仍存在。
+## 开始使用
 
-即使关闭全部 INI 优化，时间修正也始终生效。
-详见[技术发现、方法和结果](docs/research.zh-CN.md)。
+1. **下载并解压**[发布 ZIP](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-9/dlssg-sm86-310.9.1-9-win64.zip)。
+2. **关闭游戏并备份**将被替换的文件。将 `version.dll` 和 `dlssg_sm86.ini` 放在实际游戏可执行文件旁。《黑神话：悟空》的位置为 `b1/Binaries/Win64`。
+3. **在游戏中启用 DLSS 帧生成。** 随包 INI 保留游戏的模式选择，并在集成支持时允许最高 X6。
+4. **编辑 INI**，在兼容游戏中选择固定倍率或启用动态。修改配置后重启游戏。
 
-## 安装
+> **第一次使用 DLSS 模组？** [RHI](https://github.com/RankFTW/RHI) 可帮助管理 DLSS 版本及配套工具。按其指南操作，再按上面的步骤安装本项目 DLL。
 
-1. 关闭游戏，备份现有 `version.dll` 和 `dlssg_sm86.ini`。
-2. 将 `version.dll` 放在实际渲染程序旁：悟空为 `b1/Binaries/Win64`。
-3. 可将 `dlssg_sm86.ini` 放在同一目录，重启并比较 X2/X3/X4。
+已经使用其他模组？请选择一种加载方式：
 
-如果其他模组占用了 `version.dll`，请选择 DXGI 或 ASI 方式并参考
-[通用安装指南](docs/install-loaders.zh-CN.md)。使用 Ultimate ASI Loader 时，
-加载器名为 `version.dll`，本项目 DLL 改名为 `dxgi.asi`。
-配置保持 `dlssg_sm86.ini`。这些改名方式需要 -8；原始 -7 二进制文件必须
-保留 `version.dll` 名称。不可改名为 `nvngx_dlssg.dll`。回退时关闭游戏并恢复备份文件。
+| 安装文件 | 使用场景 |
+|---|---|
+| `version.dll` | 默认的直接加载方式。 |
+| `dxgi.dll` | 将同一个 DLL 改名后通过 DXGI 直接加载，无需 ASI Loader。 |
+| `dxgi.asi` | 改名后使用 [Ultimate ASI Loader x64](https://github.com/ThirteenAG/Ultimate-ASI-Loader) 加载。加载器本身可占用 `version.dll`。 |
 
-需要 Windows x64、SM86 GPU 和游戏现有的 DLSS FG 集成。Vulkan 游戏还需提供
-NGX 扩展和帧呈现机制。复制 DLL 无法为任意游戏添加 FG。DX11、Linux/Proton、
-DXVK 和 RTX 20 未验证。游玩无需安装 Python/CUDA。
-616.92 是已测试驱动，并非最低版本要求。
+**只安装一份本项目 DLL。** 配置名称始终为 `dlssg_sm86.ini`，放在本项目 DLL/ASI 旁。保留已有的 ReShade 等代理文件；[安装指南](docs/install-loaders.zh-CN.md) 介绍共存、其他 ASI 名称及回退方法。不要将本文件改名为 `nvngx_dlssg.dll`。
 
-## 可选优化
+## 按你的习惯设置
+
+用文本编辑器打开本项目 DLL 旁的 **`dlssg_sm86.ini`**。填入自己需要的值，保存后**重启游戏**。随包配置为：
 
 ```ini
-[Optimizations]
-HardwareBilinear=1
-Conv13SharedInput=1
-Conv0SharedInput=1
-ResidualVectorLoads=1
+[FrameGeneration]
+MaxMultiplier=6
+ForceMultiplier=0
+DynamicMFG=0
+DynamicTargetFPS=0
 ```
 
-| 选项 | 作用 |
+| 参数 | 应填写什么 |
 |---|---|
-| `HardwareBilinear` | 最终重建使用硬件过滤，可能出现细微像素差异；相关原项目选项为 [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md)。 |
-| `Conv13SharedInput` | 在共享内存中复用一个卷积的 FP16 输入。 |
-| `Conv0SharedInput` | 在第二个重建卷积中复用 FP16 输入。 |
-| `ResidualVectorLoads` | 对两个残差卷积使用向量化输入读取。 |
+| `MaxMultiplier` | 倍率上限，**2 至 6**。实际加载的插件必须支持所请求倍率。 |
+| `ForceMultiplier` | **0** 让游戏选择；**2 至所设上限** 请求对应固定倍率。 |
+| `DynamicMFG` | **1** 在兼容的 DX12 集成中请求原生动态；**0** 表示本 DLL 不主动请求动态。 |
+| `DynamicTargetFPS` | **0** 以显示器刷新率为目标。使用动态模式时，也可填写**自己希望的目标 FPS**（1–1000 的整数）。 |
 
-`1` 开启，`0` 关闭；文件或键缺失时默认为 `1`。修改后须重启游戏。
-设置适用于两种 API，不选择 X2/X3/X4，也不控制 Neural Rendering / NR Cost Scaler。
-本代理读取自己的 `[Optimizations]` 配置，不读取原生提供程序的配置段。
-全部关闭时仍使用修正后的参考内核，不会恢复旧版本缺陷。
-本版本不含 FP8、INT8 或降低神经网络质量的选项。
+**想固定 X5？** 设置 `MaxMultiplier=6`、`ForceMultiplier=5`、`DynamicMFG=0`。需要 X2、X3、X4 或 X6 时，改为对应倍率即可。
 
-## 配套工具与游戏反馈
+**想自动调整？** 设置 `DynamicMFG=1`，并选择自己的 `DynamicTargetFPS`。`ForceMultiplier=0` 时，回退使用游戏选择。也可指定固定回退，例如 `ForceMultiplier=4`，在动态不可用且固定覆盖受支持时生效。
 
-**建议新手使用 [RHI](https://github.com/RankFTW/RHI) 管理配套工具**，遵照其说明操作，再安装此 FG DLL。
-笔记本测试用户反馈与 [ShortFuse DLSS Tool](https://discord.com/channels/1408098019194310818/1543975158937821315) 和
-[Patched DLSS-NR for RTX20/30/40](https://discord.com/channels/1408098019194310818/1543976771920330884) 配合良好，后者也可通过 RHI 安装。
-Discord 链接可能要求加入服务器。NR 补丁名称中的 GPU 范围不会扩大本 FG 代理的 SM86 支持范围。
-请给 **[RHI](https://github.com/RankFTW/RHI)** 和 **[ShortFuse RenoDX](https://github.com/clshortfuse/renodx)** 点 Star，支持作者。
+目标**不保证实际 FPS 恒定**；VSync 可能优先生效。游戏中必须启用 FG，但菜单不必出现“Dynamic”选项。这些设置不会为游戏菜单添加按钮。
 
-| 游戏 | 验证情况 |
+原生动态需要**兼容的 DX12 Streamline 集成与驱动**。固定覆盖也需要已识别的 Streamline 路径；直接使用 NGX 的集成仍由游戏控制。**Vulkan** 请使用固定模式，原生动态在该 API 上未启用。游戏自身选择的原生动态模式会被保留，即使本 DLL 未主动请求动态。
+
+**保留旧 INI？** 加入上述配置节即可使用这些控制项。缺少该节时，默认 `MaxMultiplier=4`，其余三项为 `0`。随包新 INI 明确允许 X6，同时保留游戏的模式选择。
+
+## 四项小优化，自由选择
+
+默认全部开启。将某项设为 `0` 后重启即可比较。收益可能较小，并取决于实际负载。
+
+| INI 设置 | 改变了什么 |
 |---|---|
-| 黑神话：悟空 / DX12 | 修正后的 X4 明显更流畅；笔记本上也已确认直接使用 `dxgi.dll` 正常工作。基准图表仍为白色。 |
-| 幻兽帕鲁 | 旧版本已有良好反馈；修正版需重新测试。 |
+| `HardwareBilinear` | 最终重建使用 GPU 硬件过滤，可能产生细微像素差异。参考原项目的 [HardwareBilinear 选项](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md)。 |
+| `Conv13SharedInput` | 在 GPU 快速共享内存中复用一个卷积的输入数据。 |
+| `Conv0SharedInput` | 将共享输入复用应用到另一个重建卷积。 |
+| `ResidualVectorLoads` | 合并两个残差卷积中的内存读取。 |
 
-目前主要数据来自一台**笔记本**，不能代表桌面 GPU。欢迎[提交其他配置反馈](https://github.com/SilyNoMeta/dlssg_for_sm86/issues)：
-GPU/显存、驱动、游戏/API、分辨率、倍数、NR/Cost Scaler 设置、运动画质和响应感受。
+它们位于 `[Optimizations]`，对两种 API 均生效。省略的优化键默认为 `1`。全部关闭也会保留时间修正。这些选项不控制 Neural Rendering 或 NR Cost Scaler；不包含 FP8/INT8 模式或缩小的神经网络模型。
 
-## 诊断与致谢
+## 兼容性与配套工具
 
-DLL 内嵌未修改的 NVIDIA 310.9.1 运行时和 SM86 内核。运行时经校验后缓存于
-`%LOCALAPPDATA%/DLSSG-SM86/<SHA256>/`；内核始终内嵌。日志为代理旁的 `dlssg3109.log`。
-Vulkan 日志事件证明后端执行，不测量显示 FPS。损坏缓存会被拒绝；关闭游戏后，
-可将对应缓存子目录移走以便重新生成。
+**Windows x64 · 兼容的 SM86 GPU · 游戏已有 DLSS FG 集成。** 运动/深度信息与帧呈现由游戏提供。本 DLL 无法为任意游戏添加 FG，也不提供 DX11 后端。Linux/Proton、DXVK 和 RTX 20 未验证。
 
-感谢 [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) 和 Michael Robles 的
-[RTX40MFG-Unlock 时间修正](https://github.com/dashdogy/RTX40MFG-Unlock/blob/cf99204a00ce015a24c4c2be4082170b65e2fed1/source/native/midpoint_fix.cpp)（MIT）。
-详见[第三方声明](THIRD_PARTY_NOTICES.txt)和 `SHA256SUMS.txt`。
+原生 Dynamic MFG 已有 **RTX 3070 Ti Laptop、8 GB 显存**、驱动 **616.92** 上的游戏内功能确认。这是一台笔记本的结果，不代表所有 RTX 30 显卡或游戏。该驱动版本是测试环境，并非最低要求。高倍率与动态模式取决于**实际加载的 Streamline 插件及驱动**，而不只是 DLL 文件名。
+
+测试者还报告，本项目与 **[ShortFuse 的 DLSS Tool](https://discord.com/channels/1408098019194310818/1543975158937821315)** 及 **[Patched DLSS-NR for RTX20/30/40](https://discord.com/channels/1408098019194310818/1543976771920330884)** 配合良好，这些工具也可通过 RHI 获取。NR 补丁的 GPU 支持范围不等于本 FG 桥接的支持范围。Discord 链接可能需要先加入服务器。
+
+如果这些工具对你有帮助，请为 **[RHI](https://github.com/RankFTW/RHI)** 和 **[ShortFuse 的 RenoDX](https://github.com/clshortfuse/renodx)** 点亮一颗 Star。它们让安装管理方便了许多。
+
+## 应该尝试哪个版本？
+
+| 版本 | 主要区别 | 适合用途 |
+|---|---|---|
+| **[310.9.1-9](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-9)** | 兼容 DX12 集成中的动态模式、固定 X5/X6、INI 控制、通用加载。 | **从这里开始。** 包含此前修正及四项优化。 |
+| [310.9.1-8](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-8) | 修正后的 X2–X4，支持 `version.dll` / `dxgi.dll` / ASI。 | 比较或回退到没有新增 MFG 控制的版本。 |
+| [310.9.1-7](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7) | 首个修正 MFG 运动的版本；仅支持 `version.dll`。 | 对比时间修正的历史版本。 |
+
+-0 至 -6 因 MFG 运动错误而撤下。《黑神话：悟空》基准图表上的白色矩形仍是独立的已知问题。
+
+## 深入了解 · 帮助改进
+
+[技术说明](docs/research.zh-CN.md) 介绍时间修正、视图间能力共享修复、验证范围及尚未测量的项目。排查问题可参考[日志指南](docs/install-loaders.zh-CN.md#配置与检查)。NVIDIA 水印可用时，`Dyn DRV` 表示驱动动态模式；`4x/6x` 表示当前 X4、上限 X6。
+
+**欢迎其他配置的测试反馈。** 请提供 GPU/显存、驱动、游戏/API、实际加载的 Streamline 版本、分辨率、INI 设置，以及 NR/Cost Scaler 设置。描述运动观感及响应，FrameView/PresentMon 记录尤其有帮助。[提交反馈 →](https://github.com/SilyNoMeta/dlssg_for_sm86/issues)
+
+---
+
+基于 [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86)。感谢 [Michael Robles / RTX40MFG-Unlock](https://github.com/dashdogy/RTX40MFG-Unlock) 的时间修正、[mavismmg / ImDreamt 的 MFGAdaUnlock-RenoDx](https://github.com/mavismmg/MFGAdaUnlock-RenoDx) 提供的扩展/动态 MFG 参考，以及 [Ultimate ASI Loader](https://github.com/ThirteenAG/Ultimate-ASI-Loader) 的 ASI 加载支持。NVIDIA 运行库与资源保留其原有权利。[第三方声明](THIRD_PARTY_NOTICES.txt) · [校验值](SHA256SUMS.txt)

@@ -1,8 +1,8 @@
 # Installation: version.dll, ASI or dxgi.dll
 
-Release **310.9.1-8** — [download the universal package](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-8).
+Release **310.9.1-9** — [download the universal package](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-9).
 It contains one `version.dll` that can also be named `dxgi.dll` or `dxgi.asi`.
-These modes require -8; the original -7 binary must keep its `version.dll` name.
+These modes are available from -8 onward; the original -7 binary must keep its `version.dll` name.
 
 All names use the same DX12/Vulkan runtime, kernels, temporal fix and
 INI options. Close the game and back up existing files before choosing **one**
@@ -52,7 +52,37 @@ additional ASI loader. Choose another mode if that filename is already used.
 The game must load the chosen DLL name for the bridge to start.
 Never rename the bridge to `nvngx_dlssg.dll`.
 
+## Configure frame generation in the INI
+
+The root INI follows the game's selection with `MaxMultiplier=6`, `ForceMultiplier=0`
+and `DynamicMFG=0`. Edit `dlssg_sm86.ini` beside our DLL to select the fixed
+multiplier or native dynamic behavior you want. Restart, then enable
+FG in the game; toggle FG off/on once if the integration needs to resubmit options.
+Keep one bridge and one INI; changing settings does not require another DLL.
+
+Set `DynamicMFG=1` to request dynamic mode and choose `DynamicTargetFPS` yourself:
+0 uses display refresh, 1–1000 requests that FPS target. `ForceMultiplier=0`
+retains the game's choice as fallback; another supported value requests a fixed
+fallback. To request a fixed factor, use `DynamicMFG=0` and set `ForceMultiplier`
+from 2 to `MaxMultiplier`. Native dynamic requires compatible
+DX12 Streamline and driver support. Fixed overrides also require a recognized
+Streamline path; direct NGX integrations remain controlled by their game. A game's
+own dynamic selection is preserved. See the [settings reference](../README.en.md).
+
+Without `[FrameGeneration]`, defaults remain X4 ceiling, no fixed override and no
+dynamic request. Missing optimization keys still default to enabled. The temporal
+correction cannot be disabled by either section.
+
 ## Configuration and verification
+
+For native dynamic, `sl_native_dynamic_supported=1` followed by
+`sl_native_dynamic_accepted=<target>` confirms capability and request acceptance.
+`sl_state_viewport` and `sl_options_viewport` help diagnose split-view integrations.
+Verify actual behavior too: an available NVIDIA watermark can show `Dyn DRV` and
+`4x/6x` (current factor / ceiling). Acceptance alone is not a presentation benchmark.
+The watermark is not automatically enabled by this package. The bridge log is
+`dlssg3109.log` beside our DLL; frames-since-query counters are not multipliers.
+
 
 The configuration filename is always **`dlssg_sm86.ini`**, regardless of the
 bridge filename. Its four `[Optimizations]` options accept `1` or `0`; missing
@@ -64,8 +94,9 @@ followed by `installed_310_9_1` when the runtime is handled. An ASI loader does
 not need to display an overlay. Loading a plugin alone does not prove that
 frame generation is running.
 
-The universal binary passes automated loader and DX12/Vulkan image checks.
-Direct `dxgi.dll` operation is user-confirmed in Wukong on RTX 3070 Ti Laptop
+The universal loader was validated in -8; -9 retains its exports and startup paths.
+The new binary also passes DX12/Vulkan image checks.
+Direct `dxgi.dll` operation was user-confirmed for -8 in Wukong on RTX 3070 Ti Laptop
 8 GB. This is a functional report, not a new performance benchmark.
 The filename does not add frame generation to games without an integration,
 or add DX11 DLSSG support. To roll back, close the game, remove the installed

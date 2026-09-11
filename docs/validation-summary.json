@@ -1,44 +1,42 @@
 {
-  "release": "310.9.1-8",
-  "dll_sha256": "a19c3b7b65d3e485674377c8b2c8d71407179d7da314c6f9ccd691b03951fe75",
+  "release": "310.9.1-9",
+  "dll_sha256": "114004043035c3f8f91b1b8909bdb8b7e68fa36394aeb339c339e30042684561",
   "date": "2026-09-11",
-  "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU, 616.92",
-  "temporal_validation_baseline_release": "310.9.1-7",
-  "temporal_validation_baseline_sha256": "d10fc4d245ddfa0a8b2bd5530dfde23547bf193d6f30623d4875627db1002bef",
-  "baseline_offline_cases": 52,
-  "baseline_positive_cases": 49,
-  "baseline_expected_negative_controls": 3,
-  "motion_pixels_per_real_frame": 8,
-  "x4_expected_generated_positions": [
-    2,
+  "gpu": "RTX 3070 Ti Laptop 8 GB",
+  "driver": "616.92",
+  "same_binary_as_in_game_dynamic_validation": true,
+  "binary_rebuilt": false,
+  "control_abi_assertions": 213,
+  "guarded_option_versions": 5,
+  "guarded_state_versions": 4,
+  "fixed_gpu_cases": 16,
+  "real_streamline_scenarios": 10,
+  "real_streamline_scenarios_include_old_binary_negative_control": true,
+  "vulkan_transition_sequences": 4,
+  "explicit_feature_creations_per_sequence": 1,
+  "synthetic_temporal_error_bound_pixels": 0.403,
+  "native_dynamic_dx12_in_game_user_confirmed": true,
+  "user_observed_dynamic_multipliers": [
+    3,
     4,
-    6
+    5
   ],
-  "old_x4_approximate_positions": [
-    4,
-    4,
-    4
-  ],
-  "baseline_all_16_ini_combinations_x4_both_apis": true,
-  "baseline_x2_reference_byte_identical": true,
-  "loader_modes": [
-    "version.dll",
-    "dxgi.dll",
-    "dxgi.asi"
-  ],
-  "initialize_asi_export": true,
-  "dxgi_export_count": 20,
-  "dxgi_factory_apis_checked": 3,
-  "concurrent_dxgi_first_call_threads": 8,
-  "static_dxgi_import_host_passed": true,
-  "actual_ual_startup_passed": true,
-  "loader_gpu_cases": 4,
-  "images_per_loader_gpu_case": 12,
-  "loader_outputs_byte_identical_to_corrected_release7": true,
-  "embedded_runtime_and_both_kernel_packs_identical_to_release7": true,
-  "baseline_wukong_x4_user_reports_much_smoother": true,
-  "wukong_direct_dxgi_user_confirmed": true,
-  "wukong_direct_dxgi_report": "Functional report; no new performance benchmark or explicit per-multiplier result.",
-  "wukong_white_chart_fixed": false,
-  "corrected_vulkan_game_test": "pending"
+  "dynamic_target_requested_fps": 130,
+  "native_dynamic_vulkan_supported": false,
+  "adaptive_vulkan_controller_included": false,
+  "current_vulkan_swapchain_presentation_validation": false,
+  "new_fps_latency_benchmark": false,
+  "long_session_stability_validation": false,
+  "runtime_kernel_resources_unchanged_from_release8": true,
+  "historical": {
+    "temporal_baseline_release": "310.9.1-7",
+    "temporal_gpu_cases": 52,
+    "positive_cases": 49,
+    "expected_negative_controls": 3,
+    "loader_validation_release": "310.9.1-8",
+    "wukong_corrected_x4_and_direct_dxgi_reports": true
+  },
+  "known_issues": [
+    "White Wukong benchmark chart remains unresolved"
+  ]
 }

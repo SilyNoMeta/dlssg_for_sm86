@@ -1,6 +1,57 @@
 # Justesse temporelle et optimisations incluses
 
-11 septembre 2026 · release 310.9.1-8 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
+11 septembre 2026 · release 310.9.1-9 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
+
+## Nouveautés -9 : facteurs élevés et Dynamic MFG natif
+
+Le plafond du fournisseur est configurable jusqu'à cinq images générées, soit X6
+au total. La même correction temporelle place l'image i à t=i/(n+1), y compris
+en X5/X6. Ce plafond n'agrandit pas les tableaux d'un ancien plugin Streamline :
+le forçage reste limité par la version reconnue et les capacités annoncées.
+
+Le Dynamic MFG natif utilise les options eDynamic et la cible de Streamline.
+Il n'ajoute pas de boucle indépendante de régulation de la présentation. Son
+activation exige une ABI connue, notre fournisseur, DX12 et une capacité dynamique
+positive. FG désactivé reste désactivé. Une demande refusée ou indisponible peut
+revenir au facteur fixe configuré si celui-ci est pris en charge. Le choix dynamique
+natif déjà effectué par le jeu est conservé.
+
+### Pourquoi une capacité annoncée ne suffisait pas
+
+Une intégration peut appeler GetState sur la vue 0 et SetOptions sur la vue 1.
+Notre première implémentation conservait les capacités système dans chaque vue :
+la seconde pouvait attendre une capacité déjà signalée par la première.
+La correction partage ces capacités, tout en gardant compteurs de présentation,
+fences et état d'activation propres à chaque vue. Le cache est effacé lors d'un
+changement de fournisseur/périphérique/API et d'un arrêt réussi. Une nouvelle
+réponse négative remplace une capacité positive. Les copies versionnées préservent
+les anciennes structures du jeu ; aucun appel GetState supplémentaire ne consomme
+ses compteurs de présentation.
+
+### Preuves pour ce binaire
+
+- 213 assertions de contrôle/ABI, avec protection des anciens buffers Options/State.
+- 16 cas GPU fixes DX12/Vulkan, incluant X5/X6 et optimisations activées/désactivées.
+- 10 scénarios Streamline réels, dont l'échec attendu de la première implémentation
+  et le partage des capacités réussi dans la version corrigée.
+- Quatre séquences Vulkan X2–X6 avec une seule création explicite de feature chacune ;
+  erreur de placement inférieure à 0,403 px sur la mire synthétique.
+- Retour fonctionnel en jeu sur RTX 3070 Ti Laptop 8 Go, pilote 616.92 : transitions
+  automatiques X3/X4/X5, filigrane dynamique et demande acceptée à 130 FPS.
+
+Ce retour ne fournit pas de nouveau benchmark FPS/latence ni de test de longue durée.
+Les transitions Vulkan vérifient le contenu des images, pas la présentation par la
+swapchain ni le coût des allocations internes. Streamline 2.14.1 annonce l'absence
+de capacité dynamique native sous Vulkan, conformément au [guide NVIDIA](https://github.com/NVIDIA-RTX/Streamline/blob/v2.14.1/docs/ProgrammingGuideDLSS_G.md#63-enabling-dynamic-multi-frame-generation).
+Aucun contrôleur adaptatif Vulkan distinct n'est inclus.
+
+Le contrôle s'appuie sur l'étude de [MFGAdaUnlock-RenoDx de mavismmg / ImDreamt](https://github.com/mavismmg/MFGAdaUnlock-RenoDx),
+commit 7e613b2aadffe936f2ea19df9c71931bbbbae2e6. Son attribution MIT et la mention
+des headers Streamline accompagnent la distribution.
+
+Les sections suivantes conservent l'historique et la portée des tests temporels et
+de chargement précédents ; elles ne constituent pas de nouvelles mesures de tous
+les cas de la -9.
 
 ## Observation et hypothèse
 
@@ -127,11 +178,11 @@ renommage ne remplace pas une intégration absente et n'ajoute pas de backend DX
 
 ## Traçabilité
 
-SHA256 de `version.dll` : `a19c3b7b65d3e485674377c8b2c8d71407179d7da314c6f9ccd691b03951fe75`.
-Il s'agit du binaire exact validé dans Wukong sous le nom `dxgi.dll`, sans reconstruction.
-Le renommage ne change pas l'empreinte. Son runtime et ses deux packs embarqués
-correspondent à la -7 ; la modification porte sur le chargement.
-Les releases -0…-6 ont été retirées à cause du défaut MFG ; leurs résultats sont
-conservés pour interprétation, pas comme téléchargements recommandés.
-Cette documentation présente les mécanismes et leur validation ; les journaux
-de développement et applications de test privés ne sont pas fournis.
+SHA256 de `version.dll` -9 : `114004043035c3f8f91b1b8909bdb8b7e68fa36394aeb339c339e30042684561`.
+Il s'agit du binaire exact validé en dynamique en jeu, sans reconstruction.
+Le runtime embarqué et les deux packs corrigés sont inchangés depuis la -8 ;
+les nouveaux travaux concernent les contrôles hôtes de génération et les capacités.
+Le renommage ne change pas son empreinte. Les validations de jeux nommés ci-dessus
+restent attribuées à leurs releases d'origine. Les versions -0 à -6 ont été retirées.
+Seule la synthèse technique publique accompagne le binaire, sans journaux de
+développement ni programmes de test. Voir la [portée des validations](validation-summary.json).
