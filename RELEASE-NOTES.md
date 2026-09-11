@@ -1,3 +1,105 @@
+# DLSSG 310.9.1-6 — DirectX 12 + Vulkan, optional INI
+
+## English
+
+**Start here: [310.9.1-6 — DX12 + Vulkan + configurable optimizations](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-6/dlssg-sm86-310.9.1-6-win64.zip).**
+One `version.dll` includes both API paths and all four released optimizations.
+The ZIP includes the optional `dlssg_sm86.ini`. All four options default to on.
+Use the profiles below to compare earlier kernel combinations without swapping DLLs.
+This is an experimental prerelease; a higher revision does not guarantee higher FPS.
+
+| Option | What it controls |
+|---|---|
+| `HardwareBilinear` | Hardware bilinear filtering during final reconstruction; small pixel differences are possible. |
+| `Conv13SharedInput` | Shared-memory reuse of FP16 inputs in one convolution. |
+| `Conv0SharedInput` | The same reuse in a second reconstruction convolution. |
+| `ResidualVectorLoads` | Vectorized input loads in two residual convolutions. |
+
+The INI configures optimizations on both APIs. The game selects DX12 or Vulkan;
+there is no API-switch setting here. These switches do not select X2/X3/X4 or
+control a separate Neural Rendering / NR Cost Scaler mod.
+
+Testing so far uses one **RTX 3070 Ti Laptop GPU with 8 GB VRAM**, driver 616.92.
+Earlier DX12 versions have user reports from Wukong and Palworld. The same Vulkan
+implementation and kernels have a positive No Man's Sky X2/X3/X4 report using a
+preview with additional diagnostic logging. Controlled cross-version game
+benchmarks are still in progress; no overall speedup is promised.
+
+Hardware bilinear adapts the original project's [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) option. No FP8, INT8, workspace compression or smaller neural model is included. Fully restart the game after changing the INI. Vulkan requires an existing NGX FG integration; this does not add DX11 support.
+
+The exact distributed DLL passed fresh offline checks on both APIs, including
+all 16 INI combinations and the supplied INI file. Vulkan X2/X3/X4, history
+reset/recovery and the DX12 comparison passed. Matched outputs equal their
+corresponding reference paths; loading and cache checks also passed.
+These checks do not establish compatibility with every game or an FPS gain.
+
+## 简体中文
+
+**推荐从这里开始：[310.9.1-6 — DX12 + Vulkan + 可配置优化](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-6/dlssg-sm86-310.9.1-6-win64.zip)。**
+一个 `version.dll` 包含两种 API 路径和全部四项已发布优化。
+ZIP 内含可选的 `dlssg_sm86.ini`，四项优化默认全部开启。
+下方配置可重现此前版本的内核组合，无需反复替换 DLL。
+本版本仍为实验预发布；版本号更高不保证 FPS 更高。
+
+| 选项 | 作用 |
+|---|---|
+| `HardwareBilinear` | 最终重建使用硬件双线性过滤，可能出现细微像素差异。 |
+| `Conv13SharedInput` | 在共享内存中复用一个卷积的 FP16 输入。 |
+| `Conv0SharedInput` | 在第二个重建卷积中复用 FP16 输入。 |
+| `ResidualVectorLoads` | 在两个残差卷积中使用向量化输入读取。 |
+
+INI 对两种 API 的优化均有效。DX12 或 Vulkan 由游戏选择，INI 不提供 API 切换。
+这些开关不选择 X2/X3/X4，也不控制独立的 Neural Rendering / NR Cost Scaler 模组。
+
+目前测试设备为一台 **RTX 3070 Ti Laptop、8 GB 显存的笔记本**，驱动 616.92。
+早期 DX12 版本已有《黑神话：悟空》和《幻兽帕鲁》的用户反馈。
+相同 Vulkan 实现与内核的诊断预览版已有《无人深空》X2/X3/X4 成功运行反馈。
+该预览版额外记录诊断日志。跨版本受控游戏基准测试仍在进行，不承诺整体性能提升。
+
+硬件双线性借鉴原项目的 [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) 选项。不包含 FP8、INT8、工作缓冲区压缩或更小的神经模型。修改 INI 后需完全重启游戏。Vulkan 需要现有的 NGX 帧生成集成，不会添加 DX11 支持。
+
+实际分发的 DLL 已重新通过两种 API 的离线检查，包括全部 16 种 INI
+组合和附带的 INI 文件。Vulkan X2/X3/X4、历史重置与恢复以及 DX12 对比均通过。
+输出图像与各自参考路径一致，加载和缓存检查也已通过。
+这些检查不保证所有游戏兼容，也不代表 FPS 一定提高。
+
+## Français
+
+**Commencez ici : [310.9.1-6 — DX12 + Vulkan + optimisations configurables](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-6/dlssg-sm86-310.9.1-6-win64.zip).**
+Une seule `version.dll` contient les deux chemins API et les quatre optimisations publiées.
+Le ZIP fournit le fichier facultatif `dlssg_sm86.ini`. Les quatre options sont actives par défaut.
+Les profils ci-dessous permettent de comparer les anciennes combinaisons sans changer de DLL.
+Cette préversion reste expérimentale ; un numéro plus élevé ne garantit pas plus de FPS.
+
+| Option | Fonction |
+|---|---|
+| `HardwareBilinear` | Filtrage bilinéaire matériel à la reconstruction finale ; de petits écarts de pixels sont possibles. |
+| `Conv13SharedInput` | Réutilisation des entrées FP16 d'une convolution en mémoire partagée. |
+| `Conv0SharedInput` | Même réutilisation dans une seconde convolution de reconstruction. |
+| `ResidualVectorLoads` | Lectures vectorisées dans deux convolutions résiduelles. |
+
+L'INI règle les optimisations pour les deux API. Le jeu choisit DX12 ou Vulkan ;
+il n'y a pas de sélection d'API dans ce fichier. Ces options ne choisissent pas
+X2/X3/X4 et ne contrôlent pas les mods Neural Rendering / NR Cost Scaler.
+
+Les essais utilisent un seul **portable RTX 3070 Ti mobile avec 8 Go de VRAM**, pilote 616.92.
+Les premières versions DX12 ont des retours sur Wukong et Palworld. La même
+implémentation Vulkan et les mêmes kernels ont un premier retour positif X2/X3/X4
+dans No Man's Sky, avec une préversion ajoutant des journaux de diagnostic.
+Les benchmarks comparatifs en jeu sont en cours ; aucun gain global n'est promis.
+
+Le bilinéaire adapte l'option [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) du projet original. Ni FP8, ni INT8, compression des buffers ou modèle neuronal réduit ne sont inclus. Redémarrez le jeu après modification de l'INI. Vulkan nécessite une intégration NGX FG existante ; cela n'ajoute pas le support DX11.
+
+La DLL distribuée passe de nouvelles vérifications hors jeu sur les deux API,
+dont les 16 combinaisons INI et le fichier INI fourni. Vulkan X2/X3/X4,
+la remise à zéro de l'historique et sa reprise ainsi que la comparaison DX12 passent.
+Les images correspondent aux chemins de référence respectifs ; les contrôles de
+chargement et de cache passent aussi. Cela ne garantit ni tous les jeux ni un gain de FPS.
+
+`version.dll` SHA256: `cb471f9606e41049a48ee4c5405d420e662dd264622ccbc87990903e3f03c69b`
+
+---
+
 # DLSSG 310.9.1-5 — Optional INI controls
 
 ## English

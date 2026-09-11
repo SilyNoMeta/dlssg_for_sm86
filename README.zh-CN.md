@@ -7,6 +7,12 @@
 安装时只需复制一个文件：**`version.dll`**。
 
 
+**推荐从这里开始：[310.9.1-6 — DX12 + Vulkan + 可配置优化](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-6/dlssg-sm86-310.9.1-6-win64.zip)。**
+一个 `version.dll` 包含两种 API 路径和全部四项已发布优化。
+ZIP 内含可选的 `dlssg_sm86.ini`，四项优化默认全部开启。
+下方配置可重现此前版本的内核组合，无需反复替换 DLL。
+本版本仍为实验预发布；版本号更高不保证 FPS 更高。
+
 ## 选择版本
 
 所有版本均使用 DLSSG 310.9.1，只需安装一个 `version.dll`。
@@ -21,18 +27,19 @@
 | [310.9.1-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-3) | 包含 `-2`，并在第二个重建卷积中复用 FP16 输入。 | 离线图像与 `-2` 一致；尚未确认 GPU 总耗时有稳定改善。 |
 | [310.9.1-4](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-4) | 包含 `-3`，并在两个残差卷积中使用向量化输入读取。 | 离线图像与 `-2` 一致；GPU 总耗时变化较小且存在波动。 |
 | [310.9.1-5](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-5) | 使用 `-4` 内核，通过可选 INI 开关控制四项优化。 | 默认图像处理路径与 `-4` 相同，便于对比此前版本的内核组合。 |
+| [310.9.1-6](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-6) | **统一 DirectX 12 + Vulkan**，提供四项 INI 开关。 | 推荐起始包；默认内核与 `-4`/`-5` 相同，新增 Vulkan 路径。 |
 
 双线性优化借鉴原项目的 [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) 选项，与 `-0` 相比可能出现轻微像素差异。
 后续内存读取优化保留 FP16 运算。**这些发布版本均未使用 FP8 或 INT8。**
 
-目前的游戏反馈来自早期 `-0` 至 `-2` 版本，测试设备是一台配备
-**RTX 3070 Ti Laptop、8 GB 显存的笔记本**。较新版本已通过离线图像、
-加载和资源生命周期检查，但**尚未进行游戏实测**。单个内核运行更快，
-不代表整体性能一定有可测量的改善。请保留已验证可用的版本作为备份；欢迎其他配置的反馈。
+目前测试设备为一台 **RTX 3070 Ti Laptop、8 GB 显存的笔记本**，驱动 616.92。
+早期 DX12 版本已有《黑神话：悟空》和《幻兽帕鲁》的用户反馈。
+相同 Vulkan 实现与内核的诊断预览版已有《无人深空》X2/X3/X4 成功运行反馈。
+该预览版额外记录诊断日志。跨版本受控游戏基准测试仍在进行，不承诺整体性能提升。
 
 更换 DLL 或设置前请退出游戏。在相同设置下比较画质、响应、流畅度和 FPS。
 
-### 可选配置（`-5`）
+### 可选配置（`-5` / `-6`）
 
 将 `dlssg_sm86.ini` 放在 `version.dll` 旁，将值设为 `1`（开启）或 `0`（关闭），
 然后完全重启游戏。没有 INI 文件或缺少某项设置时，该项默认开启。
@@ -46,6 +53,16 @@ Conv0SharedInput=1
 ResidualVectorLoads=1
 ```
 
+| 选项 | 作用 |
+|---|---|
+| `HardwareBilinear` | 最终重建使用硬件双线性过滤，可能出现细微像素差异。 |
+| `Conv13SharedInput` | 在共享内存中复用一个卷积的 FP16 输入。 |
+| `Conv0SharedInput` | 在第二个重建卷积中复用 FP16 输入。 |
+| `ResidualVectorLoads` | 在两个残差卷积中使用向量化输入读取。 |
+
+INI 对两种 API 的优化均有效。DX12 或 Vulkan 由游戏选择，INI 不提供 API 切换。
+这些开关不选择 X2/X3/X4，也不控制独立的 Neural Rendering / NR Cost Scaler 模组。
+
 用于对比的内核组合（图像处理路径相同，但 DLL 文件本身不同）：
 
 | 配置 | HardwareBilinear | Conv13SharedInput | Conv0SharedInput | ResidualVectorLoads |
@@ -56,17 +73,25 @@ ResidualVectorLoads=1
 | `-3` | 1 | 1 | 1 | 0 |
 | `-4` | 1 | 1 | 1 | 1 |
 
-全部 16 种开关组合及无文件默认配置均已进行离线检查，但不保证兼容所有游戏。
+实际分发的 DLL 已重新通过两种 API 的离线检查，包括全部 16 种 INI
+组合和附带的 INI 文件。Vulkan X2/X3/X4、历史重置与恢复以及 DX12 对比均通过。
+输出图像与各自参考路径一致，加载和缓存检查也已通过。
+这些检查不保证所有游戏兼容，也不代表 FPS 一定提高。
 
 ## 运行要求
 
-- Windows x64、Direct3D 12 游戏，以及提供 NGX/NVAPI 接口的 NVIDIA 驱动。
+- Windows x64、Direct3D 12 或原生 Vulkan 游戏，以及提供 NGX 和所需 API 扩展的 NVIDIA 驱动。
 - SM86 显卡（GeForce RTX 30 系列）。已在配备 RTX 3070 Ti Laptop（**8 GB 显存**）的笔记本上使用 616.92 驱动测试；该驱动版本不是最低版本要求。
 - 游戏须集成 DLSS 帧生成，并能够加载 `version.dll` 代理。
 - X2、X3、X4 是否可选取决于游戏提供的选项。
 - 游玩时无需安装 Python 或 CUDA Toolkit。
 
-本版本不提供 SM75/RTX 20 路由、Vulkan 支持或其他文件名的代理 DLL。
+`-6` 提供 DirectX 12 和原生 Vulkan 路径；此前 `-0` 至 `-5` 包仅支持 DX12。
+Vulkan 游戏或其集成层必须已提供 NGX 帧生成输入、所需扩展和图像呈现调度。
+仅复制本 DLL 不能为任意 Vulkan 游戏添加帧生成。
+本版本未支持或验证 DX11、Linux/Proton、DXVK、SM75/RTX 20 及其他代理文件名。
+自定义 Vulkan 函数解析路径仍待验证。
+
 
 ## 安装与更新
 
@@ -92,10 +117,10 @@ SM86/RTX 30。兼容性反馈仅代表已测试的配置。
 
 1. 完全退出游戏。
 2. 备份现有的 `version.dll`。如果其他 Mod 使用该文件名，请勿覆盖；本版本不支持代理链式加载。
-3. 将本版本的 `version.dll` 复制到实际负责渲染的 EXE 旁。对于《黑神话：悟空》，路径为 `b1/Binaries/Win64`，与 `b1-Win64-Shipping.exe` 同目录。
+3. 将本版本的 `version.dll` 复制到实际负责渲染的 EXE 旁。对于《黑神话：悟空》，路径为 `b1/Binaries/Win64`，与 `b1-Win64-Shipping.exe` 同目录。《无人深空》使用 `Binaries`，放在 `NMS.exe` 旁。
 4. 启动游戏并启用 DLSS 帧生成。建议先使用 X2，再在同一运动场景中比较 X3/X4。
 
-`-5` 支持可选 INI；请参阅上方配置说明。不会读取原项目原生宿主的 INI。
+`-5` 和 `-6` 支持可选 INI；请参阅上方配置说明。不会读取原项目原生宿主的 INI。
 请勿将本 DLL 重命名为 `nvngx_dlssg.dll`，也不要用它替换游戏原有的 NVIDIA DLL。
 
 若从最初的双组件 310.9.1 包升级，请将旧 `version.dll` 和 `dlssg3109` 文件夹
@@ -119,6 +144,7 @@ SM86/RTX 30。兼容性反馈仅代表已测试的配置。
 |---|---|
 | 黑神话：悟空 | X2 体验良好，X3 可以接受；X4 能运行，但流畅度体感较差。 |
 | 幻兽帕鲁（Palworld） | 运行良好，包括 X4；X4 下画质明显下降。 |
+| 无人深空（Vulkan） | 此 Vulkan 路径的诊断预览版已有 X2/X3/X4 成功反馈；该笔记本上的 FPS 提升幅度有限。 |
 
 这些是用户反馈，并非受控基准测试，也不保证所有配置均兼容。
 显示帧率更高不一定意味着响应更快；也应比较运动中的伪影和帧间隔稳定性。
@@ -134,6 +160,10 @@ SM86/RTX 30。兼容性反馈仅代表已测试的配置。
 
 ## 排障与卸载
 
+Vulkan 日志中的 `vulkan_backend_active` 与 `vulkan_kernel_launches` 可确认
+后端执行，但不是显示 FPS 测量。Toxic Commando 尚未验证。
+反馈时请说明实际使用的 API 及帧生成选项是否可用。
+
 若帧生成选项未出现，请检查 EXE 目录和 `dlssg3109.log`。修改文件前先退出游戏。
 若日志报告缓存损坏，可将 `%LOCALAPPDATA%/DLSSG-SM86` 下对应的子目录移走，
 下次启动时会重新创建。
@@ -145,7 +175,7 @@ SM86/RTX 30。兼容性反馈仅代表已测试的配置。
 
 ## 版本与致谢
 
-`310.9.1-5` 使用 310.9.1 运行时。DLL 校验值见 `SHA256SUMS.txt`。
+`310.9.1-6` 使用 310.9.1 运行时。DLL 校验值见 `SHA256SUMS.txt`。
 
 感谢 [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) 的原始项目和 SM86 工作。
 另见[第三方声明](THIRD_PARTY_NOTICES.txt)。
