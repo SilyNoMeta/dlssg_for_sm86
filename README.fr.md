@@ -2,54 +2,44 @@
 
 [English](README.md) | [简体中文](README.zh-CN.md) | Français
 
-Adaptation expérimentale de DLSS Frame Generation **310.9.1** pour les GPU
-NVIDIA SM86, basée sur le travail de
-[sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86).
-Installation avec un seul fichier : **`version.dll`**.
+Adaptation expérimentale de DLSS Frame Generation **310.9.1** pour NVIDIA SM86/RTX 30,
+basée sur [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86). Une **`version.dll`** contient
+**DirectX 12 + Vulkan**, la correction temporelle MFG et quatre optimisations facultatives.
 
+## Télécharger 310.9.1-7
 
-**Commencez ici : [310.9.1-6 — DX12 + Vulkan + optimisations configurables](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-6/dlssg-sm86-310.9.1-6-win64.zip).**
-Une seule `version.dll` contient les deux chemins API et les quatre optimisations publiées.
-Le ZIP fournit le fichier facultatif `dlssg_sm86.ini`. Les quatre options sont actives par défaut.
-Les profils ci-dessous permettent de comparer les anciennes combinaisons sans changer de DLL.
-Cette préversion reste expérimentale ; un numéro plus élevé ne garantit pas plus de FPS.
+**[Télécharger la DLL + l'INI facultatif](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-7/dlssg-sm86-310.9.1-7-win64.zip)** · [Notes de version](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7)
 
-## Choisir une version
+C'est la seule release conservée. **Les anciennes -0 à -6 ont été retirées : leurs
+images X3/X4 pouvaient rester près du milieu du mouvement malgré un compteur FPS élevé.**
+Sur un déplacement de 8 pixels, les anciennes sorties X4 se plaçaient vers 4/4/4 pixels,
+contre 2/4/6 après correction. Le X4 dans Wukong est désormais décrit comme nettement
+plus fluide sur **RTX 3070 Ti Laptop, 8 Go**, pilote 616.92. Il s'agit d'une correction ;
+aucun gain de FPS n'est promis. Le rectangle blanc du graphique de benchmark Wukong
+reste un problème connu. La confirmation Cyberpunk/Onimusha est attendue.
 
-Toutes les versions utilisent DLSSG 310.9.1 et s'installent avec un seul `version.dll`.
-**Essayez les variantes dans la même scène et gardez celle qui vous convient le mieux.**
-Un numéro plus élevé ne garantit ni plus de FPS ni un meilleur ressenti.
+La correction reste toujours active, même si toutes les optimisations INI sont désactivées.
+Voir les [résultats, méthodes et explications techniques](docs/research.fr.md).
 
-| Version / téléchargement | Différence principale | À quoi s'attendre |
-|---|---|---|
-| [310.9.1-0](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-0) | Base avec interpolation bilinéaire manuelle. | Référence pour comparer la reconstruction d'image. |
-| [310.9.1-1](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-1) | Filtrage bilinéaire matériel pour la reconstruction finale. | De petits écarts de pixels sont possibles ; une amélioration marginale a été rapportée. |
-| [310.9.1-2](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-2) | Tout le contenu de la `-1`, plus la réutilisation des entrées FP16 d'une convolution. | Essayée en jeu par un utilisateur ; aucun problème visuel évident, gain difficile à juger. |
-| [310.9.1-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-3) | Tout le contenu de la `-2`, plus la réutilisation des entrées FP16 d'une seconde convolution de reconstruction. | Images identiques à la `-2` dans les tests hors jeu ; aucun gain constant sur le temps GPU total établi. |
-| [310.9.1-4](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-4) | Tout le contenu de la `-3`, plus des lectures vectorisées dans deux convolutions résiduelles. | Images identiques à la `-2` dans les tests hors jeu ; variations du temps GPU total faibles et irrégulières. |
-| [310.9.1-5](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-5) | Les kernels de la `-4`, avec un INI facultatif pour activer ou désactiver quatre optimisations. | Même traitement d'image par défaut que la `-4` ; permet de comparer les combinaisons des versions précédentes. |
-| [310.9.1-6](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-6) | **DirectX 12 + Vulkan réunis**, avec les quatre réglages INI. | Paquet conseillé pour commencer ; mêmes kernels par défaut que `-4`/`-5`, avec le chemin Vulkan ajouté. |
+## Installation
 
-Le bilinéaire adapte l'idée de l'option [HardwareBilinear](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md) du projet original.
-Il peut modifier légèrement les pixels par rapport à la `-0`.
-Les optimisations suivantes de lecture mémoire conservent les calculs FP16.
-**Ces releases ne contiennent ni FP8 ni INT8.**
+1. Fermer le jeu et sauvegarder les anciens `version.dll` et `dlssg_sm86.ini`.
+2. Copier `version.dll` près du véritable exécutable de rendu : Wukong
+   `b1/Binaries/Win64`, ou No Man's Sky `Binaries`.
+3. Y copier éventuellement `dlssg_sm86.ini`, puis relancer et comparer X2/X3/X4.
 
-Les essais utilisent un seul **portable RTX 3070 Ti mobile avec 8 Go de VRAM**, pilote 616.92.
-Les premières versions DX12 ont des retours sur Wukong et Palworld. La même
-implémentation Vulkan et les mêmes kernels ont un premier retour positif X2/X3/X4
-dans No Man's Sky, avec une préversion ajoutant des journaux de diagnostic.
-Les benchmarks comparatifs en jeu sont en cours ; aucun gain global n'est promis.
+Si un autre mod utilise `version.dll`, résoudre le conflit avant de le remplacer :
+ce proxy ne charge pas un second proxy. Ne pas le renommer en `dxgi.asi` ou
+`nvngx_dlssg.dll`. **Les configurations avec ASI loader restent en cours de test.**
+Pour revenir en arrière, fermer le jeu et restaurer les fichiers sauvegardés.
 
-Fermez le jeu avant de changer de DLL ou de réglages. Comparez la qualité d'image,
-la réactivité et la fluidité, ainsi que les FPS, à réglages identiques.
+Windows x64, un GPU SM86 et une intégration DLSS FG existante sont nécessaires.
+En Vulkan, le jeu doit fournir les extensions NGX et la présentation des images.
+La DLL n'ajoute pas le FG à un jeu quelconque. DX11, Linux/Proton, DXVK, RTX 20
+et les autres noms de proxy ne sont pas validés. Aucun Python/CUDA à installer
+pour jouer. Le pilote testé 616.92 ne constitue pas une version minimale requise.
 
-### Configuration facultative (`-5` / `-6`)
-
-Copiez `dlssg_sm86.ini` à côté de `version.dll`, choisissez `1` (actif) ou `0`
-(inactif), puis redémarrez complètement le jeu. Sans fichier, ou si une clé
-manque, l'optimisation correspondante est active par défaut. Ce sont les réglages
-de ce pont ; l'INI de l'hôte natif du projet original n'est pas lu.
+## Optimisations facultatives
 
 ```ini
 [Optimizations]
@@ -59,154 +49,52 @@ Conv0SharedInput=1
 ResidualVectorLoads=1
 ```
 
-| Option | Fonction |
+| Option | Effet |
 |---|---|
-| `HardwareBilinear` | Filtrage bilinéaire matériel à la reconstruction finale ; de petits écarts de pixels sont possibles. |
+| `HardwareBilinear` | Filtrage matériel à la reconstruction finale ; petits écarts de pixels possibles. Lié à [HardwareBilinear de l'original](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md). |
 | `Conv13SharedInput` | Réutilisation des entrées FP16 d'une convolution en mémoire partagée. |
-| `Conv0SharedInput` | Même réutilisation dans une seconde convolution de reconstruction. |
-| `ResidualVectorLoads` | Lectures vectorisées dans deux convolutions résiduelles. |
+| `Conv0SharedInput` | Même principe pour une seconde convolution de reconstruction. |
+| `ResidualVectorLoads` | Lectures vectorisées des entrées de deux convolutions résiduelles. |
 
-L'INI règle les optimisations pour les deux API. Le jeu choisit DX12 ou Vulkan ;
-il n'y a pas de sélection d'API dans ce fichier. Ces options ne choisissent pas
-X2/X3/X4 et ne contrôlent pas les mods Neural Rendering / NR Cost Scaler.
+`1` active et `0` désactive. Fichier ou clé manquants : `1` par défaut.
+Relancer le jeu après modification. Les options s'appliquent aux deux API ; elles
+ne choisissent pas X2/X3/X4 et ne règlent pas Neural Rendering / NR Cost Scaler.
+Le bridge lit sa section `[Optimizations]`, pas les réglages du fournisseur natif
+original. Tout à zéro sélectionne les noyaux de référence corrigés, sans rétablir
+une ancienne DLL. Aucun FP8, INT8 ou abaissement de qualité neuronale n'est inclus.
 
-Combinaisons à comparer (même traitement d'image, pas le même fichier DLL) :
+## Outils complémentaires et retours
 
-| Profil | HardwareBilinear | Conv13SharedInput | Conv0SharedInput | ResidualVectorLoads |
-|---|---:|---:|---:|---:|
-| `-0` | 0 | 0 | 0 | 0 |
-| `-1` | 1 | 0 | 0 | 0 |
-| `-2` | 1 | 1 | 0 | 0 |
-| `-3` | 1 | 1 | 1 | 0 |
-| `-4` | 1 | 1 | 1 | 1 |
+**Débutants : passez par [RHI](https://github.com/RankFTW/RHI) pour gérer les outils complémentaires**, selon
+ses instructions, puis installez cette DLL FG. Notre testeur sur portable rapporte
+une très bonne compatibilité avec [DLSS Tool de ShortFuse](https://discord.com/channels/1408098019194310818/1543975158937821315) et
+[Patched DLSS-NR for RTX20/30/40](https://discord.com/channels/1408098019194310818/1543976771920330884), également installables via RHI.
+Les liens Discord peuvent nécessiter de rejoindre le serveur. Les GPU cités
+par le patch NR n'étendent pas la compatibilité SM86 de ce bridge FG.
+Pensez à star **[RHI](https://github.com/RankFTW/RHI)** et **[RenoDX de ShortFuse](https://github.com/clshortfuse/renodx)** pour soutenir leurs auteurs.
 
-La DLL distribuée passe de nouvelles vérifications hors jeu sur les deux API,
-dont les 16 combinaisons INI et le fichier INI fourni. Vulkan X2/X3/X4,
-la remise à zéro de l'historique et sa reprise ainsi que la comparaison DX12 passent.
-Les images correspondent aux chemins de référence respectifs ; les contrôles de
-chargement et de cache passent aussi. Cela ne garantit ni tous les jeux ni un gain de FPS.
-
-## Compatibilité
-
-- Windows x64, jeu Direct3D 12 ou Vulkan natif et pilote NVIDIA fournissant NGX et les extensions API requises.
-- GPU SM86 (famille GeForce RTX 30). Essais réalisés sur un portable avec RTX 3070 Ti mobile
-  (**8 Go de VRAM**), pilote 616.92 ; ce numéro n'est pas une exigence minimale de pilote.
-- Le jeu doit intégrer DLSS Frame Generation et charger le proxy `version.dll`.
-- Modes X2, X3 et X4, selon les choix proposés par le jeu.
-- Python et CUDA Toolkit ne sont pas nécessaires pour jouer.
-
-La `-6` propose DirectX 12 et Vulkan natif ; les anciens paquets `-0` à `-5`
-sont limités à DX12. En Vulkan, le jeu ou son intégration doit déjà fournir les
-entrées NGX de génération d'images, les extensions requises et leur affichage.
-Copier cette DLL dans un jeu Vulkan quelconque ne lui ajoute pas le framegen.
-DX11, Linux/Proton, DXVK, SM75/RTX 20 et les autres noms de proxy ne sont pas pris
-en charge ou validés par cette release. Les résolveurs Vulkan personnalisés restent à vérifier.
-
-
-## Installation et mise à jour
-
-### Pour débuter : RHI et les outils de ShortFuse
-
-**Pour les néophytes, nous recommandons [RHI — ReShade HDR Installer](https://github.com/RankFTW/RHI)**
-pour installer et gérer les outils complémentaires. RHI propose notamment
-ShortFuse DLSS Tool et NR Cost Scaler dans son interface de gestion du DLSS.
-Suivre les instructions de RHI pour son jeu, puis installer le `version.dll`
-de cette release selon les étapes ci-dessous.
-
-Selon le retour de notre testeur sur les versions précédentes, la compatibilité est très bonne avec
-**[DLSS Tool de ShortFuse](https://discord.com/channels/1408098019194310818/1543975158937821315)**
-et son **[Patched DLSS-NR for RTX20/30/40](https://discord.com/channels/1408098019194310818/1543976771920330884)**,
-également installable via [RHI](https://github.com/RankFTW/RHI).
-Ces liens Discord peuvent nécessiter de rejoindre le serveur.
-
-Le support RTX20/30/40 indiqué dans le nom du patch NR concerne cet outil
-complémentaire ; ce pont de génération d'images reste destiné à SM86/RTX 30.
-Il s'agit d'un retour de compatibilité sur la configuration testée.
-
-**Pour soutenir leurs auteurs, pensez à mettre une étoile ⭐ aux dépôts
-[RHI](https://github.com/RankFTW/RHI) et [RenoDX de ShortFuse](https://github.com/clshortfuse/renodx) !**
-
-### Installer le pont de génération d'images
-
-1. Fermer complètement le jeu.
-2. Sauvegarder un éventuel `version.dll` déjà présent. Si un autre mod utilise
-   ce nom, ne pas l'écraser : cette release ne gère pas le chaînage de proxies.
-3. Copier le `version.dll` de la release près de l'exécutable qui effectue le
-   rendu. Pour Black Myth: Wukong : `b1/Binaries/Win64`, près de
-   `b1-Win64-Shipping.exe`. Pour No Man's Sky : `Binaries`, près de `NMS.exe`.
-4. Relancer le jeu et activer DLSS Frame Generation. Commencer par X2, puis
-   comparer X3/X4 dans une même scène en mouvement.
-
-L'INI est facultatif dans les `-5` et `-6` ; voir la configuration plus haut.
-L'INI de l'hôte natif du projet original n'est pas lu. Ne pas renommer cette
-DLL en `nvngx_dlssg.dll` ni remplacer les DLL NVIDIA originales du jeu.
-
-Lors d'une mise à jour depuis le premier paquet 310.9.1 à deux éléments,
-sauvegarder l'ancien `version.dll` et le dossier `dlssg3109` hors du jeu.
-Le nouveau fichier unique suffit.
-
-## Fonctionnement
-
-Le proxy embarque le runtime NVIDIA 310.9.1 inchangé et les kernels adaptés
-à SM86. Au premier chargement, le runtime est extrait automatiquement dans
-`%LOCALAPPDATA%/DLSSG-SM86/<SHA256>/nvngx_dlssg.dll` et vérifié avant utilisation.
-Les kernels sont lus directement depuis la DLL. Un cache corrompu est refusé.
-Le journal de diagnostic est `dlssg3109.log`, près du proxy.
-
-Cette architecture diffère du host natif 310.1 du projet amont. Les réglages,
-mesures de performance et routes GPU de ce dernier ne décrivent pas cette
-release. Aucun réglage global du pilote ou indicateur DLSS n'est activé
-automatiquement par l'installation.
-
-## Retours en jeu et limites
-
-Les retours ci-dessous proviennent d’un seul **ordinateur portable avec une
-RTX 3070 Ti mobile et 8 Go de VRAM**. Ils ne représentent pas des essais sur GPU de bureau.
-
-| Jeu | Retour utilisateur |
+| Jeu | État des vérifications |
 |---|---|
-| Black Myth: Wukong | X2 agréable, X3 acceptable ; X4 fonctionne mais mauvais ressenti de fluidité. |
-| Palworld | Bon fonctionnement, y compris X4 ; dégradation visuelle sensible en X4. |
-| No Man's Sky (Vulkan) | X2/X3/X4 fonctionnels selon le retour avec la préversion de diagnostic de ce chemin Vulkan ; progression des FPS limitée sur ce portable. |
+| Black Myth: Wukong / DX12 | DLL corrigée testée en X4 : nettement plus fluide selon l'utilisateur. Graphique toujours blanc. |
+| Palworld | Retours positifs sur les anciennes versions ; nouvel essai de la DLL corrigée attendu. |
+| No Man's Sky / Vulkan | Ancienne préversion de diagnostic fonctionnelle X2/X3/X4 ; nouvelle DLL vérifiée hors jeu en Vulkan, nouvel essai en jeu attendu. |
+| Cyberpunk / Onimusha | Problème initial signalé sur RTX 3060 Ti 8 Go ; correction encore à confirmer dans ces jeux. |
 
-Ces retours ne constituent pas un benchmark contrôlé ou une garantie sur
-toutes les configurations. Un compteur de FPS plus élevé ne garantit pas
-une meilleure réactivité. Comparer aussi les artefacts et la régularité en
-mouvement ; la cause précise des défauts observés en X4 n'est pas établie.
+Les essais portent surtout sur un **portable**, pas sur un GPU de bureau.
+Les retours d'autres configurations sont bienvenus : GPU/VRAM, pilote, jeu/API,
+résolution, mode, réglages NR/Cost Scaler, qualité du mouvement et réactivité.
+Utiliser les [Issues](https://github.com/SilyNoMeta/dlssg_for_sm86/issues).
+Les [captures Palworld et réglages RHI historiques](GALLERY.fr.md) montrent du X2,
+pas cette release corrigée ; la valeur exacte du Cost Scaler n'est pas confirmée.
 
-**Les retours d’autres configurations sont les bienvenus !** Préciser le GPU,
-la VRAM, le modèle de portable ou de PC fixe, le pilote, la version du jeu,
-la résolution de sortie et le mode X2/X3/X4. Avec Neural Rendering, indiquer aussi
-la version NR et le réglage NR Cost Scaler. Décrire la qualité d’image et la
-réactivité en plus des FPS, idéalement dans une même scène.
-Partager ces essais dans les [Issues GitHub](https://github.com/SilyNoMeta/dlssg_for_sm86/issues).
+## Diagnostic et crédits
 
-[Voir les captures de Palworld et la configuration RHI](GALLERY.fr.md) : NR
-activé/désactivé et résolution de traitement NR pleine/réduite. Toutes les captures
-de jeu fournies affichent X2 ; la valeur exacte du Cost Scaler n’est pas confirmée.
+La DLL contient le runtime NVIDIA 310.9.1 inchangé et les noyaux SM86. Le runtime
+est vérifié et mis en cache sous `%LOCALAPPDATA%/DLSSG-SM86/<SHA256>/` ; les noyaux
+restent embarqués. Le journal est `dlssg3109.log`, près du proxy. Les événements
+Vulkan prouvent l'exécution, pas les FPS affichés. Un cache corrompu est refusé :
+jeu fermé, déplacer son sous-dossier permet sa recréation.
 
-## Dépannage et désinstallation
-
-En Vulkan, `vulkan_backend_active` et `vulkan_kernel_launches` confirment
-l'exécution du backend dans le journal ; ce ne sont pas des mesures de FPS affichés.
-Toxic Commando n'est pas encore validé. Précisez l'API réellement utilisée et la disponibilité du FG.
-
-Si les options restent absentes, vérifier le dossier de l'exécutable et la
-présence de `dlssg3109.log`. Fermer le jeu avant toute modification. Si le
-journal signale un cache corrompu, déplacer le sous-dossier concerné de
-`%LOCALAPPDATA%/DLSSG-SM86` pour permettre sa recréation au prochain lancement.
-
-Pour désinstaller, retirer uniquement le `version.dll` de cette release,
-puis remettre le fichier sauvegardé s'il y en avait un. Le journal et le cache
-DLSSG-SM86 peuvent être retirés quand les jeux qui l'utilisent sont fermés.
-
-Pour signaler un problème, préciser le jeu, le GPU, le pilote et le mode testé.
-Vérifier les chemins personnels avant de partager un journal.
-
-## Version et crédits
-
-La version `310.9.1-6` utilise le runtime 310.9.1. L’empreinte de la DLL figure
-dans `SHA256SUMS.txt`.
-
-Merci à [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) pour le projet
-original et le travail SM86. Voir [les attributions tierces](THIRD_PARTY_NOTICES.txt).
+Merci à [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) et au
+[correctif temporel RTX40MFG-Unlock](https://github.com/dashdogy/RTX40MFG-Unlock/blob/cf99204a00ce015a24c4c2be4082170b65e2fed1/source/native/midpoint_fix.cpp) de Michael Robles (MIT).
+Voir les [mentions tierces](THIRD_PARTY_NOTICES.txt) et `SHA256SUMS.txt`.

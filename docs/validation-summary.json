@@ -1,0 +1,36 @@
+{
+  "release": "310.9.1-7",
+  "dll_sha256": "d10fc4d245ddfa0a8b2bd5530dfde23547bf193d6f30623d4875627db1002bef",
+  "date": "2026-09-11",
+  "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU, 616.92",
+  "offline_cases": 52,
+  "positive_cases": 49,
+  "expected_negative_controls": 3,
+  "motion_pixels_per_real_frame": 8,
+  "x4_expected_generated_positions": [
+    2,
+    4,
+    6
+  ],
+  "old_x4_approximate_positions": [
+    4,
+    4,
+    4
+  ],
+  "corrected_x4_approximate_positions": [
+    2,
+    4,
+    6
+  ],
+  "measurement_tolerance_pixels": 0.5,
+  "all_16_ini_combinations_x4_both_apis": true,
+  "x2_reference_byte_identical": true,
+  "cross_api_exact": true,
+  "wukong_x4_user_reports_much_smoother": true,
+  "wukong_white_chart_fixed": false,
+  "cyberpunk_corrected_game_test": "pending",
+  "onimusha_asi_corrected_game_test": "pending",
+  "corrected_vulkan_game_test": "pending",
+  "game_benchmark_conditions_matched": false,
+  "game_benchmark_deviation": "Codex companion visible but unused during corrected run"
+}
