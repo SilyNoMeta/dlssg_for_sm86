@@ -5,7 +5,7 @@
 ## Finding and hypothesis
 
 [Issue #2](https://github.com/SilyNoMeta/dlssg_for_sm86/issues/2) reported 160–170 FPS X4 with poor apparent smoothness
-in Cyberpunk and Onimusha on RTX 3060 Ti 8 GB. The maintainer reproduced the
+on RTX 3060 Ti 8 GB. The maintainer reproduced the
 perceived problem in Wukong. The hypothesis was incorrect intermediate image
 content despite successful, regularly scheduled frame generation.
 
@@ -55,8 +55,8 @@ were also checked. [Machine-readable scope](validation-summary.json).
 
 These tests do not measure game presentation or validate every occlusion,
 camera movement, UI format or game integration. The owner then confirmed a
-large X4 smoothness improvement in Wukong with this exact DLL. Cyberpunk,
-Onimusha/ASI loading and a corrected Vulkan game run remain unconfirmed.
+large X4 smoothness improvement in Wukong with this exact DLL.
+A corrected Vulkan game run remains unconfirmed for this release.
 The white Wukong benchmark chart remains visible. A synthetic UI test did not
 reproduce it, so the temporal fix is not presented as a fix for that separate symptom.
 
@@ -76,34 +76,42 @@ arithmetic, but were insufficient to validate MFG motion. FP8, INT8, LZ4 and a
 smaller neural model are not part of this release. Toggle optimizations only
 to compare the same corrected image-generation path, restarting between runs.
 
-## First game measurements
+## Loader integration: loading is not initialization
 
-Wukong 1.0.21.23831, DX12, 2560×1440, High, full ray tracing Low, super resolution
-58, strong motion blur; RTX 3070 Ti **Laptop 8 GB**, i9-12900H, driver 616.92.
-NR/NR Cost Scaler settings and capture landmark were reported unchanged.
-Exact NR values were not recorded in the CSV. One roughly 60-second capture per condition.
+In release -7, only `version.dll` triggers automatic startup. An ASI loader can
+successfully map a renamed DLL without activating its bridge. This is separate
+from the X3/X4 interpolation timing defect.
 
-| X4 configuration | Displayed FPS | 1% low FPS | Mean PC latency |
-|---|---:|---:|---:|
-| Upstream native 310.1 | 106.151 | 61.112 | 87.691 ms |
-| Old -4 | 103.710 | 72.330 | 88.099 ms |
-| Corrected DLL (-7) | 98.064 | 66.295 | 91.377 ms |
+The development build adds one idempotent startup path for three modes:
+`version.dll` forwards version-information functions; `dxgi.asi` starts on load
+and exposes `InitializeASI`; `dxgi.dll` forwards the real Windows DXGI exports.
+Ultimate ASI Loader also calls `InitializeASI` for other `.asi` filenames, so
+activation no longer depends on the special `dxgi.asi` name.
 
-**The corrected run had the Codex companion visible, unused, unlike earlier runs.**
-The conditions are not strictly matched; these numbers establish neither an
-FPS regression caused by the correction nor a speedup. The important new result
-is the user's much smoother X4 report, consistent with the independent motion test.
-The game's full-run screenshot shows 102 FPS; that is a different interval from
-the 60-second FrameView capture and is not substituted for its 98.064 FPS.
+With UAL, `version.dll` is the loader and `dxgi.asi` is our bridge: two different
+binaries. Install only one bridge copy. Its configuration is always
+`dlssg_sm86.ini`, beside the bridge, regardless of the selected filename.
 
-[Aggregated capture data](benchmark-summary.csv) includes the initial -0…-4 series
-and subsequent original/corrected runs. Source hashes identify captures; no raw
-personal logs are published. FPS=1000N/ΣΔt, using MsBetweenDisplayChange. The
-1%/0.1% lows invert the mean of the longest ceil(0.01N)/ceil(0.001N) intervals.
-Zero intervals and spikes are retained. PC latency is the mean MsPCLatency.
-No thousands-of-frames confidence claim is made: frames within a run are not
-independent benchmark repetitions. Compare motion and responsiveness alongside
-timing, and welcome results from other GPUs and games.
+The DXGI proxy loads the real library by its absolute system-directory path,
+preventing recursion into itself. Forwarding preserves integer, floating-point
+and stack arguments and returns Windows' COM objects unchanged. Real DXGI is
+loaded on the first export call, outside our `DllMain`; Microsoft documents that
+[factory creation from DllMain fails](https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nf-dxgi-createdxgifactory).
+Atomic publication handles concurrent first calls without accumulating extra
+module references. Export names and ordinals are compared with the tested Windows
+library, and real factory creation is tested separately.
+
+**These additional loader modes are not included in the downloadable -7 binary.**
+A successful startup event alone does not prove the game presents generated frames.
+
+## One set of kernels, two graphics APIs
+
+Both backends retain the 310.9.1 host graph and weights. DX12 intercepts NvAPI
+compute-kernel creation; Vulkan adapts NVX CUDA-module creation and launch calls.
+Both substitute verified SM86 images from the same corrected packs. The API
+connection changes, while neural arithmetic and temporal correction stay shared.
+The game still supplies motion/depth resources and frame presentation. Renaming
+a DLL cannot provide a missing game integration or add a DX11 backend.
 
 ## Traceability
 
@@ -111,5 +119,5 @@ DLL SHA256: `d10fc4d245ddfa0a8b2bd5530dfde23547bf193d6f30623d4875627db1002bef`.
 The release DLL is unchanged from the tested temporal candidate.
 Previous releases -0…-6 were withdrawn because of the MFG defect; their historical
 results are retained for interpretation, not as recommended downloads.
-The source methodology and curated aggregates above document this release;
+The mechanisms and validation above document this release;
 private development logs and test applications are not bundled.

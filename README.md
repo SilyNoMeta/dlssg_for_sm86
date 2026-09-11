@@ -18,21 +18,22 @@ In an 8-pixel translation test, old X4 outputs were near 4/4/4 pixels; the corre
 outputs are near 2/4/6. Wukong X4 is now reported substantially smoother on an
 **RTX 3070 Ti Laptop GPU, 8 GB**, driver 616.92. This is a correctness fix;
 an FPS increase is not promised. The white rectangle over Wukong's benchmark
-chart remains a known issue. Cyberpunk and Onimusha confirmation is pending.
+chart remains a known issue.
 
 The temporal correction is always enabled, including with all INI options off.
-See [technical findings, methods and results](docs/research.en.md).
+See [technical findings, architecture and validation](docs/research.en.md).
 
 ## Installation
 
 1. Close the game. Back up the existing `version.dll` and `dlssg_sm86.ini`.
 2. Copy `version.dll` beside the actual rendering executable: Wukong
-   `b1/Binaries/Win64`, or No Man's Sky `Binaries`.
+   `b1/Binaries/Win64`.
 3. Optionally copy `dlssg_sm86.ini` there. Start the game and compare X2/X3/X4.
 
 If another mod owns `version.dll`, resolve that conflict before replacing it;
 this proxy does not chain another proxy. Do not rename this file to `dxgi.asi`
-or `nvngx_dlssg.dll`. **ASI-loader configurations are still being tested.**
+or `nvngx_dlssg.dll`. **Additional ASI/DXGI modes are not included in this -7 download.**
+Their [generic installation guide](docs/install-loaders.en.md) explains the next build.
 For rollback, close the game and restore the backed-up files.
 
 Windows x64, an SM86 GPU and an existing DLSS FG game integration are required.
@@ -79,8 +80,6 @@ Please star **[RHI](https://github.com/RankFTW/RHI)** and **[ShortFuse's RenoDX]
 |---|---|
 | Black Myth: Wukong / DX12 | Corrected DLL tested in X4: much smoother according to the user. White benchmark chart still present. |
 | Palworld | Positive reports on earlier builds; corrected release needs a fresh test. |
-| No Man's Sky / Vulkan | Earlier diagnostic build ran X2/X3/X4; this corrected DLL passes offline Vulkan checks, game retest pending. |
-| Cyberpunk / Onimusha | Original issue reported on RTX 3060 Ti 8 GB; corrected release not yet confirmed in these games. |
 
 Reports so far primarily concern one **laptop**, not desktop GPU benchmarks.
 Other configurations are welcome: GPU/VRAM, driver, game/API, resolution, mode,

@@ -18,21 +18,22 @@ Sur un déplacement de 8 pixels, les anciennes sorties X4 se plaçaient vers 4/4
 contre 2/4/6 après correction. Le X4 dans Wukong est désormais décrit comme nettement
 plus fluide sur **RTX 3070 Ti Laptop, 8 Go**, pilote 616.92. Il s'agit d'une correction ;
 aucun gain de FPS n'est promis. Le rectangle blanc du graphique de benchmark Wukong
-reste un problème connu. La confirmation Cyberpunk/Onimusha est attendue.
+reste un problème connu.
 
 La correction reste toujours active, même si toutes les optimisations INI sont désactivées.
-Voir les [résultats, méthodes et explications techniques](docs/research.fr.md).
+Voir les [mécanismes, architecture et validations techniques](docs/research.fr.md).
 
 ## Installation
 
 1. Fermer le jeu et sauvegarder les anciens `version.dll` et `dlssg_sm86.ini`.
 2. Copier `version.dll` près du véritable exécutable de rendu : Wukong
-   `b1/Binaries/Win64`, ou No Man's Sky `Binaries`.
+   `b1/Binaries/Win64`.
 3. Y copier éventuellement `dlssg_sm86.ini`, puis relancer et comparer X2/X3/X4.
 
 Si un autre mod utilise `version.dll`, résoudre le conflit avant de le remplacer :
 ce proxy ne charge pas un second proxy. Ne pas le renommer en `dxgi.asi` ou
-`nvngx_dlssg.dll`. **Les configurations avec ASI loader restent en cours de test.**
+`nvngx_dlssg.dll`. **Les modes ASI/DXGI supplémentaires ne sont pas inclus dans ce téléchargement -7.**
+Leur [guide générique](docs/install-loaders.fr.md) décrit la prochaine version.
 Pour revenir en arrière, fermer le jeu et restaurer les fichiers sauvegardés.
 
 Windows x64, un GPU SM86 et une intégration DLSS FG existante sont nécessaires.
@@ -79,8 +80,6 @@ Pensez à star **[RHI](https://github.com/RankFTW/RHI)** et **[RenoDX de ShortFu
 |---|---|
 | Black Myth: Wukong / DX12 | DLL corrigée testée en X4 : nettement plus fluide selon l'utilisateur. Graphique toujours blanc. |
 | Palworld | Retours positifs sur les anciennes versions ; nouvel essai de la DLL corrigée attendu. |
-| No Man's Sky / Vulkan | Ancienne préversion de diagnostic fonctionnelle X2/X3/X4 ; nouvelle DLL vérifiée hors jeu en Vulkan, nouvel essai en jeu attendu. |
-| Cyberpunk / Onimusha | Problème initial signalé sur RTX 3060 Ti 8 Go ; correction encore à confirmer dans ces jeux. |
 
 Les essais portent surtout sur un **portable**, pas sur un GPU de bureau.
 Les retours d'autres configurations sont bienvenus : GPU/VRAM, pilote, jeu/API,

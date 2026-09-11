@@ -28,9 +28,5 @@
   "cross_api_exact": true,
   "wukong_x4_user_reports_much_smoother": true,
   "wukong_white_chart_fixed": false,
-  "cyberpunk_corrected_game_test": "pending",
-  "onimusha_asi_corrected_game_test": "pending",
-  "corrected_vulkan_game_test": "pending",
-  "game_benchmark_conditions_matched": false,
-  "game_benchmark_deviation": "Codex companion visible but unused during corrected run"
+  "corrected_vulkan_game_test": "pending"
 }
