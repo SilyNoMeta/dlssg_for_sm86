@@ -10,6 +10,8 @@ basée sur [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86)
 
 **[Télécharger la DLL + l'INI facultatif](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-7/dlssg-sm86-310.9.1-7-win64.zip)** · [Notes de version](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7)
 
+Le ZIP contient la DLL, l'INI facultatif, la documentation actuelle, les empreintes et les licences.
+
 C'est la seule release conservée. **Les anciennes -0 à -6 ont été retirées : leurs
 images X3/X4 pouvaient rester près du milieu du mouvement malgré un compteur FPS élevé.**
 Sur un déplacement de 8 pixels, les anciennes sorties X4 se plaçaient vers 4/4/4 pixels,
@@ -84,8 +86,6 @@ Les essais portent surtout sur un **portable**, pas sur un GPU de bureau.
 Les retours d'autres configurations sont bienvenus : GPU/VRAM, pilote, jeu/API,
 résolution, mode, réglages NR/Cost Scaler, qualité du mouvement et réactivité.
 Utiliser les [Issues](https://github.com/SilyNoMeta/dlssg_for_sm86/issues).
-Les [captures Palworld et réglages RHI historiques](GALLERY.fr.md) montrent du X2,
-pas cette release corrigée ; la valeur exacte du Cost Scaler n'est pas confirmée.
 
 ## Diagnostic et crédits
 

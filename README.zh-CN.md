@@ -10,6 +10,8 @@ MFG 时间位置修正和四项可选优化。
 
 **[下载 DLL 和可选 INI](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-7/dlssg-sm86-310.9.1-7-win64.zip)** · [版本说明](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7)
 
+ZIP 包含 DLL、可选 INI、当前文档、校验值和许可证。
+
 目前只保留此版本。**此前 -0 至 -6 已撤下：虽然 FPS 较高，其 X3/X4
 生成图像的运动位置可能都接近两张真实图像的中点。** 在每帧移动 8 像素的测试中，
 旧 X4 输出约为 4/4/4 像素，修正后为 2/4/6。使用 **RTX 3070 Ti Laptop、8 GB**、
@@ -75,8 +77,6 @@ Discord 链接可能要求加入服务器。NR 补丁名称中的 GPU 范围不�
 
 目前主要数据来自一台**笔记本**，不能代表桌面 GPU。欢迎[提交其他配置反馈](https://github.com/SilyNoMeta/dlssg_for_sm86/issues)：
 GPU/显存、驱动、游戏/API、分辨率、倍数、NR/Cost Scaler 设置、运动画质和响应感受。
-[历史帕鲁截图与 RHI 配置](GALLERY.zh-CN.md) 展示 X2，不代表本次修正版，
-也不能确认 Cost Scaler 的准确数值。
 
 ## 诊断与致谢
 

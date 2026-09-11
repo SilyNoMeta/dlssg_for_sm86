@@ -10,6 +10,8 @@ based on [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86). 
 
 **[Download the DLL + optional INI](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-7/dlssg-sm86-310.9.1-7-win64.zip)** · [Release notes](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7)
 
+The ZIP contains the DLL, optional INI, current documentation, checksums and licenses.
+
 This is the only retained release. **Earlier -0 through -6 releases were withdrawn
 because their X3/X4 images could remain near the motion midpoint despite high FPS.**
 In an 8-pixel translation test, old X4 outputs were near 4/4/4 pixels; the corrected
@@ -83,8 +85,6 @@ Please star **[RHI](https://github.com/RankFTW/RHI)** and **[ShortFuse's RenoDX]
 Reports so far primarily concern one **laptop**, not desktop GPU benchmarks.
 Other configurations are welcome: GPU/VRAM, driver, game/API, resolution, mode,
 NR/Cost Scaler settings, motion quality and responsiveness. Use [Issues](https://github.com/SilyNoMeta/dlssg_for_sm86/issues).
-[Historical Palworld screenshots and RHI setup](GALLERY.en.md) are X2 images;
-they do not demonstrate the corrected release or establish an exact Cost Scaler value.
 
 ## Diagnostics and credits
 
