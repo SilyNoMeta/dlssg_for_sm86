@@ -1,6 +1,6 @@
 # Justesse temporelle et optimisations incluses
 
-11 septembre 2026 · release 310.9.1-7 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
+11 septembre 2026 · release 310.9.1-8 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
 
 ## Observation et hypothèse
 
@@ -44,7 +44,7 @@ précision FP16 ne sont pas réduits.
 
 ## Validation et limites
 
-52 cas hors jeu sur RTX 3070 Ti Laptop 8 Go, pilote 616.92 : 49 succès attendus
+Correctif temporel -7 vérifié sur 52 cas hors jeu, RTX 3070 Ti Laptop 8 Go, pilote 616.92 : 49 succès attendus
 et 3 échecs attendus détectant les défauts X3/X4 de l'ancienne base, dont avec interface.
 Couverture : 16 combinaisons INI en X4 sur DX12/Vulkan ; X2/X3 avec toutes les
 options actives ou désactivées sur les deux API ; 1280×720 ; mouvement vers la
@@ -57,7 +57,7 @@ ont aussi été vérifiés. [Périmètre structuré](validation-summary.json).
 
 Ces tests ne mesurent pas la présentation en jeu et ne couvrent pas toutes les
 occlusions, caméras, interfaces ou intégrations. Le propriétaire a ensuite confirmé
-une forte amélioration de fluidité X4 dans Wukong avec cette DLL exacte.
+une forte amélioration de fluidité X4 dans Wukong avec ce binaire -7.
 Un nouvel essai Vulkan en jeu reste à confirmer pour cette release.
 Le graphique Wukong présente toujours un rectangle blanc. Le test d'interface
 synthétique ne le reproduit pas ; ce symptôme n'est donc pas annoncé comme corrigé.
@@ -80,11 +80,11 @@ corrigé et relancer le jeu entre les modifications.
 
 ## Chargement : une DLL présente n'est pas un bridge actif
 
-Dans la release -7, seul `version.dll` déclenche le démarrage. Un loader ASI peut
+Dans le binaire -7 original, seul `version.dll` déclenche le démarrage. Un loader ASI peut
 charger une DLL renommée sans activer son bridge. Ce problème est distinct du
 mauvais placement temporel des images X3/X4.
 
-La version en développement ajoute un démarrage commun et idempotent pour trois
+La release -8 ajoute un démarrage commun et idempotent pour trois
 modes : `version.dll` transmet les fonctions d'information de version ;
 `dxgi.asi` démarre au chargement et expose `InitializeASI` ; `dxgi.dll` transmet
 les véritables exports DXGI de Windows. Ultimate ASI Loader appelle aussi
@@ -105,7 +105,14 @@ accumuler de références supplémentaires. Les noms et ordinaux des exports son
 comparés à la bibliothèque Windows testée ; la création réelle des factories
 est vérifiée séparément.
 
-**Ces nouveaux modes ne sont pas inclus dans le binaire -7 téléchargeable.**
+**Le paquet -8 contient une seule `version.dll`, renommable pour ces modes.**
+Les 20 exports DXGI, trois API de factory, premiers appels concurrents, imports
+statiques, exports de version et démarrage par le véritable UAL passent leurs contrôles.
+Sur quatre cas X4 (DX12 sous trois noms et Vulkan sous `dxgi.dll`), les 12 images
+de chaque cas correspondent octet pour octet à la -7 standard. L'utilisateur a
+ensuite confirmé le fonctionnement direct en `dxgi.dll` dans Wukong sur RTX 3070 Ti
+Laptop 8 Go. Il s'agit d'une validation fonctionnelle, pas d'un nouveau benchmark
+FPS ou d'une validation de tous les jeux.
 Un événement de démarrage ne prouve pas à lui seul la présentation d'images générées.
 
 ## Les mêmes kernels pour deux API graphiques
@@ -120,8 +127,10 @@ renommage ne remplace pas une intégration absente et n'ajoute pas de backend DX
 
 ## Traçabilité
 
-SHA256 de la DLL : `d10fc4d245ddfa0a8b2bd5530dfde23547bf193d6f30623d4875627db1002bef`.
-La DLL publiée est celle testée comme candidate temporelle, sans reconstruction.
+SHA256 de `version.dll` : `a19c3b7b65d3e485674377c8b2c8d71407179d7da314c6f9ccd691b03951fe75`.
+Il s'agit du binaire exact validé dans Wukong sous le nom `dxgi.dll`, sans reconstruction.
+Le renommage ne change pas l'empreinte. Son runtime et ses deux packs embarqués
+correspondent à la -7 ; la modification porte sur le chargement.
 Les releases -0…-6 ont été retirées à cause du défaut MFG ; leurs résultats sont
 conservés pour interprétation, pas comme téléchargements recommandés.
 Cette documentation présente les mécanismes et leur validation ; les journaux

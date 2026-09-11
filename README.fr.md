@@ -3,16 +3,26 @@
 [English](README.md) | [简体中文](README.zh-CN.md) | Français
 
 Adaptation expérimentale de DLSS Frame Generation **310.9.1** pour NVIDIA SM86/RTX 30,
-basée sur [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86). Une **`version.dll`** contient
+basée sur [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86). Une DLL autonome contient
 **DirectX 12 + Vulkan**, la correction temporelle MFG et quatre optimisations facultatives.
 
-## Télécharger 310.9.1-7
+## Télécharger 310.9.1-8
 
-**[Télécharger la DLL + l'INI facultatif](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-7/dlssg-sm86-310.9.1-7-win64.zip)** · [Notes de version](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7)
+**[Télécharger la DLL universelle + l'INI facultatif](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-8/dlssg-sm86-310.9.1-8-win64.zip)** · [Notes de version](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-8)
 
-Le ZIP contient la DLL, l'INI facultatif, la documentation actuelle, les empreintes et les licences.
+Un paquet, une seule **`version.dll`**. Choisir son nom selon l'installation :
 
-C'est la seule release conservée. **Les anciennes -0 à -6 ont été retirées : leurs
+| Nom du fichier | Installation |
+|---|---|
+| `version.dll` | Proxy de version direct, nom fourni par défaut. |
+| `dxgi.dll` | Renommer le même fichier ; proxy DXGI direct, sans loader ASI. |
+| `dxgi.asi` | Renommer le même fichier ; chargement par Ultimate ASI Loader x64. |
+
+**Installer une seule copie de notre bridge.** Le ZIP contient aussi l'INI facultatif,
+la documentation, les empreintes et les licences. La -8 ajoute les exports DXGI
+et le démarrage ASI aux runtime et kernels corrigés de la -7, avec les quatre options INI.
+
+**Les anciennes -0 à -6 ont été retirées : leurs
 images X3/X4 pouvaient rester près du milieu du mouvement malgré un compteur FPS élevé.**
 Sur un déplacement de 8 pixels, les anciennes sorties X4 se plaçaient vers 4/4/4 pixels,
 contre 2/4/6 après correction. Le X4 dans Wukong est désormais décrit comme nettement
@@ -30,16 +40,18 @@ Voir les [mécanismes, architecture et validations techniques](docs/research.fr.
    `b1/Binaries/Win64`.
 3. Y copier éventuellement `dlssg_sm86.ini`, puis relancer et comparer X2/X3/X4.
 
-Si un autre mod utilise `version.dll`, résoudre le conflit avant de le remplacer :
-ce proxy ne charge pas un second proxy. Ne pas le renommer en `dxgi.asi` ou
-`nvngx_dlssg.dll`. **Les modes ASI/DXGI supplémentaires ne sont pas inclus dans ce téléchargement -7.**
-Leur [guide générique](docs/install-loaders.fr.md) décrit la prochaine version.
+Si un autre mod utilise `version.dll`, choisir le mode DXGI ou ASI et suivre
+le [guide générique](docs/install-loaders.fr.md). Avec Ultimate ASI Loader,
+le loader est `version.dll` et notre DLL devient `dxgi.asi`.
+Conserver le nom `dlssg_sm86.ini`. Ces renommages nécessitent la -8 ;
+le binaire -7 original doit garder son nom `version.dll`. Ne jamais renommer
+le bridge en `nvngx_dlssg.dll`.
 Pour revenir en arrière, fermer le jeu et restaurer les fichiers sauvegardés.
 
 Windows x64, un GPU SM86 et une intégration DLSS FG existante sont nécessaires.
 En Vulkan, le jeu doit fournir les extensions NGX et la présentation des images.
-La DLL n'ajoute pas le FG à un jeu quelconque. DX11, Linux/Proton, DXVK, RTX 20
-et les autres noms de proxy ne sont pas validés. Aucun Python/CUDA à installer
+La DLL n'ajoute pas le FG à un jeu quelconque. DX11, Linux/Proton, DXVK et RTX 20
+ne sont pas validés. Aucun Python/CUDA à installer
 pour jouer. Le pilote testé 616.92 ne constitue pas une version minimale requise.
 
 ## Optimisations facultatives
@@ -78,7 +90,7 @@ Pensez à star **[RHI](https://github.com/RankFTW/RHI)** et **[RenoDX de ShortFu
 
 | Jeu | État des vérifications |
 |---|---|
-| Black Myth: Wukong / DX12 | DLL corrigée testée en X4 : nettement plus fluide selon l'utilisateur. Graphique toujours blanc. |
+| Black Myth: Wukong / DX12 | X4 corrigé nettement plus fluide ; chargement direct en `dxgi.dll` également confirmé sur le portable. Graphique toujours blanc. |
 | Palworld | Retours positifs sur les anciennes versions ; nouvel essai de la DLL corrigée attendu. |
 
 Les essais portent surtout sur un **portable**, pas sur un GPU de bureau.

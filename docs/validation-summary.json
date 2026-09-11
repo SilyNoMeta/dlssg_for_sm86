@@ -1,11 +1,13 @@
 {
-  "release": "310.9.1-7",
-  "dll_sha256": "d10fc4d245ddfa0a8b2bd5530dfde23547bf193d6f30623d4875627db1002bef",
+  "release": "310.9.1-8",
+  "dll_sha256": "a19c3b7b65d3e485674377c8b2c8d71407179d7da314c6f9ccd691b03951fe75",
   "date": "2026-09-11",
   "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU, 616.92",
-  "offline_cases": 52,
-  "positive_cases": 49,
-  "expected_negative_controls": 3,
+  "temporal_validation_baseline_release": "310.9.1-7",
+  "temporal_validation_baseline_sha256": "d10fc4d245ddfa0a8b2bd5530dfde23547bf193d6f30623d4875627db1002bef",
+  "baseline_offline_cases": 52,
+  "baseline_positive_cases": 49,
+  "baseline_expected_negative_controls": 3,
   "motion_pixels_per_real_frame": 8,
   "x4_expected_generated_positions": [
     2,
@@ -17,16 +19,26 @@
     4,
     4
   ],
-  "corrected_x4_approximate_positions": [
-    2,
-    4,
-    6
+  "baseline_all_16_ini_combinations_x4_both_apis": true,
+  "baseline_x2_reference_byte_identical": true,
+  "loader_modes": [
+    "version.dll",
+    "dxgi.dll",
+    "dxgi.asi"
   ],
-  "measurement_tolerance_pixels": 0.5,
-  "all_16_ini_combinations_x4_both_apis": true,
-  "x2_reference_byte_identical": true,
-  "cross_api_exact": true,
-  "wukong_x4_user_reports_much_smoother": true,
+  "initialize_asi_export": true,
+  "dxgi_export_count": 20,
+  "dxgi_factory_apis_checked": 3,
+  "concurrent_dxgi_first_call_threads": 8,
+  "static_dxgi_import_host_passed": true,
+  "actual_ual_startup_passed": true,
+  "loader_gpu_cases": 4,
+  "images_per_loader_gpu_case": 12,
+  "loader_outputs_byte_identical_to_corrected_release7": true,
+  "embedded_runtime_and_both_kernel_packs_identical_to_release7": true,
+  "baseline_wukong_x4_user_reports_much_smoother": true,
+  "wukong_direct_dxgi_user_confirmed": true,
+  "wukong_direct_dxgi_report": "Functional report; no new performance benchmark or explicit per-multiplier result.",
   "wukong_white_chart_fixed": false,
   "corrected_vulkan_game_test": "pending"
 }

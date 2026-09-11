@@ -1,6 +1,6 @@
 # Temporal correctness and shipped optimizations
 
-2026-09-11 · release 310.9.1-7 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
+2026-09-11 · release 310.9.1-8 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
 
 ## Finding and hypothesis
 
@@ -43,7 +43,7 @@ The model, its weights and FP16 arithmetic are not reduced in precision.
 
 ## Validation and its limits
 
-52 offline GPU cases were checked on RTX 3070 Ti Laptop 8 GB, driver 616.92:
+The -7 temporal fix was checked in 52 offline GPU cases on RTX 3070 Ti Laptop 8 GB, driver 616.92:
 49 expected successes and 3 expected failures detecting old X3/X4, including UI.
 Coverage includes all 16 INI combinations in X4 on DX12 and Vulkan; X2/X3 with
 all options on/off on both APIs; 1280×720; leftward motion; and HUDLess/UIAlpha.
@@ -55,7 +55,7 @@ were also checked. [Machine-readable scope](validation-summary.json).
 
 These tests do not measure game presentation or validate every occlusion,
 camera movement, UI format or game integration. The owner then confirmed a
-large X4 smoothness improvement in Wukong with this exact DLL.
+large X4 smoothness improvement in Wukong with that -7 binary.
 A corrected Vulkan game run remains unconfirmed for this release.
 The white Wukong benchmark chart remains visible. A synthetic UI test did not
 reproduce it, so the temporal fix is not presented as a fix for that separate symptom.
@@ -78,11 +78,11 @@ to compare the same corrected image-generation path, restarting between runs.
 
 ## Loader integration: loading is not initialization
 
-In release -7, only `version.dll` triggers automatic startup. An ASI loader can
+In the original -7 binary, only `version.dll` triggers automatic startup. An ASI loader can
 successfully map a renamed DLL without activating its bridge. This is separate
 from the X3/X4 interpolation timing defect.
 
-The development build adds one idempotent startup path for three modes:
+Release -8 adds one idempotent startup path for three modes in the same binary:
 `version.dll` forwards version-information functions; `dxgi.asi` starts on load
 and exposes `InitializeASI`; `dxgi.dll` forwards the real Windows DXGI exports.
 Ultimate ASI Loader also calls `InitializeASI` for other `.asi` filenames, so
@@ -101,7 +101,13 @@ Atomic publication handles concurrent first calls without accumulating extra
 module references. Export names and ordinals are compared with the tested Windows
 library, and real factory creation is tested separately.
 
-**These additional loader modes are not included in the downloadable -7 binary.**
+**The -8 package supplies one `version.dll`, which can be renamed for these modes.**
+The 20 DXGI exports, three factory APIs, concurrent first calls, static imports,
+version forwarding and actual UAL startup pass automated checks. Across four X4
+cases (DX12 under three names and Vulkan under `dxgi.dll`), all 12 output images
+per case match the standard -7 byte for byte. The owner then confirmed direct
+`dxgi.dll` operation in Wukong on RTX 3070 Ti Laptop 8 GB. This is a functional
+validation, not a new FPS benchmark or a claim covering all games.
 A successful startup event alone does not prove the game presents generated frames.
 
 ## One set of kernels, two graphics APIs
@@ -115,8 +121,10 @@ a DLL cannot provide a missing game integration or add a DX11 backend.
 
 ## Traceability
 
-DLL SHA256: `d10fc4d245ddfa0a8b2bd5530dfde23547bf193d6f30623d4875627db1002bef`.
-The release DLL is unchanged from the tested temporal candidate.
+`version.dll` SHA256: `a19c3b7b65d3e485674377c8b2c8d71407179d7da314c6f9ccd691b03951fe75`.
+This is the exact binary validated in Wukong as `dxgi.dll`, with no rebuild.
+Renaming it does not change its hash. Its runtime and both embedded kernel packs
+match -7; the change is in loader integration.
 Previous releases -0…-6 were withdrawn because of the MFG defect; their historical
 results are retained for interpretation, not as recommended downloads.
 The mechanisms and validation above document this release;

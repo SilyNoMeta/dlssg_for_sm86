@@ -3,16 +3,25 @@
 [English](README.md) | 简体中文 | [Français](README.fr.md)
 
 基于 [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86) 的实验性 **DLSS Frame Generation 310.9.1**
-SM86/RTX 30 适配。一个 **`version.dll`** 包含 **DirectX 12 + Vulkan**、
+SM86/RTX 30 适配。一个独立 DLL 包含 **DirectX 12 + Vulkan**、
 MFG 时间位置修正和四项可选优化。
 
-## 下载 310.9.1-7
+## 下载 310.9.1-8
 
-**[下载 DLL 和可选 INI](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-7/dlssg-sm86-310.9.1-7-win64.zip)** · [版本说明](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7)
+**[下载通用 DLL 和可选 INI](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-8/dlssg-sm86-310.9.1-8-win64.zip)** · [版本说明](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-8)
 
-ZIP 包含 DLL、可选 INI、当前文档、校验值和许可证。
+一个压缩包，只含一个 **`version.dll`**。根据安装方式选择文件名：
 
-目前只保留此版本。**此前 -0 至 -6 已撤下：虽然 FPS 较高，其 X3/X4
+| 文件名 | 安装方式 |
+|---|---|
+| `version.dll` | 直接版本代理，默认文件名。 |
+| `dxgi.dll` | 同一文件改名，直接 DXGI 代理，无需 ASI 加载器。 |
+| `dxgi.asi` | 同一文件改名，通过 Ultimate ASI Loader x64 加载。 |
+
+**只安装一份本项目桥接文件。** ZIP 还包含可选 INI、文档、校验值和许可证。
+-8 在 -7 修正后的运行库和内核基础上新增 DXGI 转发及 ASI 启动，保留四项 INI 选项。
+
+**此前 -0 至 -6 已撤下：虽然 FPS 较高，其 X3/X4
 生成图像的运动位置可能都接近两张真实图像的中点。** 在每帧移动 8 像素的测试中，
 旧 X4 输出约为 4/4/4 像素，修正后为 2/4/6。使用 **RTX 3070 Ti Laptop、8 GB**、
 驱动 616.92 的用户确认《黑神话：悟空》X4 明显更加流畅。这是正确性修复，
@@ -27,14 +36,15 @@ ZIP 包含 DLL、可选 INI、当前文档、校验值和许可证。
 2. 将 `version.dll` 放在实际渲染程序旁：悟空为 `b1/Binaries/Win64`。
 3. 可将 `dlssg_sm86.ini` 放在同一目录，重启并比较 X2/X3/X4。
 
-如果其他模组占用了 `version.dll`，请先处理冲突；本代理不会链式加载其他代理。
-不要将本文件改名为 `dxgi.asi` 或 `nvngx_dlssg.dll`。
-**此 -7 下载不包含新增的 ASI/DXGI 模式。**
-新增模式的[通用安装指南](docs/install-loaders.zh-CN.md)针对下一版本。 回退时关闭游戏并恢复备份文件。
+如果其他模组占用了 `version.dll`，请选择 DXGI 或 ASI 方式并参考
+[通用安装指南](docs/install-loaders.zh-CN.md)。使用 Ultimate ASI Loader 时，
+加载器名为 `version.dll`，本项目 DLL 改名为 `dxgi.asi`。
+配置保持 `dlssg_sm86.ini`。这些改名方式需要 -8；原始 -7 二进制文件必须
+保留 `version.dll` 名称。不可改名为 `nvngx_dlssg.dll`。回退时关闭游戏并恢复备份文件。
 
 需要 Windows x64、SM86 GPU 和游戏现有的 DLSS FG 集成。Vulkan 游戏还需提供
 NGX 扩展和帧呈现机制。复制 DLL 无法为任意游戏添加 FG。DX11、Linux/Proton、
-DXVK、RTX 20 和其他代理文件名未验证。游玩无需安装 Python/CUDA。
+DXVK 和 RTX 20 未验证。游玩无需安装 Python/CUDA。
 616.92 是已测试驱动，并非最低版本要求。
 
 ## 可选优化
@@ -70,7 +80,7 @@ Discord 链接可能要求加入服务器。NR 补丁名称中的 GPU 范围不�
 
 | 游戏 | 验证情况 |
 |---|---|
-| 黑神话：悟空 / DX12 | 用户确认修正后的 X4 明显更流畅；基准图表仍为白色。 |
+| 黑神话：悟空 / DX12 | 修正后的 X4 明显更流畅；笔记本上也已确认直接使用 `dxgi.dll` 正常工作。基准图表仍为白色。 |
 | 幻兽帕鲁 | 旧版本已有良好反馈；修正版需重新测试。 |
 
 目前主要数据来自一台**笔记本**，不能代表桌面 GPU。欢迎[提交其他配置反馈](https://github.com/SilyNoMeta/dlssg_for_sm86/issues)：
