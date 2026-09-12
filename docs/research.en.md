@@ -1,5 +1,18 @@
 # Temporal correctness and shipped optimizations
 
+## 310.9.1-10: shared engine, two delivery formats
+
+Both packages embed the same NVIDIA 310.9.1 runtime and corrected multiarch packs. The DLL is the previously tested conventional engine; the standalone add-on links that engine with the ReShade panel. SM86 kernels remain unchanged from -9. The pack adds SM89 compilation of the same FP16 model and an experimental SM75 route; Turing has no physical-card validation here. The earlier sections below describe their original releases and are historical evidence, not new performance measurements.
+
+Live commands are queued and applied on the game's next Streamline options call. Saving settings and saving key bindings are independent operations; a failed file replacement preserves the prior file and active state. ReShade Record reads the runtime's captured input API because ReShade suppresses ordinary Win32 key polling while its menu owns the keyboard.
+
+A target accepted by Streamline can still be overridden by NVIDIA's global/per-game dynamic target setting. The user confirmed that removing such an override restored target changes in Wukong. The add-on does not reset NVIDIA profiles automatically.
+
+Telemetry measures successful unique source-frame submissions over about half a second, not GPU completion or latency. [OptiScaler PR #1156](https://github.com/optiscaler/OptiScaler/pull/1156) adds the consumer; it is pending at release time. [Controls](live-controls.en.md) · [Validation scope](validation-summary.json).
+
+## Historical notes through -9
+
+
 2026-09-11 · release 310.9.1-9 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
 
 ## New in -9: higher multipliers and native Dynamic MFG

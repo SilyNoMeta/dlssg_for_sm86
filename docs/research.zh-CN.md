@@ -1,5 +1,18 @@
 # 时间正确性与已集成优化
 
+## 310.9.1-10：同一引擎，两种安装方式
+
+两个包均包含相同的 NVIDIA 310.9.1 运行库和已修正多架构内核包。DLL 是已测试的常规引擎；独立 add-on 将该引擎与 ReShade 面板链接。SM86 内核保持与 -9 相同，增加同一 FP16 模型的 SM89 编译及实验性 SM75 路径，尚无实体 Turing 验证。下方历史章节对应各自原始版本，并非新的性能测量。
+
+实时请求在游戏下一次 Streamline 选项提交时应用。设置保存与快捷键保存独立；文件替换失败时保留旧文件及状态。Record 使用 ReShade 自己的输入 API，因为菜单捕获键盘时会屏蔽普通 Win32 按键轮询。
+
+Streamline 接受的目标仍可能被 NVIDIA 全局/游戏级动态目标覆盖。用户确认移除该覆盖后，《黑神话：悟空》的目标切换恢复正常。本 add-on 不会自动重置 NVIDIA 配置。
+
+遥测测量约半秒内成功提交的不同源帧，而非 GPU 完成速率或延迟。[OptiScaler PR #1156](https://github.com/optiscaler/OptiScaler/pull/1156) 添加读取端，发布时仍待审核。[控制指南](live-controls.zh-CN.md) · [验证范围](validation-summary.json)。
+
+## -9 及更早版本的历史记录
+
+
 2026-09-11 · 310.9.1-9 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
 
 ## -9 新增：更高倍率与原生 Dynamic MFG

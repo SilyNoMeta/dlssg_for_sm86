@@ -1,91 +1,25 @@
-# 安装方式：version.dll、ASI 或 dxgi.dll
+# DLL / ASI 安装 — 310.9.1-10
 
-**310.9.1-9** — [下载通用压缩包](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-9)。
-其中仅含一个 `version.dll`，也可改名为 `dxgi.dll` 或 `dxgi.asi`。
-这些方式从 -8 起提供；原始 -7 二进制文件必须保留 `version.dll` 名称。
+从[发布页](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-10)下载 **dlssg-310.9.1-10-dll-win64.zip**。需要 ReShade 面板时，请改用[独立包](standalone-reshade.zh-CN.md)。
 
-所有文件名均使用相同的 DX12/Vulkan 运行库、内核、时间修正和 INI 选项。
-请先关闭游戏并备份现有文件，在实际可执行文件所在目录选择**一种**安装方式。
-只安装一份本项目桥接文件，切换加载方式时保留自己的 INI 配置。
+关闭游戏并备份要替换的文件。仅将**一个**引擎与 `dlssg_sm86.ini` 放在实际游戏程序旁（《黑神话：悟空》：`b1/Binaries/Win64`），并在游戏中开启 DLSS FG。
 
-## 使用 Ultimate ASI Loader
+| 方式 | 安装 |
+|---|---|
+| version 代理 | 直接放入我们的 `version.dll`；游戏必须加载该名称。 |
+| DXGI 代理 | 将同一文件改名为 `dxgi.dll`，无需 ASI 加载器。 |
+| Ultimate ASI Loader | 将 [UAL x64](https://github.com/ThirteenAG/Ultimate-ASI-Loader) 作为 `version.dll`，把我们的文件改名为 `dxgi.asi`。 |
 
-1. 安装 [Ultimate ASI Loader x64](https://github.com/ThirteenAG/Ultimate-ASI-Loader)，
-   文件名为 `version.dll`。
-2. 将**本项目的** `version.dll` 重命名为 `dxgi.asi`，放在加载器旁边。
-3. 将 `dlssg_sm86.ini` 放在同一目录，保持文件名不变。
-4. 重启游戏，在游戏设置中启用 DLSS 帧生成。
+这些名称使用相同引擎。INI 始终叫 `dlssg_sm86.ini`，放在引擎旁。不要把桥接文件改名为 `nvngx_dlssg.dll`。如果 ReShade 或其他模组占用代理名称，请选择空闲的加载方式；我们的 DXGI 代理转发到 Windows，不会自动串联其他 DXGI 模组。
 
-```text
-Game.exe
-version.dll       <- Ultimate ASI Loader x64
-dxgi.asi          <- 本项目桥接文件
-dlssg_sm86.ini     <- 桥接配置
-```
+UAL 可通过 `InitializeASI` 加载其他 ASI 文件名；隔离加载测试已验证 `dlssg_sm86.asi`。不调用此导出的加载器请使用 `dxgi.asi`。放在 ASI 子目录时，INI 也放在插件旁。REFramework 可保留自己的 `dinput8.dll`。
 
-REFramework 可以继续使用自己的 `dinput8.dll`。这里的加载器和桥接文件
-是两个不同的程序。UAL 会调用插件的 `InitializeASI`，因此也可以使用其他
-`.asi` 文件名；我们已在独立加载测试中验证 `dlssg_sm86.asi`。
-对于不调用该导出函数的加载器，请使用能够自动启动的 `dxgi.asi`。
-如果插件放在 ASI 子目录中，INI 文件也应放在插件旁边。
+不要将本项目 DLL/ASI 与 `DLSSG.addon64` 或其他 MFG 解锁引擎叠加使用。ReShade 本身及无关 NR add-on 可保留。两个包功能相同，只有独立包提供 ReShade 面板。
 
-## 直接使用 dxgi.dll
+## 配置与验证
 
-将本项目的 `version.dll` 重命名为 `dxgi.dll`，与 `dlssg_sm86.ini`
-一起放在游戏可执行文件旁边。此方式不需要 ASI 加载器。
+默认跟随游戏，`MaxInterpolatedFrames=5` 表示最高 X6，仍受插件能力限制。参见[控制、迁移、日志和遥测](live-controls.zh-CN.md)。手动编辑 INI 后重启；已配置快捷键在下一次识别到的 Streamline 选项提交时生效。原生动态需要兼容 DX12，固定控制可用于已识别 DX12/Vulkan 路径。
 
-```text
-Game.exe
-dxgi.dll          <- 本项目桥接文件，同时将 DXGI 调用转发给 Windows
-dlssg_sm86.ini
-```
+日志开启时，`proxy_attached`、`dxgi_attached` 或 `asi_attached` 标识加载，`installed_310_9_1` 标识运行库处理。`sl_native_dynamic_accepted` 仅表示 SDK 接受，并不证明驱动采用了目标。NVIDIA 全局或游戏级动态目标覆盖可优先。可用的 NVIDIA 水印可显示 `Dyn DRV` 和当前/最大倍率；本包不会自动开启水印。
 
-如果 ReShade 等其他模组已经使用 `dxgi.dll`，请保留原模组并选择 ASI 方式。
-本项目的 DXGI 代理转发给 Windows，不会自动串联另一个 DXGI 代理。
-
-## 直接使用 version.dll
-
-将本项目的 `version.dll` 和 `dlssg_sm86.ini` 放在游戏可执行文件旁边，
-无需额外安装 ASI 加载器。如果该文件名已被占用，请选择其他方式。
-游戏必须实际加载所选文件名，桥接功能才会启动。
-不可将桥接文件改名为 `nvngx_dlssg.dll`。
-
-## 在 INI 中配置帧生成
-
-根目录 INI 通过 `MaxMultiplier=6`、`ForceMultiplier=0`、`DynamicMFG=0`
-保留游戏选择。编辑本项目 DLL 旁的 `dlssg_sm86.ini`，填写自己希望的固定倍率
-或动态设置。重启后启用游戏 FG；若集成需要重新提交选项，可关闭再开启一次 FG。
-所有设置只需一个 DLL 和一个 INI。
-
-设 `DynamicMFG=1` 请求动态，并自行选择 `DynamicTargetFPS`：0 为显示器刷新率，
-1–1000 为目标 FPS。`ForceMultiplier=0` 回退至游戏选择，也可用其他受支持的值
-指定固定回退。固定倍率请设 `DynamicMFG=0`，并将 `ForceMultiplier` 设为 2 至
-`MaxMultiplier`。原生动态需要兼容的 DX12 Streamline 与驱动。固定覆盖也需要已识别的
-Streamline 路径；直接调用 NGX 的集成仍由游戏控制。游戏自身选择的原生动态
-模式会被保留。详见[设置说明](../README.zh-CN.md)。
-
-缺少 `[FrameGeneration]` 时仍使用 X4 上限，不强制固定或动态模式。省略的
-优化键仍默认开启。这两个配置节均不能关闭时间修正。
-
-## 配置与检查
-
-原生动态模式中，`sl_native_dynamic_supported=1` 后出现
-`sl_native_dynamic_accepted=<目标>` 表示能力和请求已被接受。
-`sl_state_viewport`、`sl_options_viewport` 可诊断跨视图集成。也要检查实际行为：
-可用的 NVIDIA 水印会显示 `Dyn DRV` 和 `4x/6x`（当前倍率 / 上限）。仅接受请求
-不等于完成呈现基准测试。本包不会自动启用水印。日志 `dlssg3109.log` 位于本项目
-DLL 旁；查询间帧计数不能当作倍率。
-
-
-无论桥接文件使用什么名称，配置文件都必须保持 **`dlssg_sm86.ini`**。
-`[Optimizations]` 下的四个选项使用 `1` 或 `0`；文件或选项缺失时默认为 `1`。
-修改配置后需要重启游戏。X3/X4 时间插值修正始终启用。
-
-在 `dlssg3109.log` 中检查 `asi_attached`、`dxgi_attached` 或 `proxy_attached`；
-运行库接入成功后会出现 `installed_310_9_1`。ASI 加载器不需要显示界面。
-插件被加载，并不等于帧生成已经运行。
-
-通用加载已在 -8 中验证；-9 保留其导出与启动路径，并通过 DX12/Vulkan 图像测试。
-用户此前已在 RTX 3070 Ti Laptop 8 GB 上确认 -8 的 `dxgi.dll` 在悟空中正常工作。
-这是功能验证反馈，不是新的性能基准。文件名不会为未集成帧生成的游戏添加该功能，
-也不会增加 DX11 DLSSG 支持。回退时请关闭游戏，移走安装的桥接文件并恢复备份。
+加载成功不等于生成帧已经显示。回退时关闭游戏，仅移除本项目引擎并恢复备份。游玩不需要 CUDA toolkit 或编译工具。

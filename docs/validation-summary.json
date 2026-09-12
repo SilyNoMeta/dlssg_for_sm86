@@ -1,42 +1,37 @@
 {
-  "release": "310.9.1-9",
-  "dll_sha256": "114004043035c3f8f91b1b8909bdb8b7e68fa36394aeb339c339e30042684561",
-  "date": "2026-09-11",
-  "gpu": "RTX 3070 Ti Laptop 8 GB",
-  "driver": "616.92",
-  "same_binary_as_in_game_dynamic_validation": true,
-  "binary_rebuilt": false,
-  "control_abi_assertions": 213,
-  "guarded_option_versions": 5,
-  "guarded_state_versions": 4,
-  "fixed_gpu_cases": 16,
-  "real_streamline_scenarios": 10,
-  "real_streamline_scenarios_include_old_binary_negative_control": true,
-  "vulkan_transition_sequences": 4,
-  "explicit_feature_creations_per_sequence": 1,
-  "synthetic_temporal_error_bound_pixels": 0.403,
-  "native_dynamic_dx12_in_game_user_confirmed": true,
-  "user_observed_dynamic_multipliers": [
-    3,
-    4,
-    5
+  "release": "310.9.1-10",
+  "runtime": "310.9.1",
+  "packages": [
+    "DLL / ASI",
+    "standalone ReShade"
   ],
-  "dynamic_target_requested_fps": 130,
-  "native_dynamic_vulkan_supported": false,
-  "adaptive_vulkan_controller_included": false,
-  "current_vulkan_swapchain_presentation_validation": false,
-  "new_fps_latency_benchmark": false,
-  "long_session_stability_validation": false,
-  "runtime_kernel_resources_unchanged_from_release8": true,
-  "historical": {
-    "temporal_baseline_release": "310.9.1-7",
-    "temporal_gpu_cases": 52,
-    "positive_cases": 49,
-    "expected_negative_controls": 3,
-    "loader_validation_release": "310.9.1-8",
-    "wukong_corrected_x4_and_direct_dxgi_reports": true
-  },
+  "gpu_routes": [
+    "SM75 experimental",
+    "SM86",
+    "SM89"
+  ],
+  "user_reported_hardware": [
+    "RTX 3070 Ti Laptop 8 GB",
+    "RTX 4090"
+  ],
+  "physical_turing_test": false,
+  "standalone_wukong_user_confirmed": true,
+  "wukong_dynamic_target_after_driver_override_removal": true,
+  "cpu_assertions": 436,
+  "persistence_checks": 7,
+  "reshade_version_tested": "6.8.0",
+  "reshade_device_cycles": 2,
+  "native_dx12_vulkan_commands_tested": true,
+  "native_dynamic_vulkan": false,
+  "native_command_tests_present_generated_frames": false,
+  "optiscaler_pr": "https://github.com/optiscaler/OptiScaler/pull/1156",
+  "optiscaler_merged_at_release": false,
+  "new_performance_benchmark": false,
+  "telemetry_metric": "CPU source-frame submission cadence",
   "known_issues": [
-    "White Wukong benchmark chart remains unresolved"
+    "White rectangle over Wukong benchmark chart",
+    "Native dynamic requires compatible DX12 Streamline and driver",
+    "Standalone add-on must load before DLSSG initialization",
+    "RTX 20 has no physical-card validation"
   ]
 }

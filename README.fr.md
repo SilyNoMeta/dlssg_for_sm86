@@ -1,124 +1,98 @@
 <div align="center">
 
-<h1>DLSS Frame Generation<br>pour les RTX série 30</h1>
-<p>Plus d’images. Des mouvements plus fluides. Un multiplicateur qui suit votre jeu.</p>
-<p>
-<img alt="Version 310.9.1-9" src="https://img.shields.io/badge/release-310.9.1--9-76b900?style=flat-square">
-<img alt="Windows x64" src="https://img.shields.io/badge/Windows-x64-238636?style=flat-square">
-<img alt="DirectX 12 et Vulkan" src="https://img.shields.io/badge/API-DX12%20%2B%20Vulkan-30363d?style=flat-square">
-<img alt="SM86" src="https://img.shields.io/badge/GPU-SM86-30363d?style=flat-square">
-</p>
-<p><strong><a href="https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-9/dlssg-sm86-310.9.1-9-win64.zip">Télécharger la 310.9.1-9</a></strong> · <a href="RELEASE-NOTES.md">Les nouveautés</a> · <a href="docs/install-loaders.fr.md">Guide d’installation</a></p>
-<p><a href="README.en.md">English</a> · <strong>Français</strong> · <a href="README.zh-CN.md">简体中文</a></p>
+<h1>DLSS Frame Generation</h1>
+<p>Vos images, vos réglages. Désormais pilotables depuis ReShade.</p>
+<p><img alt="310.9.1-10" src="https://img.shields.io/badge/release-310.9.1--10-76b900?style=flat-square"> <img alt="Windows x64" src="https://img.shields.io/badge/Windows-x64-238636?style=flat-square"> <img alt="DX12 and Vulkan" src="https://img.shields.io/badge/API-DX12%20%2B%20Vulkan-30363d?style=flat-square"></p>
+<p><strong><a href="https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-10/dlssg-310.9.1-10-dll-win64.zip">Télécharger DLL / ASI</a> · <a href="https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-10/dlssg-310.9.1-10-reshade-win64.zip">Télécharger l’add-on ReShade</a></strong></p>
+<p><a href="README.en.md">English</a> · <a href="README.fr.md">Français</a> · <a href="README.zh-CN.md">简体中文</a></p>
 
 </div>
 
 ---
 
-Profitez de **DLSS Frame Generation 310.9.1** sur les GPU **Ampere SM86 / RTX série 30 compatibles**. Cette adaptation expérimentale s’appuie sur le [projet original de sdli1995](https://github.com/sdli1995/dlssg_for_sm86) : mouvements MFG corrigés, optimisations au choix et une seule DLL pour **DirectX 12 et Vulkan**.
 
-**La nouveauté de la -9 :** des multiplicateurs fixes jusqu’à **X6**, le **Dynamic MFG natif sur les intégrations DX12 compatibles**, et des réglages dans un seul INI modifiable. Le jeu doit déjà intégrer DLSS Frame Generation.
+**La 310.9.1-10 propose deux façons d’utiliser le même moteur :** une DLL classique ou un add-on ReShade autonome avec des réglages accessibles pendant le jeu. Basé sur le [projet original de sdli1995](https://github.com/sdli1995/dlssg_for_sm86).
 
-## Ce que ça change pour vous
+## Choisissez un paquet
+
+| Paquet | Pour quel usage ? | Fichiers à installer |
+|---|---|---|
+| **DLL / ASI** | Installation légère, INI et raccourcis facultatifs, sans dépendre de ReShade. | `version.dll` + `dlssg_sm86.ini` |
+| **ReShade** | Panneau en jeu : multiplicateur, DMFG, enregistrement des touches et sauvegarde. | `DLSSG.addon64` + `dlssg_sm86.ini`, avec ReShade et le support complet des add-ons |
+
+**L’un ou l’autre, pas les deux.** L’add-on contient déjà le moteur : aucune DLL/ASI supplémentaire de notre projet ni `DLSSGControls.addon64` n’est nécessaire. ReShade et OptiScaler ne sont pas inclus dans les ZIP.
+
+Fermez le jeu, sauvegardez les fichiers existants et installez près du véritable exécutable (Wukong : `b1/Binaries/Win64`). Activez la FG dans le jeu. Préservez ReShade, les loaders et les autres add-ons ; en changeant de paquet, retirez uniquement notre ancien moteur. Conservez votre INI après vérification de la migration ci-dessous.
+
+[Installation DLL / ASI](docs/install-loaders.fr.md) · [Installation et panneau ReShade](docs/standalone-reshade.fr.md)
+
+## Ce que vous pouvez faire
 
 | Fonction | En pratique |
 |---|---|
-| **Choisir de X2 à X6** | Essayez davantage d’images générées entre les images rendues, dans la limite du plugin chargé. X4 correspond à une image rendue et trois images générées. |
-| **Laisser le Dynamic MFG choisir** | Indiquez la cible de votre choix au runtime NVIDIA : il adapte le multiplicateur à la charge. Nécessite une intégration Streamline DX12 et un pilote compatibles. |
-| **Retrouver un mouvement bien réparti** | Les images intermédiaires occupent des positions différentes le long du mouvement. La correction temporelle résout l’ancien défaut « beaucoup de FPS, peu de fluidité ». Elle reste toujours active. |
-| **Jouer en DX12 ou Vulkan** | Les deux utilisent les mêmes kernels SM86 corrigés. X5/X6 fixe dépend du plugin du jeu ; le dynamique natif reste réservé à DX12. |
-| **Coexister avec vos mods** | Gardez `version.dll`, renommez-la en `dxgi.dll` ou chargez-la comme plugin ASI. C’est le même fichier, avec les mêmes fonctions. |
-| **Choisir vos optimisations** | Quatre optimisations GPU activables séparément dans un INI. Aucun outil de compilation ni installation CUDA nécessaire pour jouer. |
+| **X2 à X6** | Choisir un multiplicateur dans les limites du plugin chargé. X4 correspond à une image rendue et trois images générées. |
+| **Dynamic MFG natif** | Choisir une cible et laisser NVIDIA adapter le multiplicateur sur les intégrations **DX12 compatibles**. |
+| **Réglages en direct** | Raccourcis facultatifs dans les deux paquets ; panneau, enregistrement des touches et sauvegarde avec ReShade. |
+| **DX12 + Vulkan** | Même moteur de compatibilité et correction temporelle. Vulkan permet les réglages fixes sur les chemins Streamline reconnus ; le dynamique natif reste limité à DX12. |
+| **RTX 30 / RTX 40** | Kernels SM86 et SM89, avec retours sur RTX 3070 Ti Laptop 8 Go et RTX 4090. **RTX 20 / SM75 : expérimental, sans essai sur carte Turing physique.** |
+| **Télémétrie facultative** | Cadence CPU des images source, accessible aux outils compatibles. Voir OptiScaler ci-dessous. |
 
-Davantage d’images générées peut améliorer la fluidité visuelle, mais **X6 n’est pas forcément le meilleur choix**. La réactivité dépend toujours de la cadence réellement rendue, et les artefacts peuvent devenir plus visibles avec un facteur élevé. Commencez par X2 ou X3, puis comparez en mouvement.
+Monter le multiplicateur n’améliore pas toujours le ressenti : la réactivité dépend encore des FPS rendus, et les artefacts peuvent augmenter. Une intégration DLSS FG existante est nécessaire ; ce projet n’ajoute pas la FG à n’importe quel jeu ni de backend DX11. Les intégrations NGX directes restent pilotées par le jeu. Cette release ne revendique pas de nouveau benchmark FPS.
 
-## Pour commencer
-
-1. **Téléchargez et extrayez** le [ZIP de la release](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v310.9.1-9/dlssg-sm86-310.9.1-9-win64.zip).
-2. **Fermez le jeu et sauvegardez** les fichiers à remplacer. Copiez `version.dll` et `dlssg_sm86.ini` à côté du véritable exécutable du jeu. Pour Wukong : `b1/Binaries/Win64`.
-3. **Activez DLSS Frame Generation dans le jeu.** L’INI fourni laisse le jeu choisir son mode et autorise un plafond X6 lorsque l’intégration le permet.
-4. **Modifiez l’INI** pour choisir un facteur fixe ou activer le dynamique sur les jeux compatibles. Relancez après chaque changement de configuration.
-
-> **Vous découvrez les mods DLSS ?** [RHI](https://github.com/RankFTW/RHI) facilite la gestion des versions DLSS et des outils complémentaires. Suivez son guide, puis installez la DLL de ce projet avec les étapes ci-dessus.
-
-Vous utilisez déjà d’autres mods ? Choisissez un seul mode de chargement :
-
-| Fichier à installer | Quand l’utiliser |
-|---|---|
-| `version.dll` | Chargement direct, le choix par défaut. |
-| `dxgi.dll` | Renommez la même DLL pour un chargement direct via DXGI, sans ASI Loader. |
-| `dxgi.asi` | Renommez la même DLL et chargez-la avec [Ultimate ASI Loader x64](https://github.com/ThirteenAG/Ultimate-ASI-Loader). Le loader lui-même peut occuper `version.dll`. |
-
-**Une seule copie de notre DLL.** Gardez le nom `dlssg_sm86.ini`, à côté de notre DLL/ASI. Conservez vos éventuels proxys ReShade ou autres : le [guide d’installation](docs/install-loaders.fr.md) explique la cohabitation, les autres noms ASI et le retour en arrière. Ne renommez pas ce fichier en `nvngx_dlssg.dll`.
-
-## Réglez-le à votre façon
-
-Ouvrez **`dlssg_sm86.ini`**, à côté de notre DLL, avec un éditeur de texte. Mettez les valeurs de votre choix, enregistrez et **relancez le jeu**. Le fichier fourni contient :
+## Votre INI, vos réglages
 
 ```ini
 [FrameGeneration]
-MaxMultiplier=6
+MaxInterpolatedFrames=5
 ForceMultiplier=0
 DynamicMFG=0
 DynamicTargetFPS=0
 ```
 
-| Paramètre | La valeur à mettre |
+- **`MaxInterpolatedFrames`** compte les images générées : **1–5 = X2–X6**, défaut 5. La valeur 1 conserve X2 et ses correctifs nécessaires.
+- **`ForceMultiplier`** utilise le facteur affiché : 0 suit le jeu ; 2–6 demande un facteur fixe, dans les limites du plafond.
+- **`DynamicMFG=1`** demande le dynamique natif. **`DynamicTargetFPS`** accepte 1–1000 ; 0 utilise la cible de l’écran. Aucun profil FPS n’est imposé.
+- **`[Logging] Enabled=0`** coupe notre journal ; défaut 1. Les anciens fichiers sont conservés.
+- **`[Telemetry] Enabled=1`** active la cadence source ; défaut 0.
+
+**Migration :** remplacer `MaxMultiplier=M` par `MaxInterpolatedFrames=M-1` (6 devient 5). L’ancienne clé de plafond n’est plus lue. `ForceMultiplier` garde son sens. Dans `[Hotkeys]`, l’action dynamique s’appelle `ActivateDynamicMFG` ; conserver l’activation `DynamicMFG` dans `[FrameGeneration]`.
+
+Les modifications manuelles de l’INI demandent un redémarrage. Dans ReShade, **Apply for this session** est temporaire ; **Apply & save settings** conserve le mode et la cible. **Record** capture une combinaison, puis **Save keyboard shortcuts** sauvegarde les touches séparément. **Aucune touche par défaut.** [Référence et syntaxe des raccourcis](docs/live-controls.fr.md).
+
+**Cible ignorée ?** L’override NVIDIA **Override DLSSG Target Frame Rate**, global ou propre au jeu, peut remplacer une cible acceptée par Streamline. Désactivez l’override concerné pour piloter la cible depuis le panneau, puis relancez le jeu. Ce réglage est distinct du limiteur FPS classique et de VSync. Une cible DMFG ne garantit pas un plafonnement exact des FPS. Le raccourci dynamique reprend la cible sauvegardée dans l’INI : sauvegardez votre cible pour la réutiliser avec cette touche.
+
+## Quatre optimisations facultatives
+
+Toutes valent 1 par défaut dans `[Optimizations]`. Mettre une option à 0 puis redémarrer permet de comparer. Les gains dépendent de la charge et peuvent rester modestes. La correction temporelle reste active même si les quatre options sont coupées.
+
+| Clé | Rôle |
 |---|---|
-| `MaxMultiplier` | Votre plafond, de **2 à 6**. Le plugin chargé doit prendre en charge le facteur demandé. |
-| `ForceMultiplier` | **0** laisse choisir le jeu ; **2 à votre plafond** demande ce multiplicateur fixe. |
-| `DynamicMFG` | **1** demande le dynamique natif sur les intégrations DX12 compatibles ; **0** ne le demande pas via notre DLL. |
-| `DynamicTargetFPS` | **0** vise la fréquence de l’écran. Indiquez **votre propre cible de FPS** (entier de 1 à 1000) pour le dynamique. |
+| `HardwareBilinear` | Filtrage matériel pour la reconstruction, inspiré de [l’option originale](https://github.com/sdli1995/dlssg_for_sm86/blob/main/docs/NATIVE_INI.md) ; de petites différences de pixels sont possibles. |
+| `Conv13SharedInput` | Réutilisation des entrées d’une convolution en mémoire partagée GPU. |
+| `Conv0SharedInput` | Même principe pour une autre convolution. |
+| `ResidualVectorLoads` | Regroupement des lectures mémoire dans les convolutions résiduelles. |
 
-**Vous voulez du X5 fixe ?** Mettez `MaxMultiplier=6`, `ForceMultiplier=5` et `DynamicMFG=0`. Pour X2, X3, X4 ou X6, remplacez simplement la valeur du facteur.
+Ada utilise le même modèle FP16 compilé pour SM89 ; aucun mode FP8/INT8 ni modèle réduit n’est inclus. [Historique technique et validation](docs/research.fr.md).
 
-**Vous voulez une adaptation automatique ?** Mettez `DynamicMFG=1` et choisissez votre `DynamicTargetFPS`. Avec `ForceMultiplier=0`, le choix du jeu sert de repli. Vous pouvez aussi prévoir un repli fixe, par exemple `ForceMultiplier=4`, si le dynamique est indisponible et le forçage fixe pris en charge.
+## OptiScaler et outils complémentaires
 
-La cible est un objectif, **pas une garantie de FPS constants** ; VSync peut prendre le dessus. FG doit être activé dans le jeu, mais le menu n’a pas besoin d’une entrée « Dynamic ». Ces réglages n’ajoutent pas de nouveaux boutons.
+**L’intégration OptiScaler attend la [PR #1156](https://github.com/optiscaler/OptiScaler/pull/1156).** Le producteur de données est inclus ici, mais OptiScaler doit être compilé avec ce changement pour les lire. L’INI seul ne met pas à jour un ancien OptiScaler. Il s’agit d’une cadence de soumission CPU, pas d’une mesure de fin de rendu GPU ou de latence. Notre panneau ReShade peut l’afficher indépendamment lorsqu’elle est disponible.
 
-Le dynamique natif exige une **intégration Streamline DX12 et un pilote compatibles**. Le forçage fixe nécessite aussi un chemin Streamline reconnu ; les intégrations NGX directes restent pilotées par le jeu. Sous **Vulkan**, utilisez le mode fixe : le dynamique natif n’y est pas activé. Un choix dynamique natif déjà effectué par le jeu est conservé, même si notre demande dynamique est désactivée.
+Vous débutez ? **[RHI](https://github.com/RankFTW/RHI)** facilite la gestion des versions DLSS et des outils associés ; choisissez ensuite un paquet ci-dessus. Le testeur rapporte une très bonne compatibilité avec le [DLSS Tool de ShortFuse](https://discord.com/channels/1408098019194310818/1543975158937821315) et son [Patched DLSS-NR for RTX20/30/40](https://discord.com/channels/1408098019194310818/1543976771920330884), également disponibles via RHI. Leur support NR reste distinct du support FG de ce projet. Si ces outils vous aident, laissez une étoile à [RHI](https://github.com/RankFTW/RHI) et [RenoDX de ShortFuse](https://github.com/clshortfuse/renodx) !
 
-**Vous gardez un ancien INI ?** Ajoutez la section ci-dessus pour accéder à ces contrôles. Sans elle, les valeurs par défaut sont `MaxMultiplier=4` et `0` pour les trois autres clés. Le nouvel INI fourni autorise explicitement X6 tout en laissant le jeu choisir son mode.
+## Versions et retours
 
-## De petites optimisations, au choix
-
-Les quatre sont activées par défaut. Passez une valeur à `0` pour comparer, puis relancez le jeu. Les gains peuvent être modestes et dépendent de la charge.
-
-| Réglage INI | Ce qui change |
+| Version | Différence |
 |---|---|
-| `HardwareBilinear` | Utilise le filtrage matériel du GPU pour la reconstruction finale. De petites différences de pixels sont possibles. Inspiré de l’option [HardwareBilinear du projet original](https://github.com/sdli1995/dlssg_for_sm86/blob/5f62ff44a9c08f9841fa605e7b7160f79ccd2c40/docs/NATIVE_INI.md). |
-| `Conv13SharedInput` | Réutilise les données d’entrée d’une convolution dans la mémoire partagée rapide du GPU. |
-| `Conv0SharedInput` | Applique cette réutilisation à une autre convolution de reconstruction. |
-| `ResidualVectorLoads` | Regroupe les lectures mémoire de deux convolutions résiduelles. |
+| **[310.9.1-10](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-10)** | Commencez ici : deux installations, commandes en direct, kernels multiarch, journal désactivable et télémétrie facultative. |
+| [310.9.1-9](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-9) | Première version dynamique natif / X6, ancienne syntaxe du plafond INI. |
+| [310.9.1-8](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-8) | DLL renommable, X2–X4 corrigés. |
+| [310.9.1-7](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7) | Première correction du mouvement MFG, `version.dll` uniquement. |
 
-Ces options se trouvent dans `[Optimizations]` et s’appliquent aux deux API. Une clé d’optimisation absente vaut `1`. Les désactiver toutes conserve la correction temporelle. Elles ne règlent ni Neural Rendering ni NR Cost Scaler ; aucun mode FP8/INT8 ni modèle neuronal réduit n’est inclus.
+Les versions -0 à -6 ont été retirées pour un mouvement MFG incorrect. Le rectangle blanc sur le graphique du benchmark Wukong reste un problème connu. Les commandes de l’add-on autonome et les changements de cible dynamique ont été confirmés dans Wukong ; cela ne valide pas tous les jeux. Linux/Proton et DXVK ne sont pas validés.
 
-## Compatibilité et outils utiles
-
-**Windows x64 · GPU SM86 compatible · jeu intégrant déjà DLSS FG.** Le jeu fournit les informations de mouvement/profondeur et la présentation. Cette DLL n’ajoute pas FG à n’importe quel jeu et ne fournit pas de backend DX11. Linux/Proton, DXVK et les RTX 20 ne sont pas validés.
-
-Le Dynamic MFG natif a été confirmé fonctionnel en jeu sur une **RTX 3070 Ti Laptop avec 8 Go de VRAM**, pilote **616.92**. Ce retour porte sur un portable, pas sur toutes les cartes RTX 30 ni tous les jeux. Ce pilote testé ne constitue pas un minimum requis. Les facteurs élevés et le dynamique dépendent du **plugin Streamline réellement chargé et du pilote**, pas seulement du nom de la DLL.
-
-Le testeur rapporte aussi une très bonne compatibilité avec **[DLSS Tool de ShortFuse](https://discord.com/channels/1408098019194310818/1543975158937821315)** et **[Patched DLSS-NR for RTX20/30/40](https://discord.com/channels/1408098019194310818/1543976771920330884)**, disponibles via RHI. Leur compatibilité NR n’étend pas celle de notre DLL FG à d’autres GPU. Les liens Discord peuvent nécessiter de rejoindre le serveur.
-
-Si ces outils vous rendent service, offrez une étoile à **[RHI](https://github.com/RankFTW/RHI)** et à **[RenoDX de ShortFuse](https://github.com/clshortfuse/renodx)**. Leur travail simplifie beaucoup l’installation.
-
-## Quelle version essayer ?
-
-| Version | Différence principale | Pour quel usage |
-|---|---|---|
-| **[310.9.1-9](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-9)** | Dynamique sur les intégrations DX12 compatibles, X5/X6 fixe, réglages INI, chargement universel. | **Commencez ici.** Inclut les corrections et les quatre optimisations précédentes. |
-| [310.9.1-8](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-8) | X2–X4 corrigé, chargement `version.dll` / `dxgi.dll` / ASI. | Comparer ou revenir à une version sans les nouveaux contrôles MFG. |
-| [310.9.1-7](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7) | Première correction des mouvements MFG ; `version.dll` uniquement. | Comparaison historique de la correction temporelle. |
-
-Les versions -0 à -6 ont été retirées à cause du défaut de mouvement MFG. Le rectangle blanc sur le graphique du benchmark Wukong reste un problème distinct connu.
-
-## Pour les curieux · pour contribuer
-
-Les [notes techniques](docs/research.fr.md) expliquent la correction temporelle, le partage des capacités entre vues, les vérifications et ce qui reste à mesurer. Pour le diagnostic, consultez le [guide des logs](docs/install-loaders.fr.md#configuration-et-vérification). Quand le filigrane NVIDIA est disponible, `Dyn DRV` indique le dynamique pilote ; `4x/6x` signifie X4 courant avec un plafond X6.
-
-**Les retours d’autres configurations sont bienvenus.** Indiquez GPU/VRAM, pilote, jeu/API, version Streamline chargée, résolution, contenu de l’INI et réglages NR/Cost Scaler éventuels. Décrivez les mouvements et la réactivité ; les captures FrameView/PresentMon sont particulièrement utiles. [Partager un retour →](https://github.com/SilyNoMeta/dlssg_for_sm86/issues)
+[Signalez un problème](https://github.com/SilyNoMeta/dlssg_for_sm86/issues) avec GPU/VRAM, pilote, jeu/API, version Streamline chargée, paquet choisi, INI et réglages NR. D’autres configurations, notamment RTX 20, sont les bienvenues.
 
 ---
 
-Basé sur [sdli1995/dlssg_for_sm86](https://github.com/sdli1995/dlssg_for_sm86). Merci à [Michael Robles / RTX40MFG-Unlock](https://github.com/dashdogy/RTX40MFG-Unlock) pour la correction temporelle, à [mavismmg / ImDreamt et MFGAdaUnlock-RenoDx](https://github.com/mavismmg/MFGAdaUnlock-RenoDx) pour la référence MFG étendu/dynamique, et à [Ultimate ASI Loader](https://github.com/ThirteenAG/Ultimate-ASI-Loader) pour le chargement ASI. Le runtime et les ressources NVIDIA conservent leurs droits d’origine. [Mentions tierces](THIRD_PARTY_NOTICES.txt) · [Empreintes](SHA256SUMS.txt)
+Credits: [sdli1995](https://github.com/sdli1995/dlssg_for_sm86) · [Coldwood1026](https://github.com/Coldwood1026/dlssg_for_sm75) · [RTX40MFG-Unlock](https://github.com/dashdogy/RTX40MFG-Unlock) · [MFGAdaUnlock-RenoDx](https://github.com/mavismmg/MFGAdaUnlock-RenoDx) · [ReShade](https://reshade.me/) · [Ultimate ASI Loader](https://github.com/ThirteenAG/Ultimate-ASI-Loader). [Third-party notices](THIRD_PARTY_NOTICES.txt) · [Checksums](SHA256SUMS.txt)

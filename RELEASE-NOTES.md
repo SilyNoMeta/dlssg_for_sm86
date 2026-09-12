@@ -1,90 +1,55 @@
-# 310.9.1-9 · Dynamic MFG & X6
+# 310.9.1-10 — Live controls, ReShade & RTX 40
 
-[English](#english) · [Français](#français) · [简体中文](#简体中文)
+[English](README.en.md) · [Français](README.fr.md) · [简体中文](README.zh-CN.md)
 
 ## English
 
-**Let the multiplier follow the scene.** This release adds native Dynamic MFG on
-compatible DX12 integrations, fixed multipliers up to X6, and controls in one
-editable INI. Set your own target, enable FG in the game, and let the NVIDIA
-runtime choose the multiplier. Targets do not guarantee constant FPS.
+One release, two alternative packages:
 
-- **Fixed X2–X6:** constrained by the loaded plugin's capabilities.
-- **Native Dynamic MFG:** DX12, with capability checks and a supported fixed fallback.
-- **Activation fix:** system capabilities now carry across different views used
-  to query support and configure rendering; each view retains its own presentation state.
-- **One universal DLL:** `version.dll`, `dxgi.dll` or ASI. DX12 + Vulkan, corrected
-  temporal placement and all four optional optimizations are retained.
-- **Your settings:** edit one INI to follow the game, request fixed X2–X6, or set a dynamic target.
+| Download | Contents | Choose it for |
+|---|---|---|
+| **dlssg-310.9.1-10-dll-win64.zip** | `version.dll` + INI + guides | DLL/ASI loading, INI and optional hotkeys; no ReShade required. |
+| **dlssg-310.9.1-10-reshade-win64.zip** | `DLSSG.addon64` + INI + guides | Standalone ReShade panel, live settings, key recording and separate save buttons. |
 
-The root INI leaves the game in charge, with an X6 ceiling where supported.
-Edit `dlssg_sm86.ini` beside our DLL to choose your own values, then restart.
-Keeping an old INI without `[FrameGeneration]` retains the X4 ceiling
-and does not request the new modes. Fixed overrides require recognized Streamline.
-Native dynamic is not enabled on Vulkan; no separate adaptive Vulkan controller is included.
+**Install only one engine.** The add-on already contains the DLL's compatibility functionality. ReShade with full add-on support is required for the second package and is not bundled. No screenshots, test tools or modified OptiScaler are included.
 
-Functional dynamic switching is user-confirmed on RTX 3070 Ti Laptop 8 GB,
-driver 616.92. The exact binary also passed control/ABI, real Streamline and GPU
-image checks. This is not a new FPS/latency benchmark or validation of every game.
-The known white Wukong benchmark chart is not fixed by this release.
+- Live X2–X6 controls and native Dynamic MFG on compatible DX12 integrations. Fixed Vulkan controls require a recognized Streamline path.
+- RTX 40 / SM89 route with user-confirmed fixed and dynamic operation; RTX 30 / SM86 retained. RTX 20 / SM75 is included experimentally, without physical Turing validation.
+- `MaxInterpolatedFrames` replaces `MaxMultiplier`: generated-frame ceiling 1–5 = X2–X6; default 5. A value of 1 keeps X2 and required patches. `ForceMultiplier` still uses the displayed factor.
+- `[Logging] Enabled=0` disables our logging. `[Telemetry] Enabled=1` opts into CPU source-frame submission cadence (not GPU completion or latency).
+- [OptiScaler PR #1156](https://github.com/optiscaler/OptiScaler/pull/1156) is awaiting upstream review. A consumer build containing the change is needed; the INI alone will not update existing OptiScaler builds.
+- ReShade Record uses captured ReShade input, fixing ignored function keys. **Apply for this session**, **Apply & save settings**, and **Save keyboard shortcuts** serve separate purposes. No default keybindings or FPS target.
+
+**Dynamic target stuck?** NVIDIA's global/per-game **Override DLSSG Target Frame Rate** can take priority over the panel/INI, separately from a normal FPS limit. Disable the relevant override and restart if you want to set the target here. The dynamic shortcut uses the saved INI target; save session edits if you want that shortcut to reuse them.
+
+The corrected temporal motion and four optional optimizations remain, including HardwareBilinear inspired by the original project. No new FP8/INT8 mode or smaller model. Standalone controls and target changes were confirmed in Wukong on RTX 3070 Ti Laptop 8 GB. These are functional reports, not new performance benchmarks. The Wukong benchmark chart's white rectangle remains a known issue.
+
+[Installation and migration](README.en.md) · [Key syntax and telemetry](docs/live-controls.en.md) · [Technical notes](docs/research.en.md)
 
 ## Français
 
-**Un multiplicateur qui suit la scène.** Cette release ajoute le Dynamic MFG natif
-sur les intégrations DX12 compatibles, les facteurs fixes jusqu'à X6 et des réglages
-dans un seul INI modifiable. Indiquez votre cible, activez FG dans le jeu
-et laissez le runtime NVIDIA choisir le multiplicateur. La cible ne garantit pas
-des FPS constants.
+**Une release, deux ZIP au choix : DLL/ASI ou ReShade autonome. Ne pas installer les deux moteurs.** L'add-on contient déjà le moteur et demande ReShade avec le support complet des add-ons.
 
-- **X2–X6 fixe :** dans la limite des capacités du plugin chargé.
-- **Dynamic MFG natif :** DX12, avec contrôle de compatibilité et repli fixe si possible.
-- **Correction d'activation :** les capacités système passent entre la vue qui les
-  consulte et celle qui configure le rendu ; l'état de présentation reste propre à chaque vue.
-- **Une DLL universelle :** `version.dll`, `dxgi.dll` ou ASI. DX12 + Vulkan,
-  placement temporel corrigé et quatre optimisations facultatives conservés.
-- **Vos réglages :** un seul INI pour suivre le jeu, demander X2–X6 fixe ou choisir une cible dynamique.
+Cette version apporte les réglages en direct et raccourcis facultatifs, le panneau ReShade avec enregistrement des touches et sauvegardes séparées, ainsi que le chemin RTX 40. RTX 30 reste pris en charge ; RTX 20 est expérimental, sans test sur carte physique.
 
-L'INI principal laisse le jeu décider, avec plafond X6 si compatible. Modifiez
-`dlssg_sm86.ini` à côté de notre DLL avec les valeurs de votre choix, puis
-relancez. Un ancien INI sans `[FrameGeneration]` conserve le plafond X4 sans
-demander les nouveaux modes. Le forçage fixe exige un chemin Streamline reconnu.
-Le dynamique natif n'est pas activé sous Vulkan ; aucun contrôleur adaptatif
-Vulkan distinct n'est inclus.
+Migrer `MaxMultiplier=M` vers `MaxInterpolatedFrames=M-1` : 1–5 correspond à X2–X6, défaut 5. La valeur 1 conserve X2 et ses correctifs. `ForceMultiplier` garde le facteur affiché. `[Logging] Enabled=0` coupe notre journal ; `[Telemetry] Enabled=1` active la cadence CPU des images source. La PR OptiScaler #1156 attend encore sa fusion et un binaire consommateur compatible.
 
-Les transitions dynamiques sont confirmées en jeu sur RTX 3070 Ti Laptop 8 Go,
-pilote 616.92. Le binaire exact passe aussi les contrôles ABI, Streamline réel et
-images GPU. Ce retour n'est pas un nouveau benchmark FPS/latence ni une validation
-de tous les jeux. Le graphique blanc du benchmark Wukong n'est pas corrigé ici.
+Aucun raccourci ni objectif FPS imposé. L'override NVIDIA **Override DLSSG Target Frame Rate** peut remplacer la cible du panneau : désactiver l'override concerné et relancer pour piloter la cible ici. Le raccourci dynamique utilise la cible sauvegardée dans l'INI. Le dynamique natif reste limité à DX12 compatible ; Vulkan conserve les contrôles fixes sur Streamline reconnu.
+
+Les optimisations et la correction temporelle sont conservées. Pas de nouveau benchmark ni de mode FP8/INT8. Les commandes de l'add-on et changements de cible ont été confirmés dans Wukong ; le rectangle blanc de son graphique de benchmark reste connu.
+
+[Installation et migration](README.fr.md) · [Référence des commandes](docs/live-controls.fr.md)
 
 ## 简体中文
 
-**让倍率随场景而变。** 本版本新增兼容 DX12 集成中的原生 Dynamic MFG、最高 X6
-固定倍率，以及一个可自行编辑的 INI。设置自己的目标，在游戏中启用
-FG，再由 NVIDIA 运行库选择倍率。目标并不保证实际 FPS 恒定。
+**一个版本，两个可选 ZIP：DLL/ASI 或独立 ReShade。不要同时安装两个引擎。** add-on 已含完整兼容引擎，需要支持完整 add-on 的 ReShade。
 
-- **固定 X2–X6：** 受实际加载插件的能力限制。
-- **原生 Dynamic MFG：** DX12，检查支持能力，并在可用时回退至固定倍率。
-- **启用修复：** 在查询能力与配置渲染的不同视图间共享系统能力；呈现状态仍各自独立。
-- **一个通用 DLL：** `version.dll`、`dxgi.dll` 或 ASI；保留 DX12 + Vulkan、时间位置修正及四项可选优化。
-- **自行配置：** 通过一个 INI 跟随游戏、请求固定 X2–X6，或选择动态目标。
+新增实时控制、自选快捷键、ReShade 按键录制与独立保存按钮，以及 RTX 40 路径。保留 RTX 30；RTX 20 为实验支持，尚未在实体卡验证。
 
-根目录 INI 保留游戏选择，并在兼容时允许 X6 上限。在本项目 DLL 旁编辑
-`dlssg_sm86.ini`，填写自己需要的值并重启。保留缺少 `[FrameGeneration]`
-的旧 INI 时仍为 X4 上限，不请求新模式。固定覆盖需要已识别的 Streamline 路径。
-Vulkan 不启用原生动态，也未包含独立的 Vulkan 自适应控制器。
+将 `MaxMultiplier=M` 改为 `MaxInterpolatedFrames=M-1`：1–5 对应 X2–X6，默认 5。1 保留 X2 和必要补丁；`ForceMultiplier` 仍使用显示倍率。`[Logging] Enabled=0` 关闭本项目日志；`[Telemetry] Enabled=1` 开启 CPU 源帧提交速率。OptiScaler PR #1156 仍待合并及包含该改动的读取端构建。
 
-用户已在 RTX 3070 Ti Laptop 8 GB、驱动 616.92 上确认游戏内动态切换。
-同一二进制文件通过 ABI、真实 Streamline 和 GPU 图像检查。这不是新的 FPS/延迟
-基准，也不代表所有游戏均已验证。本版本未修复悟空基准图表的白色矩形。
+无默认快捷键或目标 FPS。NVIDIA 全局/游戏级 **Override DLSSG Target Frame Rate** 可覆盖面板目标；禁用相关覆盖并重启后才能在这里控制。动态快捷键使用 INI 中保存的目标。原生动态仅限兼容 DX12；Vulkan 固定控制需要识别到 Streamline 路径。
 
----
+保留时序修正和四项优化，不增加 FP8/INT8 模式，也不声称新的性能基准。独立控制与目标切换已在《黑神话：悟空》确认，基准图表白色矩形仍为已知问题。
 
-[Installation / Installation / 安装](https://github.com/SilyNoMeta/dlssg_for_sm86/blob/feat/dlssg-310.9.1/README.md)
-· [Technical notes / Notes techniques / 技术说明](https://github.com/SilyNoMeta/dlssg_for_sm86/blob/feat/dlssg-310.9.1/docs/research.en.md)
-
-Thanks to [sdli1995](https://github.com/sdli1995/dlssg_for_sm86),
-[Michael Robles / RTX40MFG-Unlock](https://github.com/dashdogy/RTX40MFG-Unlock),
-[mavismmg / ImDreamt's MFGAdaUnlock-RenoDx](https://github.com/mavismmg/MFGAdaUnlock-RenoDx),
-and [Ultimate ASI Loader](https://github.com/ThirteenAG/Ultimate-ASI-Loader).
-
-`version.dll` SHA256: `114004043035c3f8f91b1b8909bdb8b7e68fa36394aeb339c339e30042684561`
+[安装与迁移](README.zh-CN.md) · [控制参考](docs/live-controls.zh-CN.md)

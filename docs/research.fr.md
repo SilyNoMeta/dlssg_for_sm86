@@ -1,5 +1,18 @@
 # Justesse temporelle et optimisations incluses
 
+## 310.9.1-10 : moteur commun, deux formats
+
+Les deux paquets intègrent le même runtime NVIDIA 310.9.1 et les packs multiarch corrigés. La DLL reprend le moteur classique testé ; l'add-on autonome lie ce moteur au panneau ReShade. Les kernels SM86 restent identiques à la -9. Le pack ajoute une compilation SM89 du même modèle FP16 et un chemin SM75 expérimental, sans validation Turing physique. Les sections précédentes ci-dessous décrivent leurs releases d'origine, sans constituer de nouvelles mesures de performances.
+
+Les commandes sont appliquées à la prochaine soumission Streamline du jeu. Sauvegarder les réglages et les touches sont deux opérations distinctes ; un échec de remplacement du fichier préserve le fichier et l'état précédents. Record utilise l'API d'entrée de ReShade, car le menu bloque la lecture Win32 habituelle lorsqu'il capture le clavier.
+
+Une cible acceptée par Streamline peut être remplacée par l'override NVIDIA global ou par jeu. L'utilisateur a confirmé que sa suppression rétablit les changements de cible dans Wukong. L'add-on ne réinitialise pas automatiquement les profils NVIDIA.
+
+La télémétrie mesure les soumissions réussies d'images source distinctes sur environ une demi-seconde, pas la fin du rendu GPU ni la latence. La [PR OptiScaler #1156](https://github.com/optiscaler/OptiScaler/pull/1156), en attente à la publication, ajoute le consommateur. [Commandes](live-controls.fr.md) · [Périmètre de validation](validation-summary.json).
+
+## Notes historiques jusqu'à -9
+
+
 11 septembre 2026 · release 310.9.1-9 · [English](research.en.md) / [Français](research.fr.md) / [简体中文](research.zh-CN.md)
 
 ## Nouveautés -9 : facteurs élevés et Dynamic MFG natif

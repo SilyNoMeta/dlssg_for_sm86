@@ -1,4 +1,4 @@
-DLSSG 310.9.1-9 SM86 bridge
+DLSSG 310.9.1-10 — DLL and standalone ReShade add-on
 
 Based on sdli1995/dlssg_for_sm86:
 https://github.com/sdli1995/dlssg_for_sm86
@@ -150,3 +150,9 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+
+ReShade add-on API and ImGui headers: see LICENSE-ReShade.txt and LICENSE-ImGui.txt.
+The standalone distribution embeds the compatibility engine in DLSSG.addon64.
+The multiarch pack includes SM75, SM86 and SM89 code; physical Turing validation
+is pending. NVIDIA runtime and kernel assets retain their original rights.
