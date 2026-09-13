@@ -1,11 +1,14 @@
-# Live controls and INI reference — 310.9.1-10
+# Live controls and INI reference — 310.9.1-11
 
-These controls work with either the DLL/ASI package or the standalone ReShade package. Install only one engine, with `dlssg_sm86.ini` beside it, and enable FG in the game first. RTX 20 remains experimental without a physical Turing test.
+The single ZIP includes the DLL/ASI engine and optional ReShade control panel. Without ReShade, edit the INI manually and restart. Keep `dlssg_sm86.ini` beside the engine and enable FG in the game first. RTX 20 remains experimental without a physical Turing test.
 
-## Hotkeys: choose your own
+## Default hotkeys and customization
 
-The supplied `[Hotkeys]` section has **no assigned keys**. You can fill any of
-these entries; leaving an entry empty disables that action:
+**Known limitation:** DLL-only hotkeys failed in the current Wukong gameplay test, despite valid bindings being loaded. Automated parser/control tests do not establish in-game input detection. Use the ReShade panel for live changes; DLL-only users can edit the INI and restart. The binding syntax below documents the implemented interface, not a guarantee that keys work in every integration.
+
+The supplied `[Hotkeys]` section uses **Ctrl+F2 through Ctrl+F6** for X2–X6,
+**Ctrl+F10** for dynamic, **Ctrl+F11** to follow the game and **Ctrl+F12** to
+restore INI settings. Change any binding or leave it empty to disable that action:
 
 | Entry | Action |
 |---|---|
@@ -14,14 +17,18 @@ these entries; leaving an entry empty disables that action:
 | `FollowGame` | Follow the game's own mode, including its native dynamic mode, ignoring our force/dynamic settings. |
 | `ActivateDynamicMFG` | Request native dynamic mode using the INI's `DynamicTargetFPS`. Compatible DX12 only. |
 
-For example, **if you want these bindings**, put this in your INI:
+Default configuration for the next package:
 
 ```ini
 [Hotkeys]
-ForceX4=Ctrl+Alt+F6
-ForceX6=Ctrl+Alt+F8
-RestoreINI=Ctrl+Alt+F9
-FollowGame=Ctrl+Alt+F10
+ForceX2=Ctrl+F2
+ForceX3=Ctrl+F3
+ForceX4=Ctrl+F4
+ForceX5=Ctrl+F5
+ForceX6=Ctrl+F6
+ActivateDynamicMFG=Ctrl+F10
+FollowGame=Ctrl+F11
+RestoreINI=Ctrl+F12
 ```
 
 Use `+` between modifiers and **one** key. Names ignore case and surrounding
@@ -44,7 +51,7 @@ the INI or require a restart in integrations that regularly submit FG options.
 
 ## ReShade or keyboard controls
 
-For a panel, choose the **standalone ReShade ZIP** instead of the DLL ZIP. Follow the [standalone guide](standalone-reshade.en.md). No companion `DLSSGControls.addon64` is shipped or required.
+For an in-game panel, use the **ReShade controls ZIP**, which contains the engine DLL and `DLSSGControls.addon64`. Follow the [panel guide](reshade-controls.en.md). The add-on controls the DLL; it does not replace it.
 
 The panel offers **Apply for this session**, **Apply & save settings**, and a separate **Save keyboard shortcuts** button. A successful save updates both the INI and the saved settings used by this session. `RestoreINI` restores those saved settings; it does not reread a manually edited file. The `ActivateDynamicMFG` shortcut uses the saved INI target, so save a session target first if you want that shortcut to reuse it.
 
@@ -106,3 +113,6 @@ Check NVIDIA's **DLSSG dynamic target override**, both global and per-game,
 as well as the ordinary FPS limit and VSync. They are separate settings. A
 driver override can supersede a target accepted by Streamline. Save the profile
 before changing the relevant override; do not reset unrelated settings.
+
+
+With logging enabled, `hotkey_bindings_loaded` gives the number of valid bindings. `hotkey_action_triggered=0` identifies ForceX2 (1–4 identify X3–X6). A `live_multiplier_requested` event proves the request was queued; `sl_forced_multiplier_accepted` means Streamline accepted it. This does not replace checking actual presentation. For a single F4 binding, use `ForceX2=F4` under `[Hotkeys]`, then restart.

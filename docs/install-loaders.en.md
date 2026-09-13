@@ -1,6 +1,6 @@
-# DLL / ASI installation — 310.9.1-10
+# DLL / ASI installation — 310.9.1-11
 
-Download **dlssg-310.9.1-10-dll-win64.zip** from the [release](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-10). For a ReShade panel, choose the [standalone package](standalone-reshade.en.md) instead.
+Download **dlssg-310.9.1-11-win64.zip** from the [release](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-11). For the optional panel, use the [optional ReShade panel](reshade-controls.en.md).
 
 Close the game and back up files before replacing them. Copy **one** engine and `dlssg_sm86.ini` beside the actual game executable (Wukong: `b1/Binaries/Win64`). Enable DLSS FG in the game.
 
@@ -14,11 +14,13 @@ The same engine works under these names. Keep the INI named `dlssg_sm86.ini` bes
 
 UAL can load other ASI names through `InitializeASI`; `dlssg_sm86.asi` was tested in the loader fixture. With a loader that does not call that export, use `dxgi.asi`. If an ASI subdirectory is used, keep the INI beside our plugin. REFramework can retain its own `dinput8.dll`.
 
-Do not combine this DLL/ASI with `DLSSG.addon64` or another MFG unlock engine. ReShade itself and unrelated NR add-ons can stay. Both packages implement the same features; only the standalone package supplies the ReShade panel.
+The optional `DLSSGControls.addon64` works alongside this DLL/ASI. Remove the old standalone `DLSSG.addon64` before upgrading. Keep ReShade and unrelated NR add-ons, and install only one MFG compatibility engine.
+
+**Switching from FSR FG to DLSS FG?** If the selection changes but generation stays inactive, save DLSS FG as the selected mode, fully close the game and restart before testing. A successful restart has been observed; switching providers without restarting is not guaranteed.
 
 ## Configuration and verification
 
-The default follows the game, with `MaxInterpolatedFrames=5` (X6 ceiling where supported). See [controls, migration, logging and telemetry](live-controls.en.md). Manual INI edits need restart; configured shortcuts apply on the next recognized Streamline options submission. Native dynamic requires compatible DX12; fixed controls can use recognized DX12/Vulkan paths.
+The default follows the game, with `MaxInterpolatedFrames=5` (X6 ceiling where supported). See [controls, migration, logging and telemetry](live-controls.en.md). Manual INI edits need restart; use the ReShade panel for live shortcuts. DLL-only shortcuts failed in Wukong and are not a validated alternative. Native dynamic requires compatible DX12; fixed controls can use recognized DX12/Vulkan paths.
 
 With logging enabled, `proxy_attached`, `dxgi_attached` or `asi_attached` identify loading; `installed_310_9_1` identifies runtime handling. `sl_native_dynamic_accepted` means SDK acceptance, not proof the driver followed that target. NVIDIA's global/per-game dynamic target override can take priority. An available watermark can show `Dyn DRV` and current/maximum factor; this package does not enable the watermark automatically.
 

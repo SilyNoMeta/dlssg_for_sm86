@@ -1,5 +1,15 @@
 # Temporal correctness and shipped optimizations
 
+## 310.9.1-11: early engine, optional panel
+
+The DLL now limits import interception to the executable, local loader modules and recognized NVIDIA paths. Windows loader exports retain their actual identity when resolved through GetProcAddress. This avoids feeding a bridge wrapper back to an overlay as its original function, which could create recursion.
+
+Import-table interception alone can be bypassed when an overlay rewrites the table and uses saved Windows resolver addresses. A one-shot worker outside DllMain now adds MinHook detours to five loader/resolver APIs, using original trampolines for internal calls. The early import bootstrap remains: worker scheduling does not guarantee interception before every initialization. NvAPI routing distinguishes its public facade from the driver's internal implementation and scopes substitutions to the DLSSG caller. Tests cover repeated simulated overlay takeovers, real NvAPI initialization and native DX12/Vulkan control requests; these are not presentation benchmarks.
+
+The ReShade add-on is a control client, not a second engine. The established model, temporal fix and four performance switches are retained. Optional quality and Blackwell-derived kernel variants are added, disabled by default. Startup tests and isolated control tests do not establish new performance or image-quality results.
+
+Live fixed and dynamic controls now also handle compatible DX12 integrations that submit options without querying capabilities. The bridge makes a bounded capability query when an explicit override needs it. Presentation counts consumed by this query are returned exactly once on the game’s next successful state query; per-viewport fences and status are not replayed. Logging records a bounded number of mode/result transitions, helping distinguish an accepted command from actual generation.
+
 ## 310.9.1-10: shared engine, two delivery formats
 
 Both packages embed the same NVIDIA 310.9.1 runtime and corrected multiarch packs. The DLL is the previously tested conventional engine; the standalone add-on links that engine with the ReShade panel. SM86 kernels remain unchanged from -9. The pack adds SM89 compilation of the same FP16 model and an experimental SM75 route; Turing has no physical-card validation here. The earlier sections below describe their original releases and are historical evidence, not new performance measurements.
@@ -190,3 +200,5 @@ Renaming the DLL does not change its hash. Prior named-game results above remain
 attributed to their original releases. Releases -0 through -6 were withdrawn.
 Only the public technical summary accompanies the binary, not development logs
 or test programs. See [validation scope](validation-summary.json).
+
+[DLSS render scale](super-resolution.en.md) · [Release notes](../RELEASE-NOTES.md)

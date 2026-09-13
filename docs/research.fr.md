@@ -1,5 +1,15 @@
 # Justesse temporelle et optimisations incluses
 
+## 310.9.1-11 : moteur précoce et panneau facultatif
+
+La DLL limite désormais les interceptions d’imports à l’exécutable, aux modules de chargement locaux et aux chemins NVIDIA reconnus. GetProcAddress conserve l’identité réelle des exports de chargement Windows. Un overlay ne récupère ainsi plus notre relais comme fonction originale, ce qui pouvait provoquer une récursion.
+
+Un overlay peut toutefois réécrire la table et utiliser des adresses Windows sauvegardées. Un thread exécuté une seule fois hors de DllMain ajoute donc des interceptions MinHook sur cinq API de chargement/résolution, avec appels internes via les fonctions originales. L’amorçage précoce par les imports reste nécessaire : l’ordonnancement du thread ne garantit pas d’intervenir avant toute initialisation. Le routage NvAPI distingue façade publique et implémentation interne du pilote, et réserve les substitutions à l’appelant DLSSG. Les tests couvrent les reprises répétées de la table par un overlay simulé, l’initialisation réelle de NvAPI et les commandes natives DX12/Vulkan ; ce ne sont pas des benchmarks de présentation.
+
+L’add-on ReShade est un client de contrôle, sans second moteur. Le modèle GPU, les poids, le correctif temporel et les quatre optimisations restent identiques à la -10. Les essais de démarrage et de commandes isolées ne constituent pas de nouveaux résultats de performance ou de qualité d’image.
+
+Les commandes fixes et dynamiques prennent désormais en charge les intégrations DX12 compatibles qui soumettent des options sans interroger les capacités. Le bridge effectue une requête bornée lorsqu’un réglage forcé en a besoin. Les compteurs de présentation consommés par cette requête sont restitués une seule fois à la prochaine requête d’état réussie du jeu ; les fences et états propres à chaque vue ne sont pas rejoués. Le journal conserve un nombre borné de changements de mode/résultat pour distinguer une commande acceptée de la génération effective.
+
 ## 310.9.1-10 : moteur commun, deux formats
 
 Les deux paquets intègrent le même runtime NVIDIA 310.9.1 et les packs multiarch corrigés. La DLL reprend le moteur classique testé ; l'add-on autonome lie ce moteur au panneau ReShade. Les kernels SM86 restent identiques à la -9. Le pack ajoute une compilation SM89 du même modèle FP16 et un chemin SM75 expérimental, sans validation Turing physique. Les sections précédentes ci-dessous décrivent leurs releases d'origine, sans constituer de nouvelles mesures de performances.
@@ -199,3 +209,5 @@ Le renommage ne change pas son empreinte. Les validations de jeux nommés ci-des
 restent attribuées à leurs releases d'origine. Les versions -0 à -6 ont été retirées.
 Seule la synthèse technique publique accompagne le binaire, sans journaux de
 développement ni programmes de test. Voir la [portée des validations](validation-summary.json).
+
+[DLSS render scale](super-resolution.fr.md) · [Release notes](../RELEASE-NOTES.md)

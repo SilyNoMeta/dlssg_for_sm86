@@ -1,11 +1,14 @@
-# Commandes en direct et référence INI — 310.9.1-10
+# Commandes en direct et référence INI — 310.9.1-11
 
-Ces commandes fonctionnent avec le paquet DLL/ASI ou avec le paquet ReShade autonome. Installer un seul moteur, avec `dlssg_sm86.ini` à côté, puis activer la FG dans le jeu. RTX 20 reste expérimental sans test sur Turing physique.
+Le ZIP unique contient le moteur DLL/ASI et le panneau ReShade facultatif. Sans ReShade, modifier l’INI à la main puis redémarrer. Garder `dlssg_sm86.ini` près du moteur et activer d’abord la FG dans le jeu. RTX 20 reste expérimental sans essai sur Turing physique.
 
-## Des raccourcis choisis par vous
+## Raccourcis par défaut et personnalisation
 
-**Aucun raccourci n'est attribué par défaut.** Dans `[Hotkeys]`, remplir les
-actions souhaitées ; une valeur vide désactive le raccourci :
+**Limite connue :** les raccourcis de la DLL seule échouent dans le nouvel essai en jeu sur Wukong, malgré le chargement des liaisons valides. Les tests automatisés ne valident pas la détection des touches en jeu. Utiliser le panneau ReShade pour les changements en direct ; avec la DLL seule, modifier l’INI puis redémarrer. La syntaxe ci-dessous décrit l’interface implémentée, sans garantir son fonctionnement dans chaque intégration.
+
+Par défaut : **Ctrl+F2 à Ctrl+F6** pour X2–X6, **Ctrl+F10** pour le dynamique,
+**Ctrl+F11** pour suivre le jeu et **Ctrl+F12** pour restaurer les réglages INI.
+Chaque combinaison peut être modifiée ; une valeur vide désactive le raccourci :
 
 | Entrée | Action |
 |---|---|
@@ -14,14 +17,18 @@ actions souhaitées ; une valeur vide désactive le raccourci :
 | `FollowGame` | Suivre le choix du jeu, y compris son propre mode dynamique, sans notre forçage INI. |
 | `ActivateDynamicMFG` | Demander le dynamique natif avec la cible de l'INI, sur DX12 compatible. |
 
-Exemple à copier **uniquement si ces touches vous conviennent** :
+Configuration par défaut du prochain paquet :
 
 ```ini
 [Hotkeys]
-ForceX4=Ctrl+Alt+F6
-ForceX6=Ctrl+Alt+F8
-RestoreINI=Ctrl+Alt+F9
-FollowGame=Ctrl+Alt+F10
+ForceX2=Ctrl+F2
+ForceX3=Ctrl+F3
+ForceX4=Ctrl+F4
+ForceX5=Ctrl+F5
+ForceX6=Ctrl+F6
+ActivateDynamicMFG=Ctrl+F10
+FollowGame=Ctrl+F11
+RestoreINI=Ctrl+F12
 ```
 
 Séparer les modificateurs et **une seule touche** par `+`. La casse et les
@@ -47,7 +54,7 @@ l'INI et ne nécessite pas de redémarrage si le jeu soumet régulièrement ses 
 
 ## Panneau ReShade ou raccourcis
 
-Pour un panneau, choisir le **ZIP ReShade autonome** à la place du ZIP DLL. Voir le [guide autonome](standalone-reshade.fr.md). Aucun compagnon `DLSSGControls.addon64` n'est fourni ni nécessaire.
+Pour un panneau en jeu, choisir le **ZIP de contrôle ReShade**, qui contient la DLL moteur et `DLSSGControls.addon64`. Voir le [guide du panneau](reshade-controls.fr.md). L’add-on pilote la DLL ; il ne la remplace pas.
 
 Le panneau propose **Apply for this session**, **Apply & save settings** et **Save keyboard shortcuts** séparément. Une sauvegarde réussie met à jour l'INI et les réglages sauvegardés utilisés par la session. `RestoreINI` restaure ces valeurs sans relire un fichier modifié manuellement. `ActivateDynamicMFG` reprend la cible sauvegardée dans l'INI : sauvegarder une cible de session pour la réutiliser avec ce raccourci.
 
@@ -110,3 +117,6 @@ Vérifier l'override NVIDIA de **cible dynamique DLSSG**, global et spécifique 
 jeu, en plus du limiteur FPS classique et de VSync. Ce sont des réglages distincts.
 Le pilote peut remplacer une cible pourtant acceptée par Streamline. Sauvegarder
 le profil avant de corriger l'override concerné, sans réinitialiser les autres réglages.
+
+
+Si le journal est activé, `hotkey_bindings_loaded` indique le nombre de raccourcis valides. `hotkey_action_triggered=0` correspond à ForceX2 (1–4 à X3–X6). `live_multiplier_requested` prouve que la demande est enregistrée ; `sl_forced_multiplier_accepted` indique que Streamline l’accepte. Cela ne remplace pas la vérification des images présentées. Pour F4 seul, écrire `ForceX2=F4` dans `[Hotkeys]`, puis redémarrer.

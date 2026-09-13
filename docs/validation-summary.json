@@ -1,9 +1,8 @@
 {
-  "release": "310.9.1-10",
+  "release": "310.9.1-11",
   "runtime": "310.9.1",
   "packages": [
-    "DLL / ASI",
-    "standalone ReShade"
+    "Single ZIP: DLL, INI and optional ReShade control panel"
   ],
   "gpu_routes": [
     "SM75 experimental",
@@ -15,9 +14,8 @@
     "RTX 4090"
   ],
   "physical_turing_test": false,
-  "standalone_wukong_user_confirmed": true,
   "wukong_dynamic_target_after_driver_override_removal": true,
-  "cpu_assertions": 436,
+  "cpu_assertions": 472,
   "persistence_checks": 7,
   "reshade_version_tested": "6.8.0",
   "reshade_device_cycles": 2,
@@ -31,7 +29,27 @@
   "known_issues": [
     "White rectangle over Wukong benchmark chart",
     "Native dynamic requires compatible DX12 Streamline and driver",
-    "Standalone add-on must load before DLSSG initialization",
-    "RTX 20 has no physical-card validation"
-  ]
+    "RTX 20 has no physical-card validation",
+    "DLL-only hotkeys failed in the current Wukong gameplay test; use the ReShade panel for live controls",
+    "FSR FG to DLSS FG switching can require a full game restart",
+    "Intermittent Wukong black-screen startup was observed; a later unchanged-binary launch worked, but the cause remains unresolved"
+  ],
+  "publication_status": "release_authorized",
+  "loader_chain_regression": true,
+  "dll_hotkey_f4_fixture": true,
+  "dll_hotkey_user_report_resolved": false,
+  "dll_hotkeys_wukong_gameplay": false,
+  "historical_standalone_wukong_user_confirmed": true,
+  "final_engine_sha256": "346c513e460b0f2b3f9c9b300f3e56aff4bfffcb7dbd47f7053ca72ed0952cef",
+  "inline_loader_takeover_test": true,
+  "split_nvapi_initialization_test": true,
+  "historical_component_tests_note": "Existing loader, native request and game reports cover successive candidates. The current engine and panel passed 472 FG assertions, 106 SR assertions, official NGX/FrameToken ABI checks and real-DLL persistence checks. A Wukong startup rendered with X4. These are not a full final-build game matrix or new performance benchmarks.",
+  "dx12_missing_capability_query_test": true,
+  "presentation_counter_carry_test": true,
+  "provider_switch_requires_restart_workaround_observed": true,
+  "final_panel_sha256": "73373941f860a3aeb7b861b8cdf720c1e08474b6fee39bdb9df632d47400967b",
+  "sr_cpu_assertions": 106,
+  "sr_save_requires_observed_match": true,
+  "default_hotkeys": true,
+  "experimental_quality_defaults": false
 }

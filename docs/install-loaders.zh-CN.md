@@ -1,6 +1,6 @@
-# DLL / ASI 安装 — 310.9.1-10
+# DLL / ASI 安装 — 310.9.1-11
 
-从[发布页](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-10)下载 **dlssg-310.9.1-10-dll-win64.zip**。需要 ReShade 面板时，请改用[独立包](standalone-reshade.zh-CN.md)。
+从[发布页](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-11)下载 **dlssg-310.9.1-11-win64.zip**。需要可选面板时，使用 [包内可选 ReShade 面板](reshade-controls.zh-CN.md)。
 
 关闭游戏并备份要替换的文件。仅将**一个**引擎与 `dlssg_sm86.ini` 放在实际游戏程序旁（《黑神话：悟空》：`b1/Binaries/Win64`），并在游戏中开启 DLSS FG。
 
@@ -14,11 +14,13 @@
 
 UAL 可通过 `InitializeASI` 加载其他 ASI 文件名；隔离加载测试已验证 `dlssg_sm86.asi`。不调用此导出的加载器请使用 `dxgi.asi`。放在 ASI 子目录时，INI 也放在插件旁。REFramework 可保留自己的 `dinput8.dll`。
 
-不要将本项目 DLL/ASI 与 `DLSSG.addon64` 或其他 MFG 解锁引擎叠加使用。ReShade 本身及无关 NR add-on 可保留。两个包功能相同，只有独立包提供 ReShade 面板。
+可选 `DLSSGControls.addon64` 与本 DLL/ASI 配合使用。升级前移除旧独立引擎 `DLSSG.addon64`。保留 ReShade 和无关 NR add-on，并仅安装一个 MFG 兼容引擎。
+
+**从 FSR FG 切换到 DLSS FG？** 如果选项已改变但帧生成仍未启动，请保存 DLSS FG 选项，完全退出游戏后重新启动再测试。一次测试中重启恢复了帧生成；不保证无需重启即可切换帧生成提供方。
 
 ## 配置与验证
 
-默认跟随游戏，`MaxInterpolatedFrames=5` 表示最高 X6，仍受插件能力限制。参见[控制、迁移、日志和遥测](live-controls.zh-CN.md)。手动编辑 INI 后重启；已配置快捷键在下一次识别到的 Streamline 选项提交时生效。原生动态需要兼容 DX12，固定控制可用于已识别 DX12/Vulkan 路径。
+默认跟随游戏，`MaxInterpolatedFrames=5` 表示最高 X6，仍受插件能力限制。参见[控制、迁移、日志和遥测](live-controls.zh-CN.md)。手动编辑 INI 后重启；实时快捷键请使用 ReShade 面板。仅用 DLL 的快捷键在《黑神话：悟空》中失败，尚不能作为已验证的替代方案。原生动态需要兼容 DX12，固定控制可用于已识别 DX12/Vulkan 路径。
 
 日志开启时，`proxy_attached`、`dxgi_attached` 或 `asi_attached` 标识加载，`installed_310_9_1` 标识运行库处理。`sl_native_dynamic_accepted` 仅表示 SDK 接受，并不证明驱动采用了目标。NVIDIA 全局或游戏级动态目标覆盖可优先。可用的 NVIDIA 水印可显示 `Dyn DRV` 和当前/最大倍率；本包不会自动开启水印。
 

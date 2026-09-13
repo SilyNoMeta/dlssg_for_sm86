@@ -1,10 +1,13 @@
-# 实时控制与 INI 参考 — 310.9.1-10
+# 实时控制与 INI 参考 — 310.9.1-11
 
-DLL/ASI 与独立 ReShade 安装包都支持这些控制。仅安装一个引擎，把 `dlssg_sm86.ini` 放在旁边，并先在游戏中开启 FG。RTX 20 尚无实体 Turing 测试，仍属实验支持。
+统一 ZIP 包含 DLL/ASI 引擎及可选 ReShade 面板。不使用 ReShade 时，手动编辑 INI 并重启。将 `dlssg_sm86.ini` 放在引擎旁，先在游戏中开启 FG。RTX 20 尚无实体 Turing 测试，仍属实验支持。
 
-## 自己选择快捷键
+## 默认快捷键与自定义
 
-**默认不绑定任何快捷键。** 在 `[Hotkeys]` 中填写需要的项目，留空即禁用：
+**已知限制：** 当前版本在《黑神话：悟空》的实机测试中，虽然成功读取了按键绑定，仅用 DLL 的快捷键仍未生效。自动化测试不能证明游戏中的按键检测有效。实时调整请使用 ReShade 面板；仅用 DLL 时请编辑 INI 后重启。下列语法说明已实现的接口，并不保证所有游戏都能识别快捷键。
+
+默认使用 **Ctrl+F2 至 Ctrl+F6** 请求 X2–X6，**Ctrl+F10** 启用动态模式，
+**Ctrl+F11** 跟随游戏，**Ctrl+F12** 恢复 INI 设置。可修改任意绑定，留空即禁用：
 
 | 项目 | 操作 |
 |---|---|
@@ -13,14 +16,18 @@ DLL/ASI 与独立 ReShade 安装包都支持这些控制。仅安装一个引擎
 | `FollowGame` | 跟随游戏自己的选择，包括原生动态模式，忽略本项目的 INI 强制设置。 |
 | `ActivateDynamicMFG` | 使用 INI 的 `DynamicTargetFPS` 请求原生动态模式，仅适用于兼容的 DX12 集成。 |
 
-下面只是可选示例，**只有想使用这些组合时才复制**：
+下一版压缩包的默认配置：
 
 ```ini
 [Hotkeys]
-ForceX4=Ctrl+Alt+F6
-ForceX6=Ctrl+Alt+F8
-RestoreINI=Ctrl+Alt+F9
-FollowGame=Ctrl+Alt+F10
+ForceX2=Ctrl+F2
+ForceX3=Ctrl+F3
+ForceX4=Ctrl+F4
+ForceX5=Ctrl+F5
+ForceX6=Ctrl+F6
+ActivateDynamicMFG=Ctrl+F10
+FollowGame=Ctrl+F11
+RestoreINI=Ctrl+F12
 ```
 
 用 `+` 连接修饰键和**一个普通键**。名称不区分大小写，忽略名称前后的空格。
@@ -40,7 +47,7 @@ FollowGame=Ctrl+Alt+F10
 
 ## ReShade 面板或快捷键
 
-想使用面板时，请选择 **ReShade 独立 ZIP**，不要再安装 DLL ZIP。参见[独立安装指南](standalone-reshade.zh-CN.md)。不提供也不需要旧的 `DLSSGControls.addon64` 配套插件。
+需要游戏内面板时，使用 **ReShade 控制包**，其中包含引擎 DLL 和 `DLSSGControls.addon64`。参见[面板指南](reshade-controls.zh-CN.md)。add-on 控制 DLL，并不替代 DLL。
 
 面板分别提供 **Apply for this session**、**Apply & save settings** 和 **Save keyboard shortcuts**。成功保存会更新 INI 和本次运行所用的已保存设置。`RestoreINI` 恢复这些设置，不会重新读取手动编辑的文件。`ActivateDynamicMFG` 使用 INI 中保存的目标；若想通过该快捷键复用会话目标，请先保存。
 
@@ -98,3 +105,6 @@ Enabled=0
 除普通 FPS 限制和 VSync 外，还应检查 NVIDIA 全局和游戏配置中的
 **DLSSG 动态目标覆盖设置**。它们是不同选项。即使 Streamline 接受了请求，
 驱动覆盖仍可能更改目标。修改前备份配置，只调整相关覆盖项，不要重置无关设置。
+
+
+开启日志时，`hotkey_bindings_loaded` 表示有效绑定数量。`hotkey_action_triggered=0` 对应 ForceX2（1–4 对应 X3–X6）。`live_multiplier_requested` 表示请求已排队，`sl_forced_multiplier_accepted` 表示 Streamline 已接受；仍需检查实际输出帧。若只绑定 F4，在 `[Hotkeys]` 中填写 `ForceX2=F4` 并重启。
