@@ -1,4 +1,4 @@
-# Installation — v0.3.5-3
+# Installation — v0.3.5-4
 
 [README](../README.fr.md) · [English](INSTALL.en.md)
 

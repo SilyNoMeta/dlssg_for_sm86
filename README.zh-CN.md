@@ -4,7 +4,7 @@
 
 **最高 X6 的多帧生成、更稳定的界面与更清晰的细节——有无 ReShade 均可使用。**
 
-<a href="https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v0.3.5-3/DLSSG-RTX20-30-v0.3.5-3-clean-win64.zip"><img alt="下载 0.3.5-3" src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-0.3.5--3-76b900?style=for-the-badge&logo=nvidia&logoColor=white"></a>
+<a href="https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v0.3.5-4/DLSSG-RTX20-30-v0.3.5-4-clean-win64.zip"><img alt="下载 0.3.5-4" src="https://img.shields.io/badge/%E4%B8%8B%E8%BD%BD-0.3.5--4-76b900?style=for-the-badge&logo=nvidia&logoColor=white"></a>
 
 <img alt="Windows x64" src="https://img.shields.io/badge/Windows-x64-0078D4?style=flat-square&logo=windows&logoColor=white"> <img alt="DX12 与 Vulkan" src="https://img.shields.io/badge/API-DX12%20%7C%20Vulkan-30363d?style=flat-square"> <img alt="RTX 30" src="https://img.shields.io/badge/RTX%2030-%E6%94%AF%E6%8C%81-76b900?style=flat-square"> <img alt="RTX 20" src="https://img.shields.io/badge/RTX%2020-%E5%AE%9E%E9%AA%8C%E6%80%A7-d29922?style=flat-square"> <img alt="NVIDIA FG 310.9.1" src="https://img.shields.io/badge/NVIDIA%20FG-310.9.1-555?style=flat-square">
 
@@ -15,10 +15,11 @@
 > [!IMPORTANT]
 > 实验性项目。需要游戏内置 **NVIDIA DLSS 帧生成**（Streamline），即使游戏菜单中未提供该选项也可以：例如 REANIMAL 试玩版即可被启用。
 
-## ✨ 0.3.5-3 新内容
+## ✨ 0.3.5-4 新内容
 
 | | 您将注意到的变化 |
 |---|---|
+| 🌗 **不再出现重影阴影** | 移动角色的阴影在生成帧上不再出现两次（例如在 **Cyberpunk 2077** 中背对太阳奔跑时），细节依旧清晰。 |
 | 🧭 **界面更稳定** | 在未向 DLSS 帧生成提供干净场景画面的游戏中（例如 **Crimson Desert**），小地图、计量条和文字在生成帧上不再闪烁或拖影。 |
 | 🪟 **半透明面板更干净** | 半透明面板和小地图后面不再出现重影或背景扭曲（例如 **Cyberpunk 2077**）。 |
 | 🪄 **全自动** | 无需新设置。在 DX12 下使用默认的 `UIRecomposition=1` 即生效。已正确处理界面的游戏不受影响。 |
@@ -40,7 +41,7 @@ Vulkan 还需要对应版本的 NVIDIA 运行库，请参阅[安装指南](docs/
 | **X2 – X6** | 跟随游戏设置，或选择固定倍数。X4 = 1 帧渲染 + 3 帧生成。 |
 | **动态模式（DX12）** | 设定目标帧率，由 NVIDIA 在兼容游戏中自动调整生成数量。 |
 | **自适应模式（Vulkan）** | 倍数根据帧率与目标在 X2 至 X6 之间调整。 |
-| **画质** | 围栏、电线和植被更清晰，生成帧上的界面更稳定。 |
+| **画质** | 围栏、电线和植被更清晰，生成帧上的阴影不再重影、界面更稳定。 |
 | **实时控制** | 通过 ReShade 面板或 Ctrl+F2…F12 按游戏修改并保存设置。 |
 | **DLSS 渲染比例** | 从 DLAA 到超级性能或自定义比例，保存前会进行校验。 |
 | **游戏专项修复** | REANIMAL 的 DLSS 启用、FINAL FANTASY VII REBIRTH 的识别处理、Black Myth: Wukong 的启动问题。 |
@@ -100,7 +101,8 @@ UIRecomposition=1      ; 自动界面处理（0 = 跟随游戏，2 = 强制）
 
 | 版本 | |
 |---|---|
-| [**0.3.5-3**](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v0.3.5-3) | 当前版本：更稳定的界面与干净的半透明面板，基于集成引擎与可选面板。 |
+| [**0.3.5-4**](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v0.3.5-4) | 当前版本：生成帧上不再出现重影阴影。 |
+| [0.3.5-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v0.3.5-3) | 更稳定的界面与干净的半透明面板，基于集成引擎与可选面板。 |
 | [310.9.1-11](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-11) · [-10](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-10) · [-9](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-9) · [-8](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-8) · [-7](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7) | 已归档的上一代版本，使用其自身的文件布局与设置。 |
 
 ## 💬 反馈
