@@ -4,7 +4,7 @@
 
 ## Prérequis
 
-- Windows x64 et un jeu avec **DLSS Frame Generation** (D3D12 ou Vulkan).
+- Windows x64 et un jeu qui embarque **NVIDIA DLSS Frame Generation** via Streamline (D3D12 ou Vulkan), même si ses menus ne le proposent pas.
 - Une carte RTX 30 (testée) ou RTX 20 (expérimental).
 - Facultatif : **ReShade 6.8 avec prise en charge complète des add-ons**, uniquement pour le panneau et les raccourcis.
 

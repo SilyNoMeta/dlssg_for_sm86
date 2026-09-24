@@ -13,7 +13,7 @@
 </div>
 
 > [!IMPORTANT]
-> Experimental. It only works in games that already offer **DLSS Frame Generation**, and it never unlocks anything a game's plugin does not support.
+> Experimental. It needs a game that ships **NVIDIA DLSS Frame Generation** (Streamline), even when the game's menus do not offer it: the REANIMAL demo, for example, gets it activated.
 
 ## ✨ New in 0.3.5-3
 

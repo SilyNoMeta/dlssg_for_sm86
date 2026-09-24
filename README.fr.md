@@ -13,7 +13,7 @@
 </div>
 
 > [!IMPORTANT]
-> Expérimental. Fonctionne uniquement dans les jeux qui proposent déjà **DLSS Frame Generation**, et ne débloque jamais ce que le plugin du jeu ne prend pas en charge.
+> Expérimental. Nécessite un jeu qui embarque **NVIDIA DLSS Frame Generation** (Streamline), même si ses menus ne le proposent pas : la démo de REANIMAL, par exemple, se le voit activer.
 
 ## ✨ Nouveautés de la 0.3.5-3
 
