@@ -1,0 +1,16 @@
+{
+  "release": "v0.3.5-3",
+  "proxy_sha256": "9cac6a50546b20e646477659d8f14557f12df65e4cc7ee7a51505aec53577491",
+  "companion_sha256": "82c3b8e61c6ad820ddd9d479a3b295413633966233fe24d34e4a3fbdf7ce81d4",
+  "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU, driver 617.14",
+  "automated_tests": "passed (C++ suites, D3D12 and Vulkan GPU runs, five proxy names, cache and panel lifecycle)",
+  "games_tested_in_play": [
+    "Crimson Desert",
+    "Cyberpunk 2077",
+    "FINAL FANTASY VII REBIRTH",
+    "Onimusha: Way of the Sword",
+    "Bodycam",
+    "REANIMAL (demo)"
+  ],
+  "scope": "Functional and in-play checks; not a controlled performance benchmark. RTX 20 hardware untested."
+}
