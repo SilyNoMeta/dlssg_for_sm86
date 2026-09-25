@@ -1,4 +1,4 @@
-# Installation — v0.3.5-4
+# Installation — v0.3.5-5
 
 [README](../README.md) · [Français](INSTALL.md)
 
@@ -83,6 +83,16 @@ On Vulkan, NVIDIA's overlay shows the factor our adaptive mode selected (for exa
 
 Install a single copy and rename only the proxy. The game must actually load that name.
 
+## Linux (Proton) — not tested by us
+
+Other projects report NVIDIA frame generation for RTX 20/30 working under Proton. Install as on Windows, then add to the game's Steam launch options:
+
+```text
+WINEDLLOVERRIDES="version=n,b" PROTON_ENABLE_NVAPI=1 PROTON_NVIDIA_NVCUDA=1 %command%
+```
+
+Replace `version` with the proxy name you use (for example `dxgi`). Feedback is welcome.
+
 ## Upgrading
 
 Replace `version.dll`, then replace our old companion with the new optional panel (or remove it). Set aside an old `DLSSG-SM86-75-RUNTIME.dll` if present. Never keep two versions of our add-ons active; old `DLSSGControls.addon64`, `DLSSG.addon64`, `dlssg-035-companion.addon64` or `renodx-rtx-unlocker.addon64` from this project can be disabled.
@@ -102,6 +112,7 @@ Settings from release 11 builds:
 - **The panel does not appear:** check that the add-on sits beside the executable and that ReShade has full add-on support. The engine keeps working without it.
 - **The multiplier stays pending:** enable Frame Generation in the game; a factor the game's plugin does not support cannot be forced.
 - **Reporting a problem:** include GPU, driver, game and API, both INIs, and `DLSSG-SM86-75-runtime.log`. Remove personal paths before sharing.
+- **Capcom RE Engine games:** Onimusha: Way of the Sword works here. Other projects report that some RE Engine games crash at startup unless REFramework (`dinput8.dll`) is installed beside the proxy, and that X3 and above can be unstable; use X2 if so. Do not name our proxy `dinput8.dll` in that case.
 - **Cache:** a verified component is stored under `%LOCALAPPDATA%\DLSSG-SM86-75\proxy`. Close the games before deleting it.
 
 To uninstall, close the game and restore your backups. Remove only our proxy, panel and INI section; if you replaced a Vulkan runtime, restore its backup too.

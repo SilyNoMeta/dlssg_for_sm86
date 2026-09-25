@@ -4,7 +4,7 @@
 
 **Multi Frame Generation up to X6, a steadier HUD and sharper fine detail — with or without ReShade.**
 
-<a href="https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v0.3.5-4/DLSSG-RTX20-30-v0.3.5-4-clean-win64.zip"><img alt="Download 0.3.5-4" src="https://img.shields.io/badge/Download-0.3.5--4-76b900?style=for-the-badge&logo=nvidia&logoColor=white"></a>
+<a href="https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v0.3.5-5/DLSSG-RTX20-30-v0.3.5-5-clean-win64.zip"><img alt="Download 0.3.5-5" src="https://img.shields.io/badge/Download-0.3.5--5-76b900?style=for-the-badge&logo=nvidia&logoColor=white"></a>
 
 <img alt="Windows x64" src="https://img.shields.io/badge/Windows-x64-0078D4?style=flat-square&logo=windows&logoColor=white"> <img alt="DX12 and Vulkan" src="https://img.shields.io/badge/API-DX12%20%7C%20Vulkan-30363d?style=flat-square"> <img alt="RTX 30" src="https://img.shields.io/badge/RTX%2030-supported-76b900?style=flat-square"> <img alt="RTX 20" src="https://img.shields.io/badge/RTX%2020-experimental-d29922?style=flat-square"> <img alt="NVIDIA FG 310.9.1" src="https://img.shields.io/badge/NVIDIA%20FG-310.9.1-555?style=flat-square">
 
@@ -15,11 +15,11 @@
 > [!IMPORTANT]
 > Experimental. It needs a game that ships **NVIDIA DLSS Frame Generation** (Streamline), even when the game's menus do not offer it: the REANIMAL demo, for example, gets it activated.
 
-## ✨ New in 0.3.5-4
+## ✨ New in 0.3.5-5
 
 | | What you should notice |
 |---|---|
-| 🌗 **No doubled shadows** | A moving character's shadow no longer appears twice on generated frames (for example running with the sun behind you in **Cyberpunk 2077**), with fine detail as sharp as before. |
+| 🌿 **Fine detail is back** | Grass, bushes, fences, wires and fine ground textures keep their detail on generated frames instead of shimmering, and moving shadows stay single. |
 | 🧭 **Steadier HUD** | Minimaps, gauges and text no longer shimmer or smear on generated frames in games that give DLSS Frame Generation no clean view of the scene (for example **Crimson Desert**). |
 | 🪟 **Clean translucent panels** | No more double image or warped background behind translucent panels and minimaps (for example **Cyberpunk 2077**). |
 | 🪄 **Fully automatic** | No new setting. Active with the default `UIRecomposition=1` on DX12. Games that already handle their interface properly are left untouched. |
@@ -101,8 +101,7 @@ Replace `version.dll`, replace our old companion with the new optional panel (or
 
 | Version | |
 |---|---|
-| [**0.3.5-4**](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v0.3.5-4) | Current release: no more doubled shadows on generated frames. |
-| [0.3.5-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v0.3.5-3) | Steadier HUD and clean translucent panels, on top of the integrated engine and optional panel. |
+| [**0.3.5-5**](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v0.3.5-5) | Current release: fine detail back on generated frames, steadier HUD and clean translucent panels. |
 | [310.9.1-11](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-11) · [-10](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-10) · [-9](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-9) · [-8](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-8) · [-7](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7) | Archived previous generation, with its own layout and settings. |
 
 ## 💬 Feedback

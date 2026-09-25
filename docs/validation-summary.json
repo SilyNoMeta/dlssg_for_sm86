@@ -1,15 +1,16 @@
 {
-  "release": "v0.3.5-4",
-  "proxy_sha256": "cb029adf2f50985c0421b3cfca470770e8f716d4fc43ce8f0efd62944669a2f8",
-  "companion_sha256": "2442ea359f82df9853e1a30cf354716d234782cda2df78493755daf18ec43f5f",
-  "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU, driver 617.14",
-  "automated_tests": "passed (C++ suites, D3D12 and Vulkan GPU runs, five proxy names, cache and panel lifecycle)",
+  "release": "v0.3.5-5",
+  "proxy_sha256": "7489a89bf593cda243d95c62e6d8b75905d9774e27b7b2d53b91625a79c05ca4",
+  "companion_sha256": "78fbd65e122972522fea787404f2231e055389b64f82a8bf339151b08dc6d3bb",
+  "gpu": "NVIDIA GeForce RTX 3070 Ti Laptop GPU",
+  "automated_tests": "passed (C++ suites, quality policy tests, D3D12 and Vulkan GPU runs, five proxy names, startup, bundle cache and panel lifecycle)",
   "games_tested_in_play": {
-    "v0.3.5-4": [
-      "Cyberpunk 2077",
-      "Crimson Desert"
+    "v0.3.5-5": [
+      "Cyberpunk 2077 (image quality A/B against 310.9.1-11 and v0.3.5-4, NVIDIA App recordings, X2 DX12)",
+      "Validated by an external tester (as v0.3.5-5b1, same GPU kernel)"
     ],
-    "v0.3.5-3": [
+    "earlier 0.3.5 builds": [
+      "Crimson Desert",
       "FINAL FANTASY VII REBIRTH",
       "Onimusha: Way of the Sword",
       "Bodycam",

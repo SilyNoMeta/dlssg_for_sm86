@@ -1,4 +1,4 @@
-DLSSG for RTX 20 / 30 v0.3.5-4 — third-party components
+DLSSG for RTX 20 / 30 v0.3.5-5 — third-party components
 
 1. Upstream DLSSG loader and NVIDIA materials
 

@@ -1,4 +1,4 @@
-# Installation — v0.3.5-4
+# Installation — v0.3.5-5
 
 [README](../README.fr.md) · [English](INSTALL.en.md)
 
@@ -83,6 +83,16 @@ En Vulkan, l'overlay NVIDIA affiche le facteur choisi par notre mode adaptatif (
 
 Installer une seule copie et ne renommer que le proxy. Le jeu doit réellement charger ce nom.
 
+## Linux (Proton) — non testé par nous
+
+D'autres projets signalent que la génération d'images NVIDIA pour RTX 20/30 fonctionne sous Proton. Installer comme sous Windows, puis ajouter aux options de lancement Steam du jeu :
+
+```text
+WINEDLLOVERRIDES="version=n,b" PROTON_ENABLE_NVAPI=1 PROTON_NVIDIA_NVCUDA=1 %command%
+```
+
+Remplacer `version` par le nom du proxy utilisé (par exemple `dxgi`). Les retours sont bienvenus.
+
 ## Mise à jour
 
 Remplacer `version.dll`, puis remplacer notre ancien compagnon par le nouveau panneau facultatif (ou le retirer). Mettre de côté un ancien `DLSSG-SM86-75-RUNTIME.dll` s'il existe. Ne jamais garder deux versions de nos add-ons actives ; les anciens `DLSSGControls.addon64`, `DLSSG.addon64`, `dlssg-035-companion.addon64` ou `renodx-rtx-unlocker.addon64` de ce projet peuvent être désactivés.
@@ -102,6 +112,7 @@ Réglages des versions release 11 :
 - **Le panneau n'apparaît pas :** vérifier que l'add-on est à côté de l'exécutable et que ReShade prend en charge les add-ons. Le moteur fonctionne sans lui.
 - **Le multiplicateur reste en attente :** activer Frame Generation dans le jeu ; un facteur non pris en charge par le plugin du jeu ne peut pas être forcé.
 - **Signaler un problème :** indiquer GPU, pilote, jeu et API, joindre les deux INI et `DLSSG-SM86-75-runtime.log`. Retirer les chemins personnels avant partage.
+- **Jeux Capcom (moteur RE) :** Onimusha: Way of the Sword fonctionne ici. D'autres projets signalent que certains jeux RE Engine plantent au démarrage sans REFramework (`dinput8.dll`) installé à côté du proxy, et que X3 et plus peuvent être instables : utiliser X2 dans ce cas. Ne pas nommer notre proxy `dinput8.dll` dans ce cas.
 - **Cache :** un composant vérifié est stocké dans `%LOCALAPPDATA%\DLSSG-SM86-75\proxy`. Fermer les jeux avant de le supprimer.
 
 Pour désinstaller, fermer le jeu et restaurer les sauvegardes. Retirer seulement notre proxy, le panneau et notre section d'INI ; si un runtime Vulkan a été remplacé, restaurer aussi sa sauvegarde.

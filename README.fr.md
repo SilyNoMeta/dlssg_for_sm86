@@ -4,7 +4,7 @@
 
 **Multi Frame Generation jusqu’à X6, une interface plus stable et des détails fins plus nets — avec ou sans ReShade.**
 
-<a href="https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v0.3.5-4/DLSSG-RTX20-30-v0.3.5-4-clean-win64.zip"><img alt="Télécharger 0.3.5-4" src="https://img.shields.io/badge/T%C3%A9l%C3%A9charger-0.3.5--4-76b900?style=for-the-badge&logo=nvidia&logoColor=white"></a>
+<a href="https://github.com/SilyNoMeta/dlssg_for_sm86/releases/download/v0.3.5-5/DLSSG-RTX20-30-v0.3.5-5-clean-win64.zip"><img alt="Télécharger 0.3.5-5" src="https://img.shields.io/badge/T%C3%A9l%C3%A9charger-0.3.5--5-76b900?style=for-the-badge&logo=nvidia&logoColor=white"></a>
 
 <img alt="Windows x64" src="https://img.shields.io/badge/Windows-x64-0078D4?style=flat-square&logo=windows&logoColor=white"> <img alt="DX12 et Vulkan" src="https://img.shields.io/badge/API-DX12%20%7C%20Vulkan-30363d?style=flat-square"> <img alt="RTX 30" src="https://img.shields.io/badge/RTX%2030-pris%20en%20charge-76b900?style=flat-square"> <img alt="RTX 20" src="https://img.shields.io/badge/RTX%2020-exp%C3%A9rimental-d29922?style=flat-square"> <img alt="NVIDIA FG 310.9.1" src="https://img.shields.io/badge/NVIDIA%20FG-310.9.1-555?style=flat-square">
 
@@ -15,11 +15,11 @@
 > [!IMPORTANT]
 > Expérimental. Nécessite un jeu qui embarque **NVIDIA DLSS Frame Generation** (Streamline), même si ses menus ne le proposent pas : la démo de REANIMAL, par exemple, se le voit activer.
 
-## ✨ Nouveautés de la 0.3.5-4
+## ✨ Nouveautés de la 0.3.5-5
 
 | | Ce que vous devriez remarquer |
 |---|---|
-| 🌗 **Plus d’ombres dédoublées** | L’ombre d’un personnage en mouvement n’apparaît plus en double sur les images générées (par exemple en courant dos au soleil dans **Cyberpunk 2077**), avec des détails fins toujours aussi nets. |
+| 🌿 **Le détail fin revient** | Herbe, buissons, grillages, câbles et textures fines du sol gardent leur détail sur les images générées au lieu de scintiller, et les ombres en mouvement restent uniques. |
 | 🧭 **Interface stable** | Minimaps, jauges et textes ne scintillent plus et ne bavent plus sur les images générées, dans les jeux qui ne donnent pas à DLSS Frame Generation une vue propre de la scène (par exemple **Crimson Desert**). |
 | 🪟 **Panneaux translucides nets** | Plus d’image dédoublée ni de fond déformé derrière les panneaux et minimaps translucides (par exemple **Cyberpunk 2077**). |
 | 🪄 **Entièrement automatique** | Aucun nouveau réglage. Actif avec `UIRecomposition=1` (par défaut) en DX12. Les jeux qui gèrent déjà correctement leur interface ne sont pas modifiés. |
@@ -101,8 +101,7 @@ Remplacer `version.dll`, remplacer notre ancien compagnon par le nouveau panneau
 
 | Version | |
 |---|---|
-| [**0.3.5-4**](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v0.3.5-4) | Version actuelle : plus d’ombres dédoublées sur les images générées. |
-| [0.3.5-3](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v0.3.5-3) | Interface stable et panneaux translucides nets, avec le moteur intégré et le panneau facultatif. |
+| [**0.3.5-5**](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v0.3.5-5) | Version actuelle : détail fin retrouvé sur les images générées, interface stable et panneaux translucides nets. |
 | [310.9.1-11](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-11) · [-10](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-10) · [-9](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-9) · [-8](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-8) · [-7](https://github.com/SilyNoMeta/dlssg_for_sm86/releases/tag/v310.9.1-7) | Génération précédente archivée, avec son propre format et ses réglages. |
 
 ## 💬 Retours
