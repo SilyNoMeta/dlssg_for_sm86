@@ -12,6 +12,9 @@
 
 </div>
 
+> [!NOTE]
+> **Updates and improvements continue in [DLSSG-Transfusion](https://github.com/SilyNoMeta/DLSSG-Transfusion).** That project also supports RTX 40 GPUs and adds experimental driver Smooth Motion on RTX 30. This repository is no longer where new work happens.
+
 > [!IMPORTANT]
 > Experimental. It needs a game that ships **NVIDIA DLSS Frame Generation** (Streamline), even when the game's menus do not offer it: the REANIMAL demo, for example, gets it activated.
 

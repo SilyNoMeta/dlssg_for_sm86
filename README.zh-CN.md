@@ -12,6 +12,9 @@
 
 </div>
 
+> [!NOTE]
+> **后续更新与改进将在 [DLSSG-Transfusion](https://github.com/SilyNoMeta/DLSSG-Transfusion) 中继续。** 该项目同时支持 RTX 40 显卡，并在 RTX 30 上加入了实验性的驱动 Smooth Motion。新的开发工作不再在本仓库进行。
+
 > [!IMPORTANT]
 > 实验性项目。需要游戏内置 **NVIDIA DLSS 帧生成**（Streamline），即使游戏菜单中未提供该选项也可以：例如 REANIMAL 试玩版即可被启用。
 
